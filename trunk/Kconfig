@@ -1305,26 +1305,26 @@ choice
 config CC_OPTIMIZE
 	bool "Optimize for size (-O0)"
 	help
-		Reduce compilation time and make debugging produce the expected results. This is the default.
+          Reduce compilation time and make debugging produce the expected results. This is the default.
 
 config CC_OPTIMIZE_FOR_PERFORMANCE_O
 	bool "Optimize for size (-O)"
 	help
-		Optimize. Optimizing compilation takes somewhat more time, and a lot more memory for
-		a large function. With -O, the compiler tries to reduce code size and execution time,
-		without performing any optimizations that take a great deal of compilation time.
-
+          Optimize. Optimizing compilation takes somewhat more time, and a lot more memory for
+	  a large function. With -O, the compiler tries to reduce code size and execution time,
+	  without performing any optimizations that take a great deal of compilation time.
+	   
 config CC_OPTIMIZE_FOR_PERFORMANCE_O1
 	bool "Optimize for size (-O1)"
 	help
-	Somewhere between -O0 and -O2. Optimize. Optimizing compilation takes somewhat more time,
-	and a lot more memory for a large function. With -O, the compiler tries to reduce code size
-	and execution time, without performing any optimizations that take a great deal of compilation time.
+          Somewhere between -O0 and -O2. Optimize. Optimizing compilation takes somewhat more time,
+	  and a lot more memory for a large function. With -O, the compiler tries to reduce code size
+	  and execution time, without performing any optimizations that take a great deal of compilation time.
 
 config CC_OPTIMIZE_FOR_PERFORMANCE_O2
 	bool "Optimize for performance (-O2)"
 	help
-	  This is the default optimization level for the kernel, building
+       	  This is the default optimization level for the kernel, building
 	  with the "-O2" compiler flag for best performance and most
 	  helpful compile-time warnings.
 
@@ -1343,19 +1343,19 @@ config CC_OPTIMIZE_FOR_SIZE
 config CC_OPTIMIZE_FOR_PERFORMANCE_FAST
 	bool "Optimize for size (-Ofast)"
 	help
-		Disregard strict standards compliance. -Ofast enables all -O3 optimizations.
-		It also enables optimizations that are not valid for all standard-compliant programs.
+	  Disregard strict standards compliance. -Ofast enables all -O3 optimizations.
+	  It also enables optimizations that are not valid for all standard-compliant programs.
 
 config CC_OPTIMIZE_FOR_DEBBUGING
 	bool "Optimize for size (-Og)"
 	help
-		Optimize debugging experience. -Og should be the optimization level of choice for the
-		standard edit-compile-debug cycle, offering a reasonable level of optimization
-		while maintaining fast compilation and a good debugging experience. It is a better choice
-		than -O0 for producing debuggable code because some compiler passes that collect debug information
-		are disabled at -O0. Like -O0, -Og completely disables a number of optimization passes so that individual
-		options controlling them have no effect. Otherwise -Og enables all -O1 optimization flags except
-		for those that may interfere with debugging.
+	  Optimize debugging experience. -Og should be the optimization level of choice for the
+	  standard edit-compile-debug cycle, offering a reasonable level of optimization
+	  while maintaining fast compilation and a good debugging experience. It is a better choice
+	  than -O0 for producing debuggable code because some compiler passes that collect debug information
+	  are disabled at -O0. Like -O0, -Og completely disables a number of optimization passes so that individual
+	  options controlling them have no effect. Otherwise -Og enables all -O1 optimization flags except
+	  for those that may interfere with debugging.
 
 endchoice
 
