@@ -1302,29 +1302,29 @@ choice
 	prompt "Compiler optimization level"
 	default CC_OPTIMIZE_FOR_PERFORMANCE_O2
 
-config CC_OPTIMIZE
+config CC_OPTIMIZE_FOR_PERFORMANCE_O0
 	bool "Optimize for size (-O0)"
 	help
-          Reduce compilation time and make debugging produce the expected results. This is the default.
+		Reduce compilation time and make debugging produce the expected results. This is the default.
 
 config CC_OPTIMIZE_FOR_PERFORMANCE_O
 	bool "Optimize for size (-O)"
 	help
-          Optimize. Optimizing compilation takes somewhat more time, and a lot more memory for
+		Optimize. Optimizing compilation takes somewhat more time, and a lot more memory for
 	  a large function. With -O, the compiler tries to reduce code size and execution time,
 	  without performing any optimizations that take a great deal of compilation time.
-	   
+
 config CC_OPTIMIZE_FOR_PERFORMANCE_O1
 	bool "Optimize for size (-O1)"
 	help
-          Somewhere between -O0 and -O2. Optimize. Optimizing compilation takes somewhat more time,
+		Somewhere between -O0 and -O2. Optimize. Optimizing compilation takes somewhat more time,
 	  and a lot more memory for a large function. With -O, the compiler tries to reduce code size
 	  and execution time, without performing any optimizations that take a great deal of compilation time.
 
 config CC_OPTIMIZE_FOR_PERFORMANCE_O2
 	bool "Optimize for performance (-O2)"
 	help
-       	  This is the default optimization level for the kernel, building
+		This is the default optimization level for the kernel, building
 	  with the "-O2" compiler flag for best performance and most
 	  helpful compile-time warnings.
 
