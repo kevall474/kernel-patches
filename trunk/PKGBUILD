@@ -1083,7 +1083,7 @@ _package(){
   local modulesdir="${pkgdir}"/usr/lib/modules/${kernver}
 
   # install bzImage to "${pkgdir}"/boot/
-  msg2 "install bzImage to "${pkgdir}"/boot/"
+  msg2 "install bzImage to "${pkgdir}"/boot/ ..."
   install -Dm644 arch/${ARCH}/boot/bzImage "${pkgdir}"/boot/vmlinuz-${pkgbase}
 
   msg2 "Installing boot image..."
