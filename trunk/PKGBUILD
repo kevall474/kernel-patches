@@ -1108,8 +1108,11 @@ _package(){
 
   # Remove build dir and source dir
   msg2 "Remove build dir and source dir..."
-  rm -rf "$modulesdir"/build
-  rm -rf "$modulesdir"/source
+  #rm -rf "$modulesdir"/build
+  #rm -rf "$modulesdir"/source
+  
+  # remove build and source links
+  rm "$modulesdir"/{source,build}
 }
 
 _package-headers(){
