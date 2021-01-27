@@ -1,4 +1,4 @@
-From fca6222fa3d49394b4c6a7a8c211db7c184f8179 Mon Sep 17 00:00:00 2001
+From 8a06fc83fb4698eed8580738d449a05c4604b38f Mon Sep 17 00:00:00 2001
 From: Con Kolivas <kernel@kolivas.org>
 Date: Wed, 7 Dec 2016 21:13:16 +1100
 Subject: [PATCH 12/16] Make threaded IRQs optionally the default which can be
@@ -10,10 +10,10 @@ Subject: [PATCH 12/16] Make threaded IRQs optionally the default which can be
  2 files changed, 28 insertions(+)
 
 diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
-index 10a5aff4eecc..ce3bcc66b48d 100644
+index 164a031cfdb6..016a445f589e 100644
 --- a/kernel/irq/Kconfig
 +++ b/kernel/irq/Kconfig
-@@ -112,6 +112,23 @@ config GENERIC_IRQ_RESERVATION_MODE
+@@ -113,6 +113,23 @@ config GENERIC_IRQ_RESERVATION_MODE
  config IRQ_FORCED_THREADING
         bool
  
@@ -38,7 +38,7 @@ index 10a5aff4eecc..ce3bcc66b48d 100644
  	bool "Support sparse irq numbering" if MAY_HAVE_SPARSE_IRQ
  	help
 diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index 5df903fccb60..17a0dd194582 100644
+index c460e0496006..218fbcbb94e6 100644
 --- a/kernel/irq/manage.c
 +++ b/kernel/irq/manage.c
 @@ -25,9 +25,20 @@

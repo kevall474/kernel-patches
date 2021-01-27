@@ -1,4 +1,4 @@
-From f383cd42cf4fc610525e8e2736e3b4dbb6a962ab Mon Sep 17 00:00:00 2001
+From e123b4092b42207e6b73373e5d583533e5f81d57 Mon Sep 17 00:00:00 2001
 From: Con Kolivas <kernel@kolivas.org>
 Date: Sat, 12 Aug 2017 11:53:39 +1000
 Subject: [PATCH 04/16] Create highres timeout variants of schedule_timeout
@@ -23,10 +23,10 @@ index 27828145ca09..504cc97bf475 100644
  
  #endif	/* FREEZER_H_INCLUDED */
 diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 3743ac45e056..139e4535fcc6 100644
+index dc93c8907fcb..98f30ab29195 100644
 --- a/include/linux/sched.h
 +++ b/include/linux/sched.h
-@@ -217,13 +217,40 @@ struct task_group;
+@@ -218,13 +218,40 @@ struct io_uring_task;
  
  extern void scheduler_tick(void);
  
@@ -70,10 +70,10 @@ index 3743ac45e056..139e4535fcc6 100644
  extern void schedule_preempt_disabled(void);
  asmlinkage void preempt_schedule_irq(void);
 diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index 95b6a708b040..b294bc4f9593 100644
+index 387b4bef7dd1..50ac30ae082e 100644
 --- a/kernel/time/hrtimer.c
 +++ b/kernel/time/hrtimer.c
-@@ -2223,3 +2223,72 @@ int __sched schedule_hrtimeout(ktime_t *expires,
+@@ -2218,3 +2218,72 @@ int __sched schedule_hrtimeout(ktime_t *expires,
  	return schedule_hrtimeout_range(expires, 0, mode);
  }
  EXPORT_SYMBOL_GPL(schedule_hrtimeout);

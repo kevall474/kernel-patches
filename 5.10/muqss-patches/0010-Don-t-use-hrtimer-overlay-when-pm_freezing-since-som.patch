@@ -1,4 +1,4 @@
-From 91fcee33bd81bf7ff9e3c00abc4744b6875f8373 Mon Sep 17 00:00:00 2001
+From 8a04d624810bc8abe736c704c5f918999b6f95cd Mon Sep 17 00:00:00 2001
 From: Con Kolivas <kernel@kolivas.org>
 Date: Mon, 20 Feb 2017 13:32:58 +1100
 Subject: [PATCH 10/16] Don't use hrtimer overlay when pm_freezing since some
@@ -10,10 +10,10 @@ Subject: [PATCH 10/16] Don't use hrtimer overlay when pm_freezing since some
  2 files changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index b294bc4f9593..8b78fecf82f1 100644
+index 50ac30ae082e..0ee08ddf34bf 100644
 --- a/kernel/time/hrtimer.c
 +++ b/kernel/time/hrtimer.c
-@@ -2245,7 +2245,7 @@ long __sched schedule_msec_hrtimeout(long timeout)
+@@ -2240,7 +2240,7 @@ long __sched schedule_msec_hrtimeout(long timeout)
  	 * (yet) better than Hz, as would occur during startup, use regular
  	 * timers.
  	 */
@@ -23,7 +23,7 @@ index b294bc4f9593..8b78fecf82f1 100644
  
  	secs = timeout / 1000;
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index a55915037a37..a86e4530e530 100644
+index 0776dc33ecb3..0411a289ccde 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
 @@ -44,6 +44,7 @@
@@ -34,7 +34,7 @@ index a55915037a37..a86e4530e530 100644
  
  #include <linux/uaccess.h>
  #include <asm/unistd.h>
-@@ -2049,12 +2050,12 @@ void msleep(unsigned int msecs)
+@@ -2041,12 +2042,12 @@ void msleep(unsigned int msecs)
  	 * Use high resolution timers where the resolution of tick based
  	 * timers is inadequate.
  	 */
@@ -49,7 +49,7 @@ index a55915037a37..a86e4530e530 100644
  
  	while (timeout)
  		timeout = schedule_timeout_uninterruptible(timeout);
-@@ -2071,12 +2072,12 @@ unsigned long msleep_interruptible(unsigned int msecs)
+@@ -2063,12 +2064,12 @@ unsigned long msleep_interruptible(unsigned int msecs)
  	int jiffs = msecs_to_jiffies(msecs);
  	unsigned long timeout;
  

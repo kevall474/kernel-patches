@@ -1,4 +1,4 @@
-From 83b99bc785b0d3abf1b0d31c6af3a17e243cbf50 Mon Sep 17 00:00:00 2001
+From 0b9ec366834a7cb054ac486230b52706c5c100bf Mon Sep 17 00:00:00 2001
 From: Con Kolivas <kernel@kolivas.org>
 Date: Sat, 5 Nov 2016 09:27:36 +1100
 Subject: [PATCH 05/16] Special case calls of schedule_timeout(1) to use the
@@ -9,10 +9,10 @@ Subject: [PATCH 05/16] Special case calls of schedule_timeout(1) to use the
  1 file changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 5f5850e8ec19..96dfa44c0f46 100644
+index 8255b3a180b8..ae1bcf467d7a 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
-@@ -1876,6 +1876,18 @@ signed long __sched schedule_timeout(signed long timeout)
+@@ -1868,6 +1868,18 @@ signed long __sched schedule_timeout(signed long timeout)
  
  	expire = timeout + jiffies;
  
@@ -31,7 +31,7 @@ index 5f5850e8ec19..96dfa44c0f46 100644
  	timer.task = current;
  	timer_setup_on_stack(&timer.timer, process_timeout, 0);
  	__mod_timer(&timer.timer, expire, MOD_TIMER_NOTPENDING);
-@@ -1884,10 +1896,10 @@ signed long __sched schedule_timeout(signed long timeout)
+@@ -1876,10 +1888,10 @@ signed long __sched schedule_timeout(signed long timeout)
  
  	/* Remove the timer from the object tracker */
  	destroy_timer_on_stack(&timer.timer);

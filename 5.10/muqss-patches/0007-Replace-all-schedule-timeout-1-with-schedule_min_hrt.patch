@@ -1,4 +1,4 @@
-From d8780f24a2f97ab5ca821862cbc14d28a5e8f2db Mon Sep 17 00:00:00 2001
+From 04468a7eb2c75c6e0bdfdcbe754674c8e50c0c08 Mon Sep 17 00:00:00 2001
 From: Con Kolivas <kernel@kolivas.org>
 Date: Mon, 20 Feb 2017 13:28:30 +1100
 Subject: [PATCH 07/16] Replace all schedule timeout(1) with
@@ -189,7 +189,7 @@ index ac47dbac7207..09f6ba829dfd 100644
  		}
  		set_current_state(TASK_RUNNING);
 diff --git a/drivers/block/swim.c b/drivers/block/swim.c
-index dd34504382e5..0caa1c7e9223 100644
+index 52dd1efa00f9..c7131359232d 100644
 --- a/drivers/block/swim.c
 +++ b/drivers/block/swim.c
 @@ -328,7 +328,7 @@ static inline void swim_motor(struct swim __iomem *base,
@@ -219,10 +219,10 @@ index dd34504382e5..0caa1c7e9223 100644
  		swim_select(base, RELAX);
  		if (!swim_readbit(base, STEP))
 diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index 737c0b6b24ea..a3db1f42bb3b 100644
+index 8774a3b8ff95..0097c92bec48 100644
 --- a/drivers/char/ipmi/ipmi_msghandler.c
 +++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -3542,7 +3542,7 @@ static void cleanup_smi_msgs(struct ipmi_smi *intf)
+@@ -3562,7 +3562,7 @@ static void cleanup_smi_msgs(struct ipmi_smi *intf)
  	/* Current message first, to preserve order */
  	while (intf->curr_msg && !list_empty(&intf->waiting_rcv_msgs)) {
  		/* Wait for the message to clear out. */
@@ -323,10 +323,10 @@ index 8e6607fc8a67..b9ab770bbdb5 100644
  	atomic_dec(&ch->n_on_msg_allocate_wq);
  
 diff --git a/drivers/net/caif/caif_hsi.c b/drivers/net/caif/caif_hsi.c
-index 4a33ec4fc089..da85f847ebb4 100644
+index 3d63b15bbaa1..164071e9d457 100644
 --- a/drivers/net/caif/caif_hsi.c
 +++ b/drivers/net/caif/caif_hsi.c
-@@ -939,7 +939,7 @@ static void cfhsi_wake_down(struct work_struct *work)
+@@ -924,7 +924,7 @@ static void cfhsi_wake_down(struct work_struct *work)
  			break;
  
  		set_current_state(TASK_INTERRUPTIBLE);
@@ -336,10 +336,10 @@ index 4a33ec4fc089..da85f847ebb4 100644
  	}
  
 diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
-index 66d0198e7834..ce1c7bf9be87 100644
+index 63bd2ed96697..80111182faf9 100644
 --- a/drivers/net/can/usb/peak_usb/pcan_usb.c
 +++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
-@@ -242,7 +242,7 @@ static int pcan_usb_write_mode(struct peak_usb_device *dev, u8 onoff)
+@@ -290,7 +290,7 @@ static int pcan_usb_write_mode(struct peak_usb_device *dev, u8 onoff)
  	} else {
  		/* the PCAN-USB needs time to init */
  		set_current_state(TASK_INTERRUPTIBLE);
@@ -362,10 +362,10 @@ index 65b315bc60ab..2b3f71086f5f 100644
  		netif_dbg(dev, ifdown, dev->net,
  			  "waited for %d urb completions\n", temp);
 diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 2b2a841cd938..1a4d27179db1 100644
+index 6062dc27870e..d00eff8640d2 100644
 --- a/drivers/net/usb/usbnet.c
 +++ b/drivers/net/usb/usbnet.c
-@@ -767,7 +767,7 @@ static void wait_skb_queue_empty(struct sk_buff_head *q)
+@@ -764,7 +764,7 @@ static void wait_skb_queue_empty(struct sk_buff_head *q)
  	spin_lock_irqsave(&q->lock, flags);
  	while (!skb_queue_empty(q)) {
  		spin_unlock_irqrestore(&q->lock, flags);
@@ -375,7 +375,7 @@ index 2b2a841cd938..1a4d27179db1 100644
  		spin_lock_irqsave(&q->lock, flags);
  	}
 diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
-index 03b1805b106c..41ee54ff304a 100644
+index d1f7b84bbfe8..94da04ef6174 100644
 --- a/drivers/scsi/fnic/fnic_scsi.c
 +++ b/drivers/scsi/fnic/fnic_scsi.c
 @@ -217,7 +217,7 @@ int fnic_fw_reset_handler(struct fnic *fnic)
@@ -387,7 +387,7 @@ index 03b1805b106c..41ee54ff304a 100644
  
  	spin_lock_irqsave(&fnic->wq_copy_lock[0], flags);
  
-@@ -2278,7 +2278,7 @@ static int fnic_clean_pending_aborts(struct fnic *fnic,
+@@ -2277,7 +2277,7 @@ static int fnic_clean_pending_aborts(struct fnic *fnic,
  		}
  	}
  
@@ -397,10 +397,10 @@ index 03b1805b106c..41ee54ff304a 100644
  	/* walk again to check, if IOs are still pending in fw */
  	if (fnic_is_abts_pending(fnic, lr_sc))
 diff --git a/drivers/scsi/snic/snic_scsi.c b/drivers/scsi/snic/snic_scsi.c
-index b3650c989ed4..7ed1fb285754 100644
+index 6dd0ff188bb4..aedf0b78f622 100644
 --- a/drivers/scsi/snic/snic_scsi.c
 +++ b/drivers/scsi/snic/snic_scsi.c
-@@ -2353,7 +2353,7 @@ snic_reset(struct Scsi_Host *shost, struct scsi_cmnd *sc)
+@@ -2349,7 +2349,7 @@ snic_reset(struct Scsi_Host *shost, struct scsi_cmnd *sc)
  
  	/* Wait for all the IOs that are entered in Qcmd */
  	while (atomic_read(&snic->ios_inflight))

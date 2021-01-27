@@ -1,4 +1,4 @@
-From ac97b8ad5d9d075c868feadc4d82e382aaabe543 Mon Sep 17 00:00:00 2001
+From 6ca339e2a03ab0281cacfe684bd0f1c538f485c5 Mon Sep 17 00:00:00 2001
 From: Con Kolivas <kernel@kolivas.org>
 Date: Mon, 20 Feb 2017 13:30:07 +1100
 Subject: [PATCH 08/16] Replace all calls to schedule_timeout_interruptible of
@@ -206,7 +206,7 @@ index bffe548187ee..c2918ee3e100 100644
  
  	timer_setup(&ips->timer, monitor_timeout, TIMER_DEFERRABLE);
 diff --git a/net/core/pktgen.c b/net/core/pktgen.c
-index 44fdbb9c6e53..ae0adfc677c2 100644
+index 105978604ffd..cf509f492abb 100644
 --- a/net/core/pktgen.c
 +++ b/net/core/pktgen.c
 @@ -1894,7 +1894,7 @@ static void pktgen_mark_device(const struct pktgen_net *pn, const char *ifname)
@@ -285,7 +285,7 @@ index a9a6d766a176..45bf31de6282 100644
  			     WM8900_REG_POWER2_SYSCLK_ENA);
  		break;
 diff --git a/sound/soc/codecs/wm9713.c b/sound/soc/codecs/wm9713.c
-index 7072ffacbdfd..e8414ec4759c 100644
+index f333e2ff4a16..3033cc2d4005 100644
 --- a/sound/soc/codecs/wm9713.c
 +++ b/sound/soc/codecs/wm9713.c
 @@ -199,7 +199,7 @@ static int wm9713_voice_shutdown(struct snd_soc_dapm_widget *w,
