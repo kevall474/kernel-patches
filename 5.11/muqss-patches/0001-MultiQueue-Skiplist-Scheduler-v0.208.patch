@@ -985,8 +985,6 @@ index 85de313ddec2..4edef95c5f04 100644
  	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if X86_INTEL_PSTATE && SMP
 +	default CPU_FREQ_DEFAULT_GOV_ONDEMAND if !X86_INTEL_PSTATE
  	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
- 	help
- 	  This option sets which CPUFreq governor shall be loaded at
 diff --git a/fs/proc/base.c b/fs/proc/base.c
 index b3422cda2a91..7ab99c9eaa5b 100644
 --- a/fs/proc/base.c
