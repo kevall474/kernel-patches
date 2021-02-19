@@ -1,7 +1,7 @@
-From 4c5616b763b0318dd77cd788bf86c722387c7c17 Mon Sep 17 00:00:00 2001
+From 90fd279663e450d1738ffe97493dc09a0431701e Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Mon, 17 Aug 2020 22:48:47 +0200
-Subject: [PATCH 01/21] net/sched: allow configuring cake qdisc as default
+Subject: [PATCH 01/29] net/sched: allow configuring cake qdisc as default
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
 ---
@@ -34,10 +34,10 @@ index 1e8ab4749..75122fd65 100644
 2.30.1.457.gf011795891
 
 
-From c0cb2ccf2d1af34ab041b1603a741c29da509705 Mon Sep 17 00:00:00 2001
+From 1cc55d75bb8898b30373a6d906f724baccc44f90 Mon Sep 17 00:00:00 2001
 From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
 Date: Fri, 26 Oct 2018 11:22:33 +0100
-Subject: [PATCH 02/21] infiniband: Fix __read_overflow2 error with -O3
+Subject: [PATCH 02/29] infiniband: Fix __read_overflow2 error with -O3
  inlining
 
 ---
@@ -60,10 +60,10 @@ index 0abce004a..b6eeb2fab 100644
 2.30.1.457.gf011795891
 
 
-From bde250dded8fe774e8da3a19c775b14b941fe00e Mon Sep 17 00:00:00 2001
+From 85b92185151caed53f8da21f048ba970e71ed955 Mon Sep 17 00:00:00 2001
 From: Seth Forshee <seth.forshee@canonical.com>
 Date: Tue, 9 Jul 2019 13:49:19 -0500
-Subject: [PATCH 03/21] kbuild: add -fcf-protection=none to retpoline flags
+Subject: [PATCH 03/29] kbuild: add -fcf-protection=none to retpoline flags
 
 -mindirect-branch and -fcf-protection are not compatible, and
 so kernel builds fail with a gcc build where -fcf-protection is
@@ -94,10 +94,10 @@ index de1acaefe..ced238d48 100644
 2.30.1.457.gf011795891
 
 
-From 660009d7cc23fb06a705c48a7349fa02ef0d6962 Mon Sep 17 00:00:00 2001
+From 5e6e1d1b0c731a48d5bbbee638d9306617c35de8 Mon Sep 17 00:00:00 2001
 From: Sultan Alsawaf <sultan@kerneltoast.com>
 Date: Sat, 28 Mar 2020 13:06:28 -0700
-Subject: [PATCH 04/21] mm: Disable watermark boosting by default
+Subject: [PATCH 04/29] mm: Disable watermark boosting by default
 
 What watermark boosting does is preemptively fire up kswapd to free
 memory when there hasn't been an allocation failure. It does this by
@@ -155,10 +155,10 @@ index 519a60d5b..c846052bc 100644
 2.30.1.457.gf011795891
 
 
-From 8b62e1a36fa04aaace9860471d4412a9dcb7f5fb Mon Sep 17 00:00:00 2001
+From 3e3342ce1adc79074892887f936a76a1fd55d367 Mon Sep 17 00:00:00 2001
 From: Sultan Alsawaf <sultan@kerneltoast.com>
 Date: Thu, 20 Feb 2020 20:30:52 -0800
-Subject: [PATCH 05/21] mm: Stop kswapd early when nothing's waiting for it to
+Subject: [PATCH 05/29] mm: Stop kswapd early when nothing's waiting for it to
  free pages
 
 Keeping kswapd running when all the failed allocations that invoked it
@@ -255,10 +255,10 @@ index b1b574ad1..370d291de 100644
 2.30.1.457.gf011795891
 
 
-From cf85360124d630f1b1bc687c6694ce947e75b2aa Mon Sep 17 00:00:00 2001
+From e364f125fbba1d83ee599388b183e29dcfa904b1 Mon Sep 17 00:00:00 2001
 From: Sultan Alsawaf <sultan@kerneltoast.com>
 Date: Thu, 9 Apr 2020 00:20:25 -0700
-Subject: [PATCH 06/21] mm: Fully disable watermark boosting when it isn't used
+Subject: [PATCH 06/29] mm: Fully disable watermark boosting when it isn't used
 
 The watermark boosting code still wakes kswapd even when there's no
 watermark boost in effect. Change it to only wake kswapd when there is
@@ -291,10 +291,10 @@ index d2f45e2c6..1d01b5244 100644
 2.30.1.457.gf011795891
 
 
-From b32f5284030dba4531811d1cd0c9e279fbcfffb1 Mon Sep 17 00:00:00 2001
+From 30f5aa782632ff9a070e84441e80ad0cba96d51f Mon Sep 17 00:00:00 2001
 From: Sultan Alsawaf <sultan@kerneltoast.com>
 Date: Wed, 20 May 2020 09:55:17 -0700
-Subject: [PATCH 07/21] mm: Don't stop kswapd on a per-node basis when there
+Subject: [PATCH 07/29] mm: Don't stop kswapd on a per-node basis when there
  are no waiters
 
 The page allocator wakes all kswapds in an allocation context's allowed
@@ -398,10 +398,10 @@ index 370d291de..923f0a381 100644
 2.30.1.457.gf011795891
 
 
-From d0abca9089c50b161cd7456fc3b555fbbe6246a7 Mon Sep 17 00:00:00 2001
+From eec7c8ce98107faefe31ef688b7340511eeb7155 Mon Sep 17 00:00:00 2001
 From: Sultan Alsawaf <sultan@kerneltoast.com>
 Date: Sun, 8 Mar 2020 00:31:35 -0800
-Subject: [PATCH 08/21] kbuild: Disable stack conservation for GCC
+Subject: [PATCH 08/29] kbuild: Disable stack conservation for GCC
 
 There's plenty of room on the stack for a few more inlined bytes here
 and there. The measured stack usage at runtime is still safe without
@@ -431,10 +431,10 @@ index ced238d48..10cc29e96 100644
 2.30.1.457.gf011795891
 
 
-From 7e6f19a5ea82086672b8d85810eb8450d8b1f2f5 Mon Sep 17 00:00:00 2001
+From e0a398d40a97c2a1195d4722b9528642cd28eb96 Mon Sep 17 00:00:00 2001
 From: Mark Weiman <mark.weiman@markzz.com>
 Date: Sun, 12 Aug 2018 11:36:21 -0400
-Subject: [PATCH 09/21] pci: Enable overrides for missing ACS capabilities
+Subject: [PATCH 09/29] pci: Enable overrides for missing ACS capabilities
 
 This an updated version of Alex Williamson's patch from:
 https://lkml.org/lkml/2013/5/30/513
@@ -629,10 +629,10 @@ index 653660e3b..af8534a51 100644
 2.30.1.457.gf011795891
 
 
-From cbb688f2af51d3503555e2c9a8357b79743f84be Mon Sep 17 00:00:00 2001
+From 1b3338695b033d3340fea6f6cda08f30b7de1c96 Mon Sep 17 00:00:00 2001
 From: "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>
 Date: Mon, 3 Aug 2020 21:18:53 +0200
-Subject: [PATCH 10/21] ZEN: Add OpenRGB patches
+Subject: [PATCH 10/29] ZEN: Add OpenRGB patches
 
 Squashed commit of the following:
 
@@ -1378,10 +1378,10 @@ index 8c1b31ed0..0b1b36fa0 100644
 2.30.1.457.gf011795891
 
 
-From 24981d7fc4e753a77bbe8d93c08e2fa4f3f335ea Mon Sep 17 00:00:00 2001
+From 79651fd3149495dd9732b7b2ac98dd61efbb0614 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Fri, 25 Sep 2020 13:22:05 +0200
-Subject: [PATCH 11/21] tty: Allow setting the number of available virtual TTYs
+Subject: [PATCH 11/29] tty: Allow setting the number of available virtual TTYs
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
 ---
@@ -1448,10 +1448,10 @@ index e9d39c485..3bceead8d 100644
 2.30.1.457.gf011795891
 
 
-From 5960c9b8283e3f52f0fbdbf599c166bf48c8af43 Mon Sep 17 00:00:00 2001
+From c3dd224823257af996e1dd14f424e688ee9a9ca8 Mon Sep 17 00:00:00 2001
 From: "Martin K. Petersen" <martin.petersen@oracle.com>
 Date: Sun, 22 Mar 2020 16:57:06 -0400
-Subject: [PATCH 12/21] scsi: sd: Optimal I/O size should be a multiple of
+Subject: [PATCH 12/29] scsi: sd: Optimal I/O size should be a multiple of
  reported granularity
 
 Commit a83da8a4509d ("scsi: sd: Optimal I/O size should be a multiple of
@@ -1582,10 +1582,10 @@ index b59136c41..4154030c8 100644
 2.30.1.457.gf011795891
 
 
-From c2c9096ea4d52abf8ea3c07219f593a9fbe2dbd0 Mon Sep 17 00:00:00 2001
+From 14f052ddd63b252ccb1e4871c9d1f005c077f6fa Mon Sep 17 00:00:00 2001
 From: Yafang Shao <laoar.shao@gmail.com>
 Date: Thu, 4 Jun 2020 03:05:47 -0400
-Subject: [PATCH 13/21] iomap: avoid deadlock if memory reclaim is triggered in
+Subject: [PATCH 13/29] iomap: avoid deadlock if memory reclaim is triggered in
  writepage path
 
 Recently there is a XFS deadlock on our server with an old kernel.
@@ -1706,10 +1706,10 @@ index 16a1e82e3..93460d808 100644
 2.30.1.457.gf011795891
 
 
-From b13abd692eef66b9de1ced16a780d1b84d708be6 Mon Sep 17 00:00:00 2001
+From 39eb0c04ca7ddaa43c42ea86a10e7e06405ec593 Mon Sep 17 00:00:00 2001
 From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 Date: Tue, 22 Dec 2020 09:21:28 +0800
-Subject: [PATCH 14/21] mm: Add become_kswapd and restore_kswapd
+Subject: [PATCH 14/29] mm: Add become_kswapd and restore_kswapd
 
 Since XFS needs to pretend to be kswapd in some of its worker threads,
 create methods to save & restore kswapd state.  Don't bother restoring
@@ -1837,10 +1837,10 @@ index 923f0a381..7b77c7297 100644
 2.30.1.457.gf011795891
 
 
-From d32a518831bea94b11d997f5597ec0db1ec3584a Mon Sep 17 00:00:00 2001
+From 8f271591c17060c5ebc8432e33d4bcb5b4807150 Mon Sep 17 00:00:00 2001
 From: "Darrick J. Wong" <djwong@kernel.org>
 Date: Mon, 11 Jan 2021 14:50:53 -0800
-Subject: [PATCH 15/21] xfs: fix an ABBA deadlock in xfs_rename
+Subject: [PATCH 15/29] xfs: fix an ABBA deadlock in xfs_rename
 
 When overlayfs is running on top of xfs and the user unlinks a file in
 the overlay, overlayfs will create a whiteout inode and ask xfs to
@@ -1963,10 +1963,10 @@ index b7352bc4c..e5dc41b10 100644
 2.30.1.457.gf011795891
 
 
-From d89b28cb990fa09c5d14e5e1c577a23ada41d9cd Mon Sep 17 00:00:00 2001
+From 1a8d9477ab747bff2683fd4a6a3ab292dbe0f594 Mon Sep 17 00:00:00 2001
 From: Yafang Shao <laoar.shao@gmail.com>
 Date: Wed, 13 Jan 2021 18:22:22 +0800
-Subject: [PATCH 16/21] xfs: use memalloc_nofs_{save,restore} in xfs
+Subject: [PATCH 16/29] xfs: use memalloc_nofs_{save,restore} in xfs
  transaction
 
 Introduce a new API to mark the start and end of XFS transactions.
@@ -2112,10 +2112,10 @@ index 084658946..44b11c64a 100644
 2.30.1.457.gf011795891
 
 
-From 304554bf6ea6b1afa4f1ef0d2b98d754e3bb90b7 Mon Sep 17 00:00:00 2001
+From 9caeebd70dbc496d2ced17283eef72d7d803ace9 Mon Sep 17 00:00:00 2001
 From: Yafang Shao <laoar.shao@gmail.com>
 Date: Wed, 13 Jan 2021 18:22:23 +0800
-Subject: [PATCH 17/21] xfs: refactor the usage around
+Subject: [PATCH 17/29] xfs: refactor the usage around
  xfs_trans_context_{set,clear}
 
 The xfs_trans context should be active after it is allocated, and
@@ -2269,10 +2269,10 @@ index 44b11c64a..3645fd0d7 100644
 2.30.1.457.gf011795891
 
 
-From d5307e2b9c2affd73633964a8b9903800a7fbf77 Mon Sep 17 00:00:00 2001
+From 8263c5d2e2563a019b9f0160c625722e55510c47 Mon Sep 17 00:00:00 2001
 From: Yafang Shao <laoar.shao@gmail.com>
 Date: Wed, 13 Jan 2021 18:22:24 +0800
-Subject: [PATCH 18/21] xfs: use current->journal_info to avoid transaction
+Subject: [PATCH 18/29] xfs: use current->journal_info to avoid transaction
  reservation recursion
 
 PF_FSTRANS which is used to avoid transaction reservation recursion, is
@@ -2402,10 +2402,10 @@ index 3645fd0d7..e2f3251d6 100644
 2.30.1.457.gf011795891
 
 
-From 0d97fa580bafab2dac810494edb3da476574bda9 Mon Sep 17 00:00:00 2001
+From 93e17e08b8accd83fd21bd150df1a53bbc7d4da3 Mon Sep 17 00:00:00 2001
 From: Jeffrey Mitchell <jeffrey.mitchell@starlab.io>
 Date: Thu, 21 Jan 2021 09:19:12 -0600
-Subject: [PATCH 19/21] xfs: set inode size after creating symlink
+Subject: [PATCH 19/29] xfs: set inode size after creating symlink
 
 When XFS creates a new symlink, it writes its size to disk but not to the
 VFS inode. This causes i_size_read() to return 0 for that symlink until
@@ -2438,10 +2438,10 @@ index 1f43fd7f3..c835827ae 100644
 2.30.1.457.gf011795891
 
 
-From 23349e03c175c082b9d9e9d32d4eef103e510ff3 Mon Sep 17 00:00:00 2001
+From 036ffd6f31445021d719f11ed0c9f01633858cd8 Mon Sep 17 00:00:00 2001
 From: Johannes Weiner <hannes@cmpxchg.org>
 Date: Tue, 12 May 2020 17:29:36 -0400
-Subject: [PATCH 20/21] vfs: keep inodes with page cache off the inode shrinker
+Subject: [PATCH 20/29] vfs: keep inodes with page cache off the inode shrinker
  LRU
 
 The VFS inode shrinker is currently allowed to reclaim cold inodes
@@ -3232,10 +3232,10 @@ index 10e96de94..9b5202dd5 100644
 2.30.1.457.gf011795891
 
 
-From d68b53ae45cc983155e1c0bbfb0e29b1c1619686 Mon Sep 17 00:00:00 2001
+From f15133bee424c266489e4af56c570754b55e6254 Mon Sep 17 00:00:00 2001
 From: Brian Foster <bfoster@redhat.com>
 Date: Wed, 10 Feb 2021 12:01:12 -0500
-Subject: [PATCH 21/21] xfs: restore shutdown check in mapped write fault path
+Subject: [PATCH 21/29] xfs: restore shutdown check in mapped write fault path
 
 XFS triggers an iomap warning in the write fault path due to a
 !PageUptodate() page if a write fault happens to occur on a page
@@ -3275,6 +3275,1137 @@ index 7b9ff824e..74bc2bead 100644
  	/* we can't use delayed allocations when using extent size hints */
  	if (xfs_get_extsz_hint(ip))
  		return xfs_direct_write_iomap_begin(inode, offset, count,
+-- 
+2.30.1.457.gf011795891
+
+
+From ae5cd8292f235b48827dbeeb9d144085e00b81c0 Mon Sep 17 00:00:00 2001
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
+Date: Mon, 15 Feb 2021 10:37:46 -0500
+Subject: [PATCH 22/29] SUNRPC: Set TCP_CORK until the transmit queue is empty
+
+When we have multiple RPC requests queued up, it makes sense to set the
+TCP_CORK option while the transmit queue is non-empty.
+
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+---
+ include/linux/sunrpc/xprt.h | 1 +
+ net/sunrpc/xprt.c           | 2 ++
+ net/sunrpc/xprtsock.c       | 5 ++++-
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/sunrpc/xprt.h b/include/linux/sunrpc/xprt.h
+index d2e97ee80..d81fe8b36 100644
+--- a/include/linux/sunrpc/xprt.h
++++ b/include/linux/sunrpc/xprt.h
+@@ -247,6 +247,7 @@ struct rpc_xprt {
+ 	struct rpc_task *	snd_task;	/* Task blocked in send */
+ 
+ 	struct list_head	xmit_queue;	/* Send queue */
++	atomic_long_t		xmit_queuelen;
+ 
+ 	struct svc_xprt		*bc_xprt;	/* NFSv4.1 backchannel */
+ #if defined(CONFIG_SUNRPC_BACKCHANNEL)
+diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
+index 691ccf804..a853f75d4 100644
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -1352,6 +1352,7 @@ xprt_request_enqueue_transmit(struct rpc_task *task)
+ 		list_add_tail(&req->rq_xmit, &xprt->xmit_queue);
+ 		INIT_LIST_HEAD(&req->rq_xmit2);
+ out:
++		atomic_long_inc(&xprt->xmit_queuelen);
+ 		set_bit(RPC_TASK_NEED_XMIT, &task->tk_runstate);
+ 		spin_unlock(&xprt->queue_lock);
+ 	}
+@@ -1381,6 +1382,7 @@ xprt_request_dequeue_transmit_locked(struct rpc_task *task)
+ 		}
+ 	} else
+ 		list_del(&req->rq_xmit2);
++	atomic_long_dec(&req->rq_xprt->xmit_queuelen);
+ }
+ 
+ /**
+diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
+index c56a66cdf..1e0a20c64 100644
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -1018,6 +1018,7 @@ static int xs_tcp_send_request(struct rpc_rqst *req)
+ 	 * to cope with writespace callbacks arriving _after_ we have
+ 	 * called sendmsg(). */
+ 	req->rq_xtime = ktime_get();
++	tcp_sock_set_cork(transport->inet, true);
+ 	while (1) {
+ 		status = xprt_sock_sendmsg(transport->sock, &msg, xdr,
+ 					   transport->xmit.offset, rm, &sent);
+@@ -1032,6 +1033,8 @@ static int xs_tcp_send_request(struct rpc_rqst *req)
+ 		if (likely(req->rq_bytes_sent >= msglen)) {
+ 			req->rq_xmit_bytes_sent += transport->xmit.offset;
+ 			transport->xmit.offset = 0;
++			if (atomic_long_read(&xprt->xmit_queuelen) == 1)
++				tcp_sock_set_cork(transport->inet, false);
+ 			return 0;
+ 		}
+ 
+@@ -2162,6 +2165,7 @@ static int xs_tcp_finish_connecting(struct rpc_xprt *xprt, struct socket *sock)
+ 		}
+ 
+ 		xs_tcp_set_socket_timeouts(xprt, sock);
++		tcp_sock_set_nodelay(sk);
+ 
+ 		write_lock_bh(&sk->sk_callback_lock);
+ 
+@@ -2176,7 +2180,6 @@ static int xs_tcp_finish_connecting(struct rpc_xprt *xprt, struct socket *sock)
+ 
+ 		/* socket options */
+ 		sock_reset_flag(sk, SOCK_LINGER);
+-		tcp_sk(sk)->nonagle |= TCP_NAGLE_OFF;
+ 
+ 		xprt_clear_connected(xprt);
+ 
+-- 
+2.30.1.457.gf011795891
+
+
+From ced3cb7757e76ae0e8f10e12f0ae6284ee7b213c Mon Sep 17 00:00:00 2001
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
+Date: Tue, 16 Feb 2021 12:17:22 -0500
+Subject: [PATCH 23/29] SUNRPC: Use TCP_CORK to optimise send performance on
+ the server
+
+Use a counter to keep track of how many requests are queued behind the
+xprt->xpt_mutex, and keep TCP_CORK set until the queue is empty.
+
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+---
+ include/linux/sunrpc/svcsock.h | 2 ++
+ net/sunrpc/svcsock.c           | 8 +++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/sunrpc/svcsock.h b/include/linux/sunrpc/svcsock.h
+index b7ac7fe68..bcc555c7a 100644
+--- a/include/linux/sunrpc/svcsock.h
++++ b/include/linux/sunrpc/svcsock.h
+@@ -35,6 +35,8 @@ struct svc_sock {
+ 	/* Total length of the data (not including fragment headers)
+ 	 * received so far in the fragments making up this rpc: */
+ 	u32			sk_datalen;
++	/* Number of queued send requests */
++	atomic_t		sk_sendqlen;
+ 
+ 	struct page *		sk_pages[RPCSVC_MAXPAGES];	/* received data */
+ };
+diff --git a/net/sunrpc/svcsock.c b/net/sunrpc/svcsock.c
+index 5a809c64d..231f510a4 100644
+--- a/net/sunrpc/svcsock.c
++++ b/net/sunrpc/svcsock.c
+@@ -1171,18 +1171,23 @@ static int svc_tcp_sendto(struct svc_rqst *rqstp)
+ 
+ 	svc_tcp_release_rqst(rqstp);
+ 
++	atomic_inc(&svsk->sk_sendqlen);
+ 	mutex_lock(&xprt->xpt_mutex);
+ 	if (svc_xprt_is_dead(xprt))
+ 		goto out_notconn;
++	tcp_sock_set_cork(svsk->sk_sk, true);
+ 	err = svc_tcp_sendmsg(svsk->sk_sock, &msg, xdr, marker, &sent);
+ 	xdr_free_bvec(xdr);
+ 	trace_svcsock_tcp_send(xprt, err < 0 ? err : sent);
+ 	if (err < 0 || sent != (xdr->len + sizeof(marker)))
+ 		goto out_close;
++	if (atomic_dec_and_test(&svsk->sk_sendqlen))
++		tcp_sock_set_cork(svsk->sk_sk, false);
+ 	mutex_unlock(&xprt->xpt_mutex);
+ 	return sent;
+ 
+ out_notconn:
++	atomic_dec(&svsk->sk_sendqlen);
+ 	mutex_unlock(&xprt->xpt_mutex);
+ 	return -ENOTCONN;
+ out_close:
+@@ -1192,6 +1197,7 @@ static int svc_tcp_sendto(struct svc_rqst *rqstp)
+ 		  (err < 0) ? err : sent, xdr->len);
+ 	set_bit(XPT_CLOSE, &xprt->xpt_flags);
+ 	svc_xprt_enqueue(xprt);
++	atomic_dec(&svsk->sk_sendqlen);
+ 	mutex_unlock(&xprt->xpt_mutex);
+ 	return -EAGAIN;
+ }
+@@ -1261,7 +1267,7 @@ static void svc_tcp_init(struct svc_sock *svsk, struct svc_serv *serv)
+ 		svsk->sk_datalen = 0;
+ 		memset(&svsk->sk_pages[0], 0, sizeof(svsk->sk_pages));
+ 
+-		tcp_sk(sk)->nonagle |= TCP_NAGLE_OFF;
++		tcp_sock_set_nodelay(sk);
+ 
+ 		set_bit(XPT_DATA, &svsk->sk_xprt.xpt_flags);
+ 		switch (sk->sk_state) {
+-- 
+2.30.1.457.gf011795891
+
+
+From fd4cbcc94b1c989aee000c46a2954ceffdafffe6 Mon Sep 17 00:00:00 2001
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
+Date: Tue, 16 Feb 2021 12:17:23 -0500
+Subject: [PATCH 24/29] SUNRPC: Remove redundant socket flags from
+ svc_tcp_sendmsg()
+
+Now that the caller controls the TCP_CORK socket option, it is redundant
+to set MSG_MORE and MSG_SENDPAGE_NOTLAST in the calls to
+kernel_sendpage().
+
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+---
+ net/sunrpc/svcsock.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/net/sunrpc/svcsock.c b/net/sunrpc/svcsock.c
+index 231f510a4..8c19732e4 100644
+--- a/net/sunrpc/svcsock.c
++++ b/net/sunrpc/svcsock.c
+@@ -1088,12 +1088,11 @@ static int svc_tcp_sendmsg(struct socket *sock, struct msghdr *msg,
+ 		.iov_base	= &marker,
+ 		.iov_len	= sizeof(marker),
+ 	};
+-	int flags, ret;
++	int ret;
+ 
+ 	*sentp = 0;
+ 	xdr_alloc_bvec(xdr, GFP_KERNEL);
+ 
+-	msg->msg_flags = MSG_MORE;
+ 	ret = kernel_sendmsg(sock, msg, &rm, 1, rm.iov_len);
+ 	if (ret < 0)
+ 		return ret;
+@@ -1101,8 +1100,7 @@ static int svc_tcp_sendmsg(struct socket *sock, struct msghdr *msg,
+ 	if (ret != rm.iov_len)
+ 		return -EAGAIN;
+ 
+-	flags = head->iov_len < xdr->len ? MSG_MORE | MSG_SENDPAGE_NOTLAST : 0;
+-	ret = svc_tcp_send_kvec(sock, head, flags);
++	ret = svc_tcp_send_kvec(sock, head, 0);
+ 	if (ret < 0)
+ 		return ret;
+ 	*sentp += ret;
+@@ -1116,15 +1114,11 @@ static int svc_tcp_sendmsg(struct socket *sock, struct msghdr *msg,
+ 		bvec = xdr->bvec + (xdr->page_base >> PAGE_SHIFT);
+ 		offset = offset_in_page(xdr->page_base);
+ 		remaining = xdr->page_len;
+-		flags = MSG_MORE | MSG_SENDPAGE_NOTLAST;
+ 		while (remaining > 0) {
+-			if (remaining <= PAGE_SIZE && tail->iov_len == 0)
+-				flags = 0;
+-
+ 			len = min(remaining, bvec->bv_len - offset);
+ 			ret = kernel_sendpage(sock, bvec->bv_page,
+ 					      bvec->bv_offset + offset,
+-					      len, flags);
++					      len, 0);
+ 			if (ret < 0)
+ 				return ret;
+ 			*sentp += ret;
+-- 
+2.30.1.457.gf011795891
+
+
+From a99a19bb6a563e315e899417621d0ca87fc42b74 Mon Sep 17 00:00:00 2001
+From: Dave Chinner <dchinner@redhat.com>
+Date: Thu, 28 Jan 2021 15:41:50 +1100
+Subject: [PATCH 25/29] xfs: log stripe roundoff is a property of the log
+
+We don't need to look at the xfs_mount and superblock every time we
+need to do an iclog roundoff calculation. The property is fixed for
+the life of the log, so store the roundoff in the log at mount time
+and use that everywhere.
+
+On a debug build:
+
+$ size fs/xfs/xfs_log.o.*
+   text	   data	    bss	    dec	    hex	filename
+  27360	    560	      8	  27928	   6d18	fs/xfs/xfs_log.o.orig
+  27219	    560	      8	  27787	   6c8b	fs/xfs/xfs_log.o.patched
+
+[HH: re-added lost factor 2 in xfs_log_calc_unit_res()]
+Signed-off-by: Dave Chinner <dchinner@redhat.com>
+---
+ fs/xfs/libxfs/xfs_log_format.h |  3 --
+ fs/xfs/xfs_log.c               | 60 +++++++++++++++-------------------
+ fs/xfs/xfs_log_priv.h          |  2 ++
+ 3 files changed, 28 insertions(+), 37 deletions(-)
+
+diff --git a/fs/xfs/libxfs/xfs_log_format.h b/fs/xfs/libxfs/xfs_log_format.h
+index 8bd00da6d..165872195 100644
+--- a/fs/xfs/libxfs/xfs_log_format.h
++++ b/fs/xfs/libxfs/xfs_log_format.h
+@@ -34,9 +34,6 @@ typedef uint32_t xlog_tid_t;
+ #define XLOG_MIN_RECORD_BSHIFT	14		/* 16384 == 1 << 14 */
+ #define XLOG_BIG_RECORD_BSHIFT	15		/* 32k == 1 << 15 */
+ #define XLOG_MAX_RECORD_BSHIFT	18		/* 256k == 1 << 18 */
+-#define XLOG_BTOLSUNIT(log, b)  (((b)+(log)->l_mp->m_sb.sb_logsunit-1) / \
+-                                 (log)->l_mp->m_sb.sb_logsunit)
+-#define XLOG_LSUNITTOB(log, su) ((su) * (log)->l_mp->m_sb.sb_logsunit)
+ 
+ #define XLOG_HEADER_SIZE	512
+ 
+diff --git a/fs/xfs/xfs_log.c b/fs/xfs/xfs_log.c
+index fa2d05e65..bc3eda5ab 100644
+--- a/fs/xfs/xfs_log.c
++++ b/fs/xfs/xfs_log.c
+@@ -1323,6 +1323,12 @@ xlog_alloc_log(
+ 	xlog_assign_atomic_lsn(&log->l_last_sync_lsn, 1, 0);
+ 	log->l_curr_cycle  = 1;	    /* 0 is bad since this is initial value */
+ 
++	/* roundoff padding for transaction data and one for commit record */
++	if (xfs_sb_version_haslogv2(&mp->m_sb) && mp->m_sb.sb_logsunit > 1)
++		log->l_iclog_roundoff = mp->m_sb.sb_logsunit;
++	else
++		log->l_iclog_roundoff = BBSIZE;
++
+ 	xlog_grant_head_init(&log->l_reserve_head);
+ 	xlog_grant_head_init(&log->l_write_head);
+ 
+@@ -1775,29 +1781,15 @@ xlog_calc_iclog_size(
+ 	uint32_t		*roundoff)
+ {
+ 	uint32_t		count_init, count;
+-	bool			use_lsunit;
+-
+-	use_lsunit = xfs_sb_version_haslogv2(&log->l_mp->m_sb) &&
+-			log->l_mp->m_sb.sb_logsunit > 1;
+ 
+ 	/* Add for LR header */
+ 	count_init = log->l_iclog_hsize + iclog->ic_offset;
++	count = roundup(count_init, log->l_iclog_roundoff);
+ 
+-	/* Round out the log write size */
+-	if (use_lsunit) {
+-		/* we have a v2 stripe unit to use */
+-		count = XLOG_LSUNITTOB(log, XLOG_BTOLSUNIT(log, count_init));
+-	} else {
+-		count = BBTOB(BTOBB(count_init));
+-	}
+-
+-	ASSERT(count >= count_init);
+ 	*roundoff = count - count_init;
+ 
+-	if (use_lsunit)
+-		ASSERT(*roundoff < log->l_mp->m_sb.sb_logsunit);
+-	else
+-		ASSERT(*roundoff < BBTOB(1));
++	ASSERT(count >= count_init);
++	ASSERT(*roundoff < log->l_iclog_roundoff);
+ 	return count;
+ }
+ 
+@@ -3069,10 +3061,9 @@ xlog_state_switch_iclogs(
+ 	log->l_curr_block += BTOBB(eventual_size)+BTOBB(log->l_iclog_hsize);
+ 
+ 	/* Round up to next log-sunit */
+-	if (xfs_sb_version_haslogv2(&log->l_mp->m_sb) &&
+-	    log->l_mp->m_sb.sb_logsunit > 1) {
+-		uint32_t sunit_bb = BTOBB(log->l_mp->m_sb.sb_logsunit);
+-		log->l_curr_block = roundup(log->l_curr_block, sunit_bb);
++	if (log->l_iclog_roundoff > BBSIZE) {
++		log->l_curr_block = roundup(log->l_curr_block,
++						BTOBB(log->l_iclog_roundoff));
+ 	}
+ 
+ 	if (log->l_curr_block >= log->l_logBBsize) {
+@@ -3324,12 +3315,11 @@ xfs_log_ticket_get(
+  * Figure out the total log space unit (in bytes) that would be
+  * required for a log ticket.
+  */
+-int
+-xfs_log_calc_unit_res(
+-	struct xfs_mount	*mp,
++static int
++xlog_calc_unit_res(
++	struct xlog		*log,
+ 	int			unit_bytes)
+ {
+-	struct xlog		*log = mp->m_log;
+ 	int			iclog_space;
+ 	uint			num_headers;
+ 
+@@ -3405,18 +3395,20 @@ xfs_log_calc_unit_res(
+ 	/* for commit-rec LR header - note: padding will subsume the ophdr */
+ 	unit_bytes += log->l_iclog_hsize;
+ 
+-	/* for roundoff padding for transaction data and one for commit record */
+-	if (xfs_sb_version_haslogv2(&mp->m_sb) && mp->m_sb.sb_logsunit > 1) {
+-		/* log su roundoff */
+-		unit_bytes += 2 * mp->m_sb.sb_logsunit;
+-	} else {
+-		/* BB roundoff */
+-		unit_bytes += 2 * BBSIZE;
+-        }
++	/* roundoff padding for transaction data and one for commit record */
++	unit_bytes += 2 * log->l_iclog_roundoff;
+ 
+ 	return unit_bytes;
+ }
+ 
++int
++xfs_log_calc_unit_res(
++	struct xfs_mount	*mp,
++	int			unit_bytes)
++{
++	return xlog_calc_unit_res(mp->m_log, unit_bytes);
++}
++
+ /*
+  * Allocate and initialise a new log ticket.
+  */
+@@ -3433,7 +3425,7 @@ xlog_ticket_alloc(
+ 
+ 	tic = kmem_cache_zalloc(xfs_log_ticket_zone, GFP_NOFS | __GFP_NOFAIL);
+ 
+-	unit_res = xfs_log_calc_unit_res(log->l_mp, unit_bytes);
++	unit_res = xlog_calc_unit_res(log, unit_bytes);
+ 
+ 	atomic_set(&tic->t_ref, 1);
+ 	tic->t_task		= current;
+diff --git a/fs/xfs/xfs_log_priv.h b/fs/xfs/xfs_log_priv.h
+index 1c6fdbf3d..037950cf1 100644
+--- a/fs/xfs/xfs_log_priv.h
++++ b/fs/xfs/xfs_log_priv.h
+@@ -436,6 +436,8 @@ struct xlog {
+ #endif
+ 	/* log recovery lsn tracking (for buffer submission */
+ 	xfs_lsn_t		l_recovery_lsn;
++
++	uint32_t		l_iclog_roundoff;/* padding roundoff */
+ };
+ 
+ #define XLOG_BUF_CANCEL_BUCKET(log, blkno) \
+-- 
+2.30.1.457.gf011795891
+
+
+From 2edc22fd2181d07a0f07bccbf623618355036a04 Mon Sep 17 00:00:00 2001
+From: Dave Chinner <dchinner@redhat.com>
+Date: Thu, 28 Jan 2021 15:41:51 +1100
+Subject: [PATCH 26/29] xfs: separate CIL commit record IO
+
+To allow for iclog IO device cache flush behaviour to be optimised,
+we first need to separate out the commit record iclog IO from the
+rest of the checkpoint so we can wait for the checkpoint IO to
+complete before we issue the commit record.
+
+This separate is only necessary if the commit record is being
+written into a different iclog to the start of the checkpoint. If
+the entire checkpoint and commit is in the one iclog, then they are
+both covered by the one set of cache flush primitives on the iclog
+and hence there is no need to separate them.
+
+Otherwise, we need to wait for all the previous iclogs to complete
+so they are ordered correctly and made stable by the REQ_PREFLUSH
+that the commit record iclog IO issues. This guarantees that if a
+reader sees the commit record in the journal, they will also see the
+entire checkpoint that commit record closes off.
+
+This also provides the guarantee that when the commit record IO
+completes, we can safely unpin all the log items in the checkpoint
+so they can be written back because the entire checkpoint is stable
+in the journal.
+
+Signed-off-by: Dave Chinner <dchinner@redhat.com>
+Reviewed-by: Chandan Babu R <chandanrlinux@gmail.com>
+---
+ fs/xfs/xfs_log.c      | 47 +++++++++++++++++++++++++++++++++++++++++++
+ fs/xfs/xfs_log_cil.c  |  7 +++++++
+ fs/xfs/xfs_log_priv.h |  2 ++
+ 3 files changed, 56 insertions(+)
+
+diff --git a/fs/xfs/xfs_log.c b/fs/xfs/xfs_log.c
+index bc3eda5ab..21a00a946 100644
+--- a/fs/xfs/xfs_log.c
++++ b/fs/xfs/xfs_log.c
+@@ -786,6 +786,53 @@ xlog_wait_on_iclog(
+ 	return 0;
+ }
+ 
++/*
++ * Wait on any iclogs that are still flushing in the range of start_lsn to
++ * the current iclog's lsn. The caller holds a reference to the iclog, but
++ * otherwise holds no log locks.
++ *
++ * We walk backwards through the iclogs to find the iclog with the highest lsn
++ * in the range that we need to wait for and then wait for it to complete.
++ * Completion ordering of iclog IOs ensures that all prior iclogs to this IO are
++ * complete by the time our candidate has completed.
++ */
++int
++xlog_wait_on_iclog_lsn(
++	struct xlog_in_core	*iclog,
++	xfs_lsn_t		start_lsn)
++{
++	struct xlog		*log = iclog->ic_log;
++	struct xlog_in_core	*prev;
++	int			error = -EIO;
++
++	spin_lock(&log->l_icloglock);
++	if (XLOG_FORCED_SHUTDOWN(log))
++		goto out_unlock;
++
++	error = 0;
++	for (prev = iclog->ic_prev; prev != iclog; prev = prev->ic_prev) {
++
++		/* Done if the lsn is before our start lsn */
++		if (XFS_LSN_CMP(be64_to_cpu(prev->ic_header.h_lsn),
++				start_lsn) < 0)
++			break;
++
++		/* Don't need to wait on completed, clean iclogs */
++		if (prev->ic_state == XLOG_STATE_DIRTY ||
++		    prev->ic_state == XLOG_STATE_ACTIVE) {
++			continue;
++		}
++
++		/* wait for completion on this iclog */
++		xlog_wait(&prev->ic_force_wait, &log->l_icloglock);
++		return 0;
++	}
++
++out_unlock:
++	spin_unlock(&log->l_icloglock);
++	return error;
++}
++
+ /*
+  * Write out an unmount record using the ticket provided. We have to account for
+  * the data space used in the unmount ticket as this write is not done from a
+diff --git a/fs/xfs/xfs_log_cil.c b/fs/xfs/xfs_log_cil.c
+index b0ef071b3..c5cc1b7ad 100644
+--- a/fs/xfs/xfs_log_cil.c
++++ b/fs/xfs/xfs_log_cil.c
+@@ -870,6 +870,13 @@ xlog_cil_push_work(
+ 	wake_up_all(&cil->xc_commit_wait);
+ 	spin_unlock(&cil->xc_push_lock);
+ 
++	/*
++	 * If the checkpoint spans multiple iclogs, wait for all previous
++	 * iclogs to complete before we submit the commit_iclog.
++	 */
++	if (ctx->start_lsn != commit_lsn)
++		xlog_wait_on_iclog_lsn(commit_iclog, ctx->start_lsn);
++
+ 	/* release the hounds! */
+ 	xfs_log_release_iclog(commit_iclog);
+ 	return;
+diff --git a/fs/xfs/xfs_log_priv.h b/fs/xfs/xfs_log_priv.h
+index 037950cf1..a7ac85aaf 100644
+--- a/fs/xfs/xfs_log_priv.h
++++ b/fs/xfs/xfs_log_priv.h
+@@ -584,6 +584,8 @@ xlog_wait(
+ 	remove_wait_queue(wq, &wait);
+ }
+ 
++int xlog_wait_on_iclog_lsn(struct xlog_in_core *iclog, xfs_lsn_t start_lsn);
++
+ /*
+  * The LSN is valid so long as it is behind the current LSN. If it isn't, this
+  * means that the next log record that includes this metadata could have a
+-- 
+2.30.1.457.gf011795891
+
+
+From 9b1a26f5a7774f0cf4041125eefa3eb781f2d349 Mon Sep 17 00:00:00 2001
+From: Dave Chinner <dchinner@redhat.com>
+Date: Thu, 28 Jan 2021 15:41:52 +1100
+Subject: [PATCH 27/29] xfs: journal IO cache flush reductions
+
+Currently every journal IO is issued as REQ_PREFLUSH | REQ_FUA to
+guarantee the ordering requirements the journal has w.r.t. metadata
+writeback. THe two ordering constraints are:
+
+1. we cannot overwrite metadata in the journal until we guarantee
+that the dirty metadata has been written back in place and is
+stable.
+
+2. we cannot write back dirty metadata until it has been written to
+the journal and guaranteed to be stable (and hence recoverable) in
+the journal.
+
+THe ordering guarantees of #1 are provided by REQ_PREFLUSH. This
+causes the journal IO to issue a cache flush and wait for it to
+complete before issuing the write IO to the journal. Hence all
+completed metadata IO is guaranteed to be stable before the journal
+overwrites the old metadata.
+
+THe ordering guarantees of #2 are provided by the REQ_FUA, which
+ensures the journal writes do not complete until they are on stable
+storage. Hence by the time the last journal IO in a checkpoint
+completes, we know that the entire checkpoint is on stable storage
+and we can unpin the dirty metadata and allow it to be written back.
+
+This is the mechanism by which ordering was first implemented in XFS
+way back in 2002 by this commit:
+
+commit 95d97c36e5155075ba2eb22b17562cfcc53fcf96
+Author: Steve Lord <lord@sgi.com>
+Date:   Fri May 24 14:30:21 2002 +0000
+
+    Add support for drive write cache flushing - should the kernel
+    have the infrastructure
+
+A lot has changed since then, most notably we now use delayed
+logging to checkpoint the filesystem to the journal rather than
+write each individual transaction to the journal. Cache flushes on
+journal IO are necessary when individual transactions are wholly
+contained within a single iclog. However, CIL checkpoints are single
+transactions that typically span hundreds to thousands of individual
+journal writes, and so the requirements for device cache flushing
+have changed.
+
+That is, the ordering rules I state above apply to ordering of
+atomic transactions recorded in the journal, not to the journal IO
+itself. Hence we need to ensure metadata is stable before we start
+writing a new transaction to the journal (guarantee #1), and we need
+to ensure the entire transaction is stable in the journal before we
+start metadata writeback (guarantee #2).
+
+Hence we only need a REQ_PREFLUSH on the journal IO that starts a
+new journal transaction to provide #1, and it is not on any other
+journal IO done within the context of that journal transaction.
+
+To ensure that the entire journal transaction is on stable storage
+before we run the completion code that unpins all the dirty metadata
+recorded in the journal transaction, the last write of the
+transaction must also ensure that the entire journal transaction is
+stable. We already know what IO that will be, thanks to the commit
+record we explicitly write to complete the transaction. We can order
+all the previous journal IO for this transaction by waiting for all
+the previous iclogs containing the transaction data to complete
+their IO, then issuing the commit record IO using REQ_PREFLUSH
+| REQ_FUA. The preflush ensures all the previous journal IO is
+stable before the commit record hits the log, and the REQ_FUA
+ensures that the commit record is stable before completion is
+signalled to the filesystem.
+
+Hence using REQ_PREFLUSH on the first IO of a journal transaction,
+and then ordering the journal IO before issuing the commit record
+with REQ_PREFLUSH | REQ_FUA, we get all the same ordering guarantees
+that we currently achieve by issuing all journal IO with cache
+flushes.
+
+As an optimisation, when the commit record lands in the same iclog
+as the journal transaction starts, we don't need to wait for
+anything and can simply issue the journal IO with REQ_PREFLUSH |
+REQ_FUA as we do right now. This means that for fsync() heavy
+workloads, the cache flush behaviour is completely unchanged and
+there is no degradation in performance as a result of optimise the
+multi-IO transaction case.
+
+To further simplify the implementation, we also issue the initial IO
+in a journal transaction with REQ_FUA. THis ensures the journal is
+dirtied by the first IO in a long running transaction as quickly as
+possible. This helps ensure that log recovery will at least have a
+transaction header for the incomplete transaction in the log similar
+to the stable journal write behaviour we have now.
+
+The most notable sign that there is less IO latency on my test
+machine (nvme SSDs) is that the "noiclogs" rate has dropped
+substantially. This metric indicates that the CIL push is blocking
+in xlog_get_iclog_space() waiting for iclog IO completion to occur.
+With 8 iclogs of 256kB, the rate is appoximately 1 noiclog event to
+every 4 iclog writes. IOWs, every 4th call to xlog_get_iclog_space()
+is blocking waiting for log IO. With the changes in this patch, this
+drops to 1 noiclog event for every 100 iclog writes. Hence it is
+clear that log IO is completing much faster than it was previously,
+but it is also clear that for large iclog sizes, this isn't the
+performance limiting factor on this hardware.
+
+With smaller iclogs (32kB), however, there is a sustantial
+difference. With the cache flush modifications, the journal is now
+running at over 4000 write IOPS, and the journal throughput is
+largely identical to the 256kB iclogs and the noiclog event rate
+stays low at about 1:50 iclog writes. The existing code tops out at
+about 2500 IOPS as the number of cache flushes dominate performance
+and latency. The noiclog event rate is about 1:4, and the
+performance variance is quite large as the journal throughput can
+fall to less than half the peak sustained rate when the cache flush
+rate prevents metadata writeback from keeping up and the log runs
+out of space and throttles reservations.
+
+As a result:
+
+	logbsize	fsmark create rate	rm -rf
+before	32kb		152851+/-5.3e+04	5m28s
+patched	32kb		221533+/-1.1e+04	5m24s
+
+before	256kb		220239+/-6.2e+03	4m58s
+patched	256kb		228286+/-9.2e+03	5m06s
+
+The rm -rf times are included because I ran them, but the
+differences are largely noise. This workload is largely metadata
+read IO latency bound and the changes to the journal cache flushing
+doesn't really make any noticable difference to behaviour apart from
+a reduction in noiclog events from background CIL pushing.
+
+Signed-off-by: Dave Chinner <dchinner@redhat.com>
+---
+ fs/xfs/xfs_log.c      | 34 ++++++++++++++++++++++------------
+ fs/xfs/xfs_log_priv.h |  3 +++
+ 2 files changed, 25 insertions(+), 12 deletions(-)
+
+diff --git a/fs/xfs/xfs_log.c b/fs/xfs/xfs_log.c
+index 21a00a946..0ce82570d 100644
+--- a/fs/xfs/xfs_log.c
++++ b/fs/xfs/xfs_log.c
+@@ -1727,8 +1727,7 @@ xlog_write_iclog(
+ 	struct xlog		*log,
+ 	struct xlog_in_core	*iclog,
+ 	uint64_t		bno,
+-	unsigned int		count,
+-	bool			need_flush)
++	unsigned int		count)
+ {
+ 	ASSERT(bno < log->l_logBBsize);
+ 
+@@ -1766,10 +1765,11 @@ xlog_write_iclog(
+ 	 * writeback throttle from throttling log writes behind background
+ 	 * metadata writeback and causing priority inversions.
+ 	 */
+-	iclog->ic_bio.bi_opf = REQ_OP_WRITE | REQ_META | REQ_SYNC |
+-				REQ_IDLE | REQ_FUA;
+-	if (need_flush)
+-		iclog->ic_bio.bi_opf |= REQ_PREFLUSH;
++	iclog->ic_bio.bi_opf = REQ_OP_WRITE | REQ_META | REQ_SYNC | REQ_IDLE;
++	if (iclog->ic_flags & XLOG_ICL_NEED_FLUSH) {
++		iclog->ic_bio.bi_opf |= REQ_PREFLUSH | REQ_FUA;
++		iclog->ic_flags &= ~XLOG_ICL_NEED_FLUSH;
++	}
+ 
+ 	if (xlog_map_iclog_data(&iclog->ic_bio, iclog->ic_data, count)) {
+ 		xfs_force_shutdown(log->l_mp, SHUTDOWN_LOG_IO_ERROR);
+@@ -1872,7 +1872,7 @@ xlog_sync(
+ 	unsigned int		roundoff;       /* roundoff to BB or stripe */
+ 	uint64_t		bno;
+ 	unsigned int		size;
+-	bool			need_flush = true, split = false;
++	bool			split = false;
+ 
+ 	ASSERT(atomic_read(&iclog->ic_refcnt) == 0);
+ 
+@@ -1930,13 +1930,14 @@ xlog_sync(
+ 	 * synchronously here; for an internal log we can simply use the block
+ 	 * layer state machine for preflushes.
+ 	 */
+-	if (log->l_targ != log->l_mp->m_ddev_targp || split) {
++	if (log->l_targ != log->l_mp->m_ddev_targp ||
++	    (split && (iclog->ic_flags & XLOG_ICL_NEED_FLUSH))) {
+ 		xfs_blkdev_issue_flush(log->l_mp->m_ddev_targp);
+-		need_flush = false;
++		iclog->ic_flags &= ~XLOG_ICL_NEED_FLUSH;
+ 	}
+ 
+ 	xlog_verify_iclog(log, iclog, count);
+-	xlog_write_iclog(log, iclog, bno, count, need_flush);
++	xlog_write_iclog(log, iclog, bno, count);
+ }
+ 
+ /*
+@@ -2387,9 +2388,18 @@ xlog_write(
+ 		ASSERT(log_offset <= iclog->ic_size - 1);
+ 		ptr = iclog->ic_datap + log_offset;
+ 
+-		/* start_lsn is the first lsn written to. That's all we need. */
+-		if (!*start_lsn)
++		/*
++		 * Start_lsn is the first lsn written to. That's all the caller
++		 * needs to have returned. Setting it indicates the first iclog
++		 * of a new checkpoint or the commit record for a checkpoint, so
++		 * also mark the iclog as requiring a pre-flush to ensure all
++		 * metadata writeback or journal IO in the checkpoint is
++		 * correctly ordered against this new log write.
++		 */
++		if (!*start_lsn) {
+ 			*start_lsn = be64_to_cpu(iclog->ic_header.h_lsn);
++			iclog->ic_flags |= XLOG_ICL_NEED_FLUSH;
++		}
+ 
+ 		/*
+ 		 * This loop writes out as many regions as can fit in the amount
+diff --git a/fs/xfs/xfs_log_priv.h b/fs/xfs/xfs_log_priv.h
+index a7ac85aaf..9f1e627cc 100644
+--- a/fs/xfs/xfs_log_priv.h
++++ b/fs/xfs/xfs_log_priv.h
+@@ -133,6 +133,8 @@ enum xlog_iclog_state {
+ 
+ #define XLOG_COVER_OPS		5
+ 
++#define XLOG_ICL_NEED_FLUSH     (1 << 0)        /* iclog needs REQ_PREFLUSH */
++
+ /* Ticket reservation region accounting */ 
+ #define XLOG_TIC_LEN_MAX	15
+ 
+@@ -201,6 +203,7 @@ typedef struct xlog_in_core {
+ 	u32			ic_size;
+ 	u32			ic_offset;
+ 	enum xlog_iclog_state	ic_state;
++	unsigned int		ic_flags;
+ 	char			*ic_datap;	/* pointer to iclog data */
+ 
+ 	/* Callback structures need their own cacheline */
+-- 
+2.30.1.457.gf011795891
+
+
+From 256202b969e9dca2dd40222019b6370c08000bfb Mon Sep 17 00:00:00 2001
+From: Dave Chinner <dchinner@redhat.com>
+Date: Thu, 28 Jan 2021 15:41:53 +1100
+Subject: [PATCH 28/29] xfs: Fix CIL throttle hang when CIL space used going
+ backwards
+
+A hang with tasks stuck on the CIL hard throttle was reported and
+largely diagnosed by Donald Buczek, who discovered that it was a
+result of the CIL context space usage decrementing in committed
+transactions once the hard throttle limit had been hit and processes
+were already blocked.  This resulted in the CIL push not waking up
+those waiters because the CIL context was no longer over the hard
+throttle limit.
+
+The surprising aspect of this was the CIL space usage going
+backwards regularly enough to trigger this situation. Assumptions
+had been made in design that the relogging process would only
+increase the size of the objects in the CIL, and so that space would
+only increase.
+
+This change and commit message fixes the issue and documents the
+result of an audit of the triggers that can cause the CIL space to
+go backwards, how large the backwards steps tend to be, the
+frequency in which they occur, and what the impact on the CIL
+accounting code is.
+
+Even though the CIL ctx->space_used can go backwards, it will only
+do so if the log item is already logged to the CIL and contains a
+space reservation for it's entire logged state. This is tracked by
+the shadow buffer state on the log item. If the item is not
+previously logged in the CIL it has no shadow buffer nor log vector,
+and hence the entire size of the logged item copied to the log
+vector is accounted to the CIL space usage. i.e.  it will always go
+up in this case.
+
+If the item has a log vector (i.e. already in the CIL) and the size
+decreases, then the existing log vector will be overwritten and the
+space usage will go down. This is the only condition where the space
+usage reduces, and it can only occur when an item is already tracked
+in the CIL. Hence we are safe from CIL space usage underruns as a
+result of log items decreasing in size when they are relogged.
+
+Typically this reduction in CIL usage occurs from metadta blocks
+being free, such as when a btree block merge
+occurs or a directory enter/xattr entry is removed and the da-tree
+is reduced in size. This generally results in a reduction in size of
+around a single block in the CIL, but also tends to increase the
+number of log vectors because the parent and sibling nodes in the
+tree needs to be updated when a btree block is removed. If a
+multi-level merge occurs, then we see reduction in size of 2+
+blocks, but again the log vector count goes up.
+
+The other vector is inode fork size changes, which only log the
+current size of the fork and ignore the previously logged size when
+the fork is relogged. Hence if we are removing items from the inode
+fork (dir/xattr removal in shortform, extent record removal in
+extent form, etc) the relogged size of the inode for can decrease.
+
+No other log items can decrease in size either because they are a
+fixed size (e.g. dquots) or they cannot be relogged (e.g. relogging
+an intent actually creates a new intent log item and doesn't relog
+the old item at all.) Hence the only two vectors for CIL context
+size reduction are relogging inode forks and marking buffers active
+in the CIL as stale.
+
+Long story short: the majority of the code does the right thing and
+handles the reduction in log item size correctly, and only the CIL
+hard throttle implementation is problematic and needs fixing. This
+patch makes that fix, as well as adds comments in the log item code
+that result in items shrinking in size when they are relogged as a
+clear reminder that this can and does happen frequently.
+
+The throttle fix is based upon the change Donald proposed, though it
+goes further to ensure that once the throttle is activated, it
+captures all tasks until the CIL push issues a wakeup, regardless of
+whether the CIL space used has gone back under the throttle
+threshold.
+
+This ensures that we prevent tasks reducing the CIL slightly under
+the throttle threshold and then making more changes that push it
+well over the throttle limit. This is acheived by checking if the
+throttle wait queue is already active as a condition of throttling.
+Hence once we start throttling, we continue to apply the throttle
+until the CIL context push wakes everything on the wait queue.
+
+We can use waitqueue_active() for the waitqueue manipulations and
+checks as they are all done under the ctx->xc_push_lock. Hence the
+waitqueue has external serialisation and we can safely peek inside
+the wait queue without holding the internal waitqueue locks.
+
+Many thanks to Donald for his diagnostic and analysis work to
+isolate the cause of this hang.
+
+Reported-by: Donald Buczek <buczek@molgen.mpg.de>
+Signed-off-by: Dave Chinner <dchinner@redhat.com>
+Reviewed-by: Brian Foster <bfoster@redhat.com>
+Reviewed-by: Chandan Babu R <chandanrlinux@gmail.com>
+---
+ fs/xfs/xfs_buf_item.c   | 37 ++++++++++++++++++-------------------
+ fs/xfs/xfs_inode_item.c | 14 ++++++++++++++
+ fs/xfs/xfs_log_cil.c    | 22 +++++++++++++++++-----
+ 3 files changed, 49 insertions(+), 24 deletions(-)
+
+diff --git a/fs/xfs/xfs_buf_item.c b/fs/xfs/xfs_buf_item.c
+index dc0be2a63..17960b1ce 100644
+--- a/fs/xfs/xfs_buf_item.c
++++ b/fs/xfs/xfs_buf_item.c
+@@ -56,14 +56,12 @@ xfs_buf_log_format_size(
+ }
+ 
+ /*
+- * This returns the number of log iovecs needed to log the
+- * given buf log item.
++ * Return the number of log iovecs and space needed to log the given buf log
++ * item segment.
+  *
+- * It calculates this as 1 iovec for the buf log format structure
+- * and 1 for each stretch of non-contiguous chunks to be logged.
+- * Contiguous chunks are logged in a single iovec.
+- *
+- * If the XFS_BLI_STALE flag has been set, then log nothing.
++ * It calculates this as 1 iovec for the buf log format structure and 1 for each
++ * stretch of non-contiguous chunks to be logged.  Contiguous chunks are logged
++ * in a single iovec.
+  */
+ STATIC void
+ xfs_buf_item_size_segment(
+@@ -119,11 +117,8 @@ xfs_buf_item_size_segment(
+ }
+ 
+ /*
+- * This returns the number of log iovecs needed to log the given buf log item.
+- *
+- * It calculates this as 1 iovec for the buf log format structure and 1 for each
+- * stretch of non-contiguous chunks to be logged.  Contiguous chunks are logged
+- * in a single iovec.
++ * Return the number of log iovecs and space needed to log the given buf log
++ * item.
+  *
+  * Discontiguous buffers need a format structure per region that is being
+  * logged. This makes the changes in the buffer appear to log recovery as though
+@@ -133,7 +128,11 @@ xfs_buf_item_size_segment(
+  * what ends up on disk.
+  *
+  * If the XFS_BLI_STALE flag has been set, then log nothing but the buf log
+- * format structures.
++ * format structures. If the item has previously been logged and has dirty
++ * regions, we do not relog them in stale buffers. This has the effect of
++ * reducing the size of the relogged item by the amount of dirty data tracked
++ * by the log item. This can result in the committing transaction reducing the
++ * amount of space being consumed by the CIL.
+  */
+ STATIC void
+ xfs_buf_item_size(
+@@ -147,9 +146,9 @@ xfs_buf_item_size(
+ 	ASSERT(atomic_read(&bip->bli_refcount) > 0);
+ 	if (bip->bli_flags & XFS_BLI_STALE) {
+ 		/*
+-		 * The buffer is stale, so all we need to log
+-		 * is the buf log format structure with the
+-		 * cancel flag in it.
++		 * The buffer is stale, so all we need to log is the buf log
++		 * format structure with the cancel flag in it as we are never
++		 * going to replay the changes tracked in the log item.
+ 		 */
+ 		trace_xfs_buf_item_size_stale(bip);
+ 		ASSERT(bip->__bli_format.blf_flags & XFS_BLF_CANCEL);
+@@ -164,9 +163,9 @@ xfs_buf_item_size(
+ 
+ 	if (bip->bli_flags & XFS_BLI_ORDERED) {
+ 		/*
+-		 * The buffer has been logged just to order it.
+-		 * It is not being included in the transaction
+-		 * commit, so no vectors are used at all.
++		 * The buffer has been logged just to order it. It is not being
++		 * included in the transaction commit, so no vectors are used at
++		 * all.
+ 		 */
+ 		trace_xfs_buf_item_size_ordered(bip);
+ 		*nvecs = XFS_LOG_VEC_ORDERED;
+diff --git a/fs/xfs/xfs_inode_item.c b/fs/xfs/xfs_inode_item.c
+index 17e20a6d8..6ff91e5bf 100644
+--- a/fs/xfs/xfs_inode_item.c
++++ b/fs/xfs/xfs_inode_item.c
+@@ -28,6 +28,20 @@ static inline struct xfs_inode_log_item *INODE_ITEM(struct xfs_log_item *lip)
+ 	return container_of(lip, struct xfs_inode_log_item, ili_item);
+ }
+ 
++/*
++ * The logged size of an inode fork is always the current size of the inode
++ * fork. This means that when an inode fork is relogged, the size of the logged
++ * region is determined by the current state, not the combination of the
++ * previously logged state + the current state. This is different relogging
++ * behaviour to most other log items which will retain the size of the
++ * previously logged changes when smaller regions are relogged.
++ *
++ * Hence operations that remove data from the inode fork (e.g. shortform
++ * dir/attr remove, extent form extent removal, etc), the size of the relogged
++ * inode gets -smaller- rather than stays the same size as the previously logged
++ * size and this can result in the committing transaction reducing the amount of
++ * space being consumed by the CIL.
++ */
+ STATIC void
+ xfs_inode_item_data_fork_size(
+ 	struct xfs_inode_log_item *iip,
+diff --git a/fs/xfs/xfs_log_cil.c b/fs/xfs/xfs_log_cil.c
+index c5cc1b7ad..daf1f3eb2 100644
+--- a/fs/xfs/xfs_log_cil.c
++++ b/fs/xfs/xfs_log_cil.c
+@@ -668,9 +668,14 @@ xlog_cil_push_work(
+ 	ASSERT(push_seq <= ctx->sequence);
+ 
+ 	/*
+-	 * Wake up any background push waiters now this context is being pushed.
++	 * As we are about to switch to a new CILi, empty context, we no longer
++	 * need to throttle tasks on CIL space overruns. Wake any waiters that
++	 * the hard push throttle may have caught so they can start committing
++	 * to the new context. The ctx->xc_push_lock provides the serialisation
++	 * necessary for safely using the lockless waitqueue_active() check in
++	 * this context.
+ 	 */
+-	if (ctx->space_used >= XLOG_CIL_BLOCKING_SPACE_LIMIT(log))
++	if (waitqueue_active(&cil->xc_push_wait))
+ 		wake_up_all(&cil->xc_push_wait);
+ 
+ 	/*
+@@ -914,7 +919,7 @@ xlog_cil_push_background(
+ 	ASSERT(!list_empty(&cil->xc_cil));
+ 
+ 	/*
+-	 * don't do a background push if we haven't used up all the
++	 * Don't do a background push if we haven't used up all the
+ 	 * space available yet.
+ 	 */
+ 	if (cil->xc_ctx->space_used < XLOG_CIL_SPACE_LIMIT(log)) {
+@@ -938,9 +943,16 @@ xlog_cil_push_background(
+ 
+ 	/*
+ 	 * If we are well over the space limit, throttle the work that is being
+-	 * done until the push work on this context has begun.
++	 * done until the push work on this context has begun. Enforce the hard
++	 * throttle on all transaction commits once it has been activated, even
++	 * if the committing transactions have resulted in the space usage
++	 * dipping back down under the hard limit.
++	 *
++	 * The ctx->xc_push_lock provides the serialisation necessary for safely
++	 * using the lockless waitqueue_active() check in this context.
+ 	 */
+-	if (cil->xc_ctx->space_used >= XLOG_CIL_BLOCKING_SPACE_LIMIT(log)) {
++	if (cil->xc_ctx->space_used >= XLOG_CIL_BLOCKING_SPACE_LIMIT(log) ||
++	    waitqueue_active(&cil->xc_push_wait)) {
+ 		trace_xfs_log_cil_wait(log, cil->xc_ctx->ticket);
+ 		ASSERT(cil->xc_ctx->space_used < log->l_logsize);
+ 		xlog_wait(&cil->xc_push_wait, &cil->xc_push_lock);
+-- 
+2.30.1.457.gf011795891
+
+
+From baf83b7b99d2718e9167f228813f57ef4bb90c64 Mon Sep 17 00:00:00 2001
+From: Dave Chinner <dchinner@redhat.com>
+Date: Thu, 28 Jan 2021 15:41:54 +1100
+Subject: [PATCH 29/29] xfs: reduce buffer log item shadow allocations
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When we modify btrees repeatedly, we regularly increase the size of
+the logged region by a single chunk at a time (per transaction
+commit). This results in the CIL formatting code having to
+reallocate the log vector buffer every time the buffer dirty region
+grows. Hence over a typical 4kB btree buffer, we might grow the log
+vector 4096/128 = 32x over a short period where we repeatedly add
+or remove records to/from the buffer over a series of running
+transaction. This means we are doing 32 memory allocations and frees
+over this time during a performance critical path in the journal.
+
+The amount of space tracked in the CIL for the object is calculated
+during the ->iop_format() call for the buffer log item, but the
+buffer memory allocated for it is calculated by the ->iop_size()
+call. The size callout determines the size of the buffer, the format
+call determines the space used in the buffer.
+
+Hence we can oversize the buffer space required in the size
+calculation without impacting the amount of space used and accounted
+to the CIL for the changes being logged. This allows us to reduce
+the number of allocations by rounding up the buffer size to allow
+for future growth. This can safe a substantial amount of CPU time in
+this path:
+
+-   46.52%     2.02%  [kernel]                  [k] xfs_log_commit_cil
+   - 44.49% xfs_log_commit_cil
+      - 30.78% _raw_spin_lock
+         - 30.75% do_raw_spin_lock
+              30.27% __pv_queued_spin_lock_slowpath
+
+(oh, ouch!)
+....
+      - 1.05% kmem_alloc_large
+         - 1.02% kmem_alloc
+              0.94% __kmalloc
+
+This overhead here us what this patch is aimed at. After:
+
+      - 0.76% kmem_alloc_large                                                                                                                                      ▒
+         - 0.75% kmem_alloc                                                                                                                                         ▒
+              0.70% __kmalloc                                                                                                                                       ▒
+
+Signed-off-by: Dave Chinner <dchinner@redhat.com>
+Reviewed-by: Chandan Babu R <chandanrlinux@gmail.com>
+---
+ fs/xfs/xfs_buf_item.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/fs/xfs/xfs_buf_item.c b/fs/xfs/xfs_buf_item.c
+index 17960b1ce..0628a65d9 100644
+--- a/fs/xfs/xfs_buf_item.c
++++ b/fs/xfs/xfs_buf_item.c
+@@ -142,6 +142,7 @@ xfs_buf_item_size(
+ {
+ 	struct xfs_buf_log_item	*bip = BUF_ITEM(lip);
+ 	int			i;
++	int			bytes;
+ 
+ 	ASSERT(atomic_read(&bip->bli_refcount) > 0);
+ 	if (bip->bli_flags & XFS_BLI_STALE) {
+@@ -173,7 +174,7 @@ xfs_buf_item_size(
+ 	}
+ 
+ 	/*
+-	 * the vector count is based on the number of buffer vectors we have
++	 * The vector count is based on the number of buffer vectors we have
+ 	 * dirty bits in. This will only be greater than one when we have a
+ 	 * compound buffer with more than one segment dirty. Hence for compound
+ 	 * buffers we need to track which segment the dirty bits correspond to,
+@@ -181,10 +182,18 @@ xfs_buf_item_size(
+ 	 * count for the extra buf log format structure that will need to be
+ 	 * written.
+ 	 */
++	bytes = 0;
+ 	for (i = 0; i < bip->bli_format_count; i++) {
+ 		xfs_buf_item_size_segment(bip, &bip->bli_formats[i],
+-					  nvecs, nbytes);
++					  nvecs, &bytes);
+ 	}
++
++	/*
++	 * Round up the buffer size required to minimise the number of memory
++	 * allocations that need to be done as this item grows when relogged by
++	 * repeated modifications.
++	 */
++	*nbytes = round_up(bytes, 512);
+ 	trace_xfs_buf_item_size(bip);
+ }
+ 
 -- 
 2.30.1.457.gf011795891
 
