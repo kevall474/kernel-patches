@@ -1,7 +1,7 @@
-From a256fa62a51d4eb40d0e963baa3d32c5a330062b Mon Sep 17 00:00:00 2001
+From a21c0eb8a6845236303e9e5f418f4d1dca47dfa5 Mon Sep 17 00:00:00 2001
 From: Tian Tao <tiantao6@hisilicon.com>
 Date: Tue, 9 Feb 2021 11:03:39 +1100
-Subject: [PATCH 1/4] mm/zswap: add the flag can_sleep_mapped
+Subject: [PATCH 1/5] mm/zswap: add the flag can_sleep_mapped
 
 Patch series "Fix the compatibility of zsmalloc and zswap".
 
@@ -226,10 +226,10 @@ index 182f6ad5a..67d455549 100644
 2.30.1.457.gf011795891
 
 
-From 93726e49c8fdb32d4f5cf161a9cf76c5352a4c14 Mon Sep 17 00:00:00 2001
+From 566bc1e41eccf18096ce0ebfbded5f196ce97b6f Mon Sep 17 00:00:00 2001
 From: Tian Tao <tiantao6@hisilicon.com>
 Date: Tue, 9 Feb 2021 11:03:40 +1100
-Subject: [PATCH 2/4] mm/zswap: fix potential memory leak
+Subject: [PATCH 2/5] mm/zswap: fix potential memory leak
 
 If entry is NULL, the requested memory tmp should be freed, otherwise it
 may cause a memory leak.
@@ -263,10 +263,10 @@ index 67d455549..d546cfa26 100644
 2.30.1.457.gf011795891
 
 
-From de4bcc2364d0002f3a8c3feee08eecdde190c1c5 Mon Sep 17 00:00:00 2001
+From 98e0f7a1cedf7b1cb00bd8cd5204516a1de4e81b Mon Sep 17 00:00:00 2001
 From: Tian Tao <tiantao6@hisilicon.com>
 Date: Tue, 9 Feb 2021 11:03:40 +1100
-Subject: [PATCH 3/4] mm/zswap: fix variable 'entry' is uninitialized when used
+Subject: [PATCH 3/5] mm/zswap: fix variable 'entry' is uninitialized when used
 
 the entry has not been initialized when it is used, so allocate PAGE_SIZE
 
@@ -303,10 +303,10 @@ index d546cfa26..832baf3a6 100644
 2.30.1.457.gf011795891
 
 
-From cb72a9b7749b25aa1853b648c107a59693bbe068 Mon Sep 17 00:00:00 2001
+From 65f82d14eedc69395c13ffc972ce043cf60ecfaa Mon Sep 17 00:00:00 2001
 From: Tian Tao <tiantao6@hisilicon.com>
 Date: Tue, 9 Feb 2021 11:03:40 +1100
-Subject: [PATCH 4/4] mm: set the sleep_mapped to true for zbud and z3fold
+Subject: [PATCH 4/5] mm: set the sleep_mapped to true for zbud and z3fold
 
 zpool driver adds a flag to indicate whether the zpool driver can enter an
 atomic context after mapping.  This patch sets it true for z3fold and
@@ -351,6 +351,41 @@ index c49966ece..7ec5f27a6 100644
  	.owner =	THIS_MODULE,
  	.create =	zbud_zpool_create,
  	.destroy =	zbud_zpool_destroy,
+-- 
+2.30.1.457.gf011795891
+
+
+From 4ff715f57f5835ec5ab8496f2c75faae5c225f0a Mon Sep 17 00:00:00 2001
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Date: Thu, 18 Feb 2021 22:32:05 +0100
+Subject: [PATCH 5/5] mm-5.11: v2 of zsmalloc vs zswap fixes
+
+Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+---
+ mm/zswap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/mm/zswap.c b/mm/zswap.c
+index 832baf3a6..1566cc3ab 100644
+--- a/mm/zswap.c
++++ b/mm/zswap.c
+@@ -935,7 +935,7 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+ 	struct scatterlist input, output;
+ 	struct crypto_acomp_ctx *acomp_ctx;
+ 
+-	u8 *src, *tmp;
++	u8 *src, *tmp = NULL;
+ 	unsigned int dlen;
+ 	int ret;
+ 	struct writeback_control wbc = {
+@@ -1272,6 +1272,7 @@ static int zswap_frontswap_load(unsigned type, pgoff_t offset,
+ 		dst = kmap_atomic(page);
+ 		zswap_fill_page(dst, entry->value);
+ 		kunmap_atomic(dst);
++		ret = 0;
+ 		goto freeentry;
+ 	}
+ 
 -- 
 2.30.1.457.gf011795891
 
