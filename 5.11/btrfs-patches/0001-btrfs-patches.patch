@@ -1,7 +1,7 @@
-From ef32b6b5474e786d1d328595e95cf3ca027bc79f Mon Sep 17 00:00:00 2001
+From 761255c1755241d3a75afdd268fd6985fc122b2c Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Mon, 5 Aug 2019 14:31:53 -0400
-Subject: [PATCH 01/33] btrfs: add a force_chunk_alloc to space_info's sysfs
+Subject: [PATCH 01/34] btrfs: add a force_chunk_alloc to space_info's sysfs
 
 In testing various things such as the btrfsck patch to detect over
 allocation of chunks, empty block group deletion, and balance I've had
@@ -116,10 +116,10 @@ index 19b9fffa2..0ea665247 100644
 2.30.1.457.gf011795891
 
 
-From 286decdef3bb4da4d1a3b22067b3631f96a68ff2 Mon Sep 17 00:00:00 2001
+From b23f9ee7f7f14208a6123d4dac5432ffa1b23533 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 24 Jul 2020 12:41:47 -0400
-Subject: [PATCH 02/33] btrfs: do not evaluate the expression with
+Subject: [PATCH 02/34] btrfs: do not evaluate the expression with
  !CONFIG_BTRFS_ASSERT
 
 While investigating a performance issue I noticed that turning off
@@ -159,10 +159,10 @@ index 4debdbdde..a982ad944 100644
 2.30.1.457.gf011795891
 
 
-From 0d145cf1e416487fe5cae4f68903d6f8ad843b25 Mon Sep 17 00:00:00 2001
+From af331b31df878ebc421e09c30d6bf25d9ac19a59 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:19 -0500
-Subject: [PATCH 03/33] btrfs: do not block on deleted bgs mutex in the cleaner
+Subject: [PATCH 03/34] btrfs: do not block on deleted bgs mutex in the cleaner
 
 While running some stress tests I started getting hung task messages.
 This is because the delete unused bg's code has to take the
@@ -224,10 +224,10 @@ index 48ebc106a..16a77d91b 100644
 2.30.1.457.gf011795891
 
 
-From fb17721b19a80862e06b2c16c793cc99f5f97b79 Mon Sep 17 00:00:00 2001
+From e13e18169aa52006f3e2d349f41c412ea0620a04 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:20 -0500
-Subject: [PATCH 04/33] btrfs: only let one thread pre-flush delayed refs in
+Subject: [PATCH 04/34] btrfs: only let one thread pre-flush delayed refs in
  commit
 
 I've been running a stress test that runs 20 workers in their own
@@ -351,10 +351,10 @@ index 6af7f2bf9..1b83f072c 100644
 2.30.1.457.gf011795891
 
 
-From 18c72b94540f7da1d504f9fe479cae6ee1fecc05 Mon Sep 17 00:00:00 2001
+From 0386ebe65d89e177d09d1a949c3873b9bfb6c018 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:21 -0500
-Subject: [PATCH 05/33] btrfs: delayed refs pre-flushing should only run the
+Subject: [PATCH 05/34] btrfs: delayed refs pre-flushing should only run the
  heads we have
 
 Previously our delayed ref running used the total number of items as the
@@ -395,10 +395,10 @@ index 0c335dae5..b797b6792 100644
 2.30.1.457.gf011795891
 
 
-From ad0cf4e1fbf16f5b1a9f7841820a8181a7553566 Mon Sep 17 00:00:00 2001
+From d3eb1721a76dbcfdac55033d0814d2a146151f29 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:22 -0500
-Subject: [PATCH 06/33] btrfs: only run delayed refs once before committing
+Subject: [PATCH 06/34] btrfs: only run delayed refs once before committing
 
 We try to pre-flush the delayed refs when committing, because we want to
 do as little work as possible in the critical section of the transaction
@@ -439,10 +439,10 @@ index 1b83f072c..31598fd79 100644
 2.30.1.457.gf011795891
 
 
-From 885c23f33a38a0155bf265f68d7b19be04849396 Mon Sep 17 00:00:00 2001
+From 17c198e14b895bc496f3a692c4b4b2ef85705aed Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:23 -0500
-Subject: [PATCH 07/33] btrfs: move delayed ref flushing for qgroup into qgroup
+Subject: [PATCH 07/34] btrfs: move delayed ref flushing for qgroup into qgroup
  helper
 
 The commit d67263354541 ("btrfs: qgroup: Make snapshot accounting work
@@ -506,10 +506,10 @@ index 31598fd79..cef4d73b7 100644
 2.30.1.457.gf011795891
 
 
-From d5cf430a4e364ebcc25a4f55f28bd372ec6875b6 Mon Sep 17 00:00:00 2001
+From 2842d18d0fe3d3cccdc11bc6c73c40ee0cf33c0e Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:24 -0500
-Subject: [PATCH 08/33] btrfs: remove bogus BUG_ON in alloc_reserved_tree_block
+Subject: [PATCH 08/34] btrfs: remove bogus BUG_ON in alloc_reserved_tree_block
 
 The fix 361048f586f5 ("Btrfs: fix full backref problem when inserting
 shared block reference") added a delayed ref flushing at subvolume
@@ -584,10 +584,10 @@ index b797b6792..44acf990a 100644
 2.30.1.457.gf011795891
 
 
-From e4bab36b3550e527a9a61f6f54fa5a718322100c Mon Sep 17 00:00:00 2001
+From 75e06d6da7864d635e47607c8ed450d2e56340f0 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:25 -0500
-Subject: [PATCH 09/33] btrfs: stop running all delayed refs during snapshot
+Subject: [PATCH 09/34] btrfs: stop running all delayed refs during snapshot
 
 This was added in commit 361048f586f5 ("Btrfs: fix full backref problem
 when inserting shared block reference") to address a problem where we
@@ -629,10 +629,10 @@ index cef4d73b7..e720ed13f 100644
 2.30.1.457.gf011795891
 
 
-From ff7e50e7a5675cb3bcdd7ea62f07e75dc838d9f3 Mon Sep 17 00:00:00 2001
+From 1c7852238ddfb3ad9f20f7de34450ce9e96fa7ae Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:26 -0500
-Subject: [PATCH 10/33] btrfs: run delayed refs less often in
+Subject: [PATCH 10/34] btrfs: run delayed refs less often in
  commit_cowonly_roots
 
 We love running delayed refs in commit_cowonly_roots, but it is a bit
@@ -707,10 +707,10 @@ index e720ed13f..8b2ba6984 100644
 2.30.1.457.gf011795891
 
 
-From ea42f68abe987d5ff11f84de4794fb98cf12e949 Mon Sep 17 00:00:00 2001
+From 1420ed892d1c3ddd9748606e72ad2b35d46f2073 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:18 -0400
-Subject: [PATCH 11/33] btrfs: make flush_space take a enum btrfs_flush_state
+Subject: [PATCH 11/34] btrfs: make flush_space take a enum btrfs_flush_state
  instead of int
 
 I got a automated message from somebody who runs clang against our
@@ -750,10 +750,10 @@ index e8347461c..fa8526c31 100644
 2.30.1.457.gf011795891
 
 
-From 55b1b64eca3b5a1458d29ac955539915bfb49781 Mon Sep 17 00:00:00 2001
+From e8458234760bec87e2a333ef0fdcbfe4156e1699 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:19 -0400
-Subject: [PATCH 12/33] btrfs: add a trace point for reserve tickets
+Subject: [PATCH 12/34] btrfs: add a trace point for reserve tickets
 
 While debugging a ENOSPC related performance problem I needed to see the
 time difference between start and end of a reserve ticket, so add a
@@ -865,10 +865,10 @@ index ecd24c719..eb3486568 100644
 2.30.1.457.gf011795891
 
 
-From 9dcf521bcf8946ceff4143bdf18c3833df0da9ce Mon Sep 17 00:00:00 2001
+From 10c32daa18aa53352368555e900b5ed2ecd0eb4b Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:20 -0400
-Subject: [PATCH 13/33] btrfs: track ordered bytes instead of just dio ordered
+Subject: [PATCH 13/34] btrfs: track ordered bytes instead of just dio ordered
  bytes
 
 We track dio_bytes because the shrink delalloc code needs to know if we
@@ -1027,10 +1027,10 @@ index 720f4cf73..26dc2b892 100644
 2.30.1.457.gf011795891
 
 
-From d265fcfd26150b1ac7e55caad1fe7f741c876810 Mon Sep 17 00:00:00 2001
+From dcce9fae1eec2caf4d0f3dc0b3ba4386a27140f3 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:21 -0400
-Subject: [PATCH 14/33] btrfs: introduce a FORCE_COMMIT_TRANS flush operation
+Subject: [PATCH 14/34] btrfs: introduce a FORCE_COMMIT_TRANS flush operation
 
 Sole-y for preemptive flushing, we want to be able to force the
 transaction commit without any of the ambiguity of
@@ -1095,10 +1095,10 @@ index eb3486568..0a3d35d95 100644
 2.30.1.457.gf011795891
 
 
-From 832496847ca418018e936385338d7f7c1716091f Mon Sep 17 00:00:00 2001
+From 200d081b2fef898ec7169962a1f20740506ccd1f Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:22 -0400
-Subject: [PATCH 15/33] btrfs: improve preemptive background space flushing
+Subject: [PATCH 15/34] btrfs: improve preemptive background space flushing
 
 Currently if we ever have to flush space because we do not have enough
 we allocate a ticket and attach it to the space_info, and then
@@ -1300,10 +1300,10 @@ index 23451988f..8a9e18cdf 100644
 2.30.1.457.gf011795891
 
 
-From 0936dcb860f97b098cf9a8e3683a93fddc97713f Mon Sep 17 00:00:00 2001
+From 802626cb6164cb3624f7f49116226dcdbf137a3f Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:23 -0400
-Subject: [PATCH 16/33] btrfs: rename need_do_async_reclaim
+Subject: [PATCH 16/34] btrfs: rename need_do_async_reclaim
 
 All of our normal flushing is asynchronous reclaim, so this helper is
 poorly named.  This is more checking if we need to preemptively flush
@@ -1354,10 +1354,10 @@ index 8a9e18cdf..b062d8379 100644
 2.30.1.457.gf011795891
 
 
-From e168b7031266800f878c3bed201f2241200b1632 Mon Sep 17 00:00:00 2001
+From 4ac4366c5435e4106a55a07cade243a9a4a5b4c8 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:24 -0400
-Subject: [PATCH 17/33] btrfs: check reclaim_size in need_preemptive_reclaim
+Subject: [PATCH 17/34] btrfs: check reclaim_size in need_preemptive_reclaim
 
 If we're flushing space for tickets then we have
 space_info->reclaim_size set and we do not need to do background
@@ -1391,10 +1391,10 @@ index b062d8379..67ed12794 100644
 2.30.1.457.gf011795891
 
 
-From f21bf60f3df85d4d4b30029dbb472c3738528a20 Mon Sep 17 00:00:00 2001
+From 5c560ec29329c68708d20bb3a3c9a94e0310987d Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:25 -0400
-Subject: [PATCH 18/33] btrfs: rework btrfs_calc_reclaim_metadata_size
+Subject: [PATCH 18/34] btrfs: rework btrfs_calc_reclaim_metadata_size
 
 Currently btrfs_calc_reclaim_metadata_size does two things, it returns
 the space currently required for flushing by the tickets, and if there
@@ -1499,10 +1499,10 @@ index 67ed12794..ad61b9fe3 100644
 2.30.1.457.gf011795891
 
 
-From 083cac2eab0a06fa0b406000e605215ae20c3d6d Mon Sep 17 00:00:00 2001
+From 3cc596d29e6bf254842e971de0fc737cb9aab747 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:26 -0400
-Subject: [PATCH 19/33] btrfs: simplify the logic in need_preemptive_flushing
+Subject: [PATCH 19/34] btrfs: simplify the logic in need_preemptive_flushing
 
 A lot of this was added all in one go with no explanation, and is a bit
 unwieldy and confusing.  Simplify the logic to start preemptive flushing
@@ -1641,10 +1641,10 @@ index ad61b9fe3..029db49c1 100644
 2.30.1.457.gf011795891
 
 
-From 89b1f2bd75597b49395e02d3ddfb2129853ed14f Mon Sep 17 00:00:00 2001
+From 0656b005bc1c8d7e7f2c6b3cde6e2c49ab48f656 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:27 -0400
-Subject: [PATCH 20/33] btrfs: implement space clamping for preemptive flushing
+Subject: [PATCH 20/34] btrfs: implement space clamping for preemptive flushing
 
 Starting preemptive flushing at 50% of available free space is a good
 start, but some workloads are particularly abusive and can quickly
@@ -1780,10 +1780,10 @@ index 5646393b9..bcbbfae13 100644
 2.30.1.457.gf011795891
 
 
-From cc3185fb8c51f9766f98c9ff9a1a745d41414778 Mon Sep 17 00:00:00 2001
+From a97b568cc27539e92f600011542b6b6f1e4e385a Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:28 -0400
-Subject: [PATCH 21/33] btrfs: adjust the flush trace point to include the
+Subject: [PATCH 21/34] btrfs: adjust the flush trace point to include the
  source
 
 Since we have normal ticketed flushing and preemptive flushing, adjust
@@ -1923,10 +1923,10 @@ index 0a3d35d95..6d93637ba 100644
 2.30.1.457.gf011795891
 
 
-From 1dfded903fa8c326f9d2d7d41e2d0693a1f3a226 Mon Sep 17 00:00:00 2001
+From b3204ed531be58cad8b37b948ccd579d67915fc8 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:29 -0400
-Subject: [PATCH 22/33] btrfs: add a trace class for dumping the current ENOSPC
+Subject: [PATCH 22/34] btrfs: add a trace class for dumping the current ENOSPC
  state
 
 Often when I'm debugging ENOSPC related issues I have to resort to
@@ -2033,10 +2033,10 @@ index 6d93637ba..74b466dc2 100644
 2.30.1.457.gf011795891
 
 
-From 3078edc7e428e9c59e1dc1f355facb53d55abfde Mon Sep 17 00:00:00 2001
+From 808b30a4d7c5b1d52d1c0a345babc5bb8b4cbb70 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 20 Mar 2020 14:34:36 -0400
-Subject: [PATCH 23/33] btrfs: restart snapshot delete if we have to end the
+Subject: [PATCH 23/34] btrfs: restart snapshot delete if we have to end the
  transaction
 
 This is to fully fix the deadlock described in
@@ -2110,10 +2110,10 @@ index 44acf990a..e125aa8c8 100644
 2.30.1.457.gf011795891
 
 
-From 793e419ce83943d96db22c2f4188411ce406eb42 Mon Sep 17 00:00:00 2001
+From 4b240a356fd1092c500ea582c416cb531db9956a Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 15 Jan 2021 16:48:55 -0500
-Subject: [PATCH 24/33] btrfs: handle ->total_bytes_pinned inside the delayed
+Subject: [PATCH 24/34] btrfs: handle ->total_bytes_pinned inside the delayed
  ref itself
 
 Currently we pass things around to figure out if we maybe free'ing data
@@ -2609,10 +2609,10 @@ index bcbbfae13..aced1f3f7 100644
 2.30.1.457.gf011795891
 
 
-From b49501e404b77961e1b5bfcb4b96af9d6031e430 Mon Sep 17 00:00:00 2001
+From 78b8809f86c68ddbca8a6bb73c814e8115f2c5e3 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 15 Jan 2021 16:48:56 -0500
-Subject: [PATCH 25/33] btrfs: account for new extents being deleted in
+Subject: [PATCH 25/34] btrfs: account for new extents being deleted in
  total_bytes_pinned
 
 My recent patch set "A variety of lock contention fixes", found here
@@ -2737,10 +2737,10 @@ index 91b139680..a77f52f77 100644
 2.30.1.457.gf011795891
 
 
-From 831935235bc9a44ea34e84faf892739e695161ed Mon Sep 17 00:00:00 2001
+From 86ee402ceff988eed7599fea85d6d1e98f86f739 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:54 +0000
-Subject: [PATCH 26/33] btrfs: remove unnecessary directory inode item update
+Subject: [PATCH 26/34] btrfs: remove unnecessary directory inode item update
  when deleting dir entry
 
 When we remove a directory entry, as part of an unlink operation, if the
@@ -2854,10 +2854,10 @@ index 254c2ee43..5ad1b84a1 100644
 2.30.1.457.gf011795891
 
 
-From c1d904bce28c9ce04cdf371b18b7b98e41db5f26 Mon Sep 17 00:00:00 2001
+From 1fcf07852969f3fd69ac0cbd108c86ea27ea35c5 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:55 +0000
-Subject: [PATCH 27/33] btrfs: stop setting nbytes when filling inode item for
+Subject: [PATCH 27/34] btrfs: stop setting nbytes when filling inode item for
  logging
 
 When we fill an inode item for logging we are setting its nbytes field
@@ -2916,10 +2916,10 @@ index 5ad1b84a1..69bd20364 100644
 2.30.1.457.gf011795891
 
 
-From 4e41f60fbb754632f58c26452054bb3b1184a143 Mon Sep 17 00:00:00 2001
+From f1d799cee6d0b5efcdf8780e6e14a128ef333247 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:56 +0000
-Subject: [PATCH 28/33] btrfs: avoid logging new ancestor inodes when logging
+Subject: [PATCH 28/34] btrfs: avoid logging new ancestor inodes when logging
  new inode
 
 When we fsync a new file, created in the current transaction, we check
@@ -3019,10 +3019,10 @@ index 69bd20364..a4f98ebae 100644
 2.30.1.457.gf011795891
 
 
-From 4bd2adea574733d2e620971f6c0788287752a354 Mon Sep 17 00:00:00 2001
+From 994eb5cdaafce086044e1fe709f9e5554763d268 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:57 +0000
-Subject: [PATCH 29/33] btrfs: skip logging directories already logged when
+Subject: [PATCH 29/34] btrfs: skip logging directories already logged when
  logging all parents
 
 Some times when we fsync an inode we need to do a full log of all its
@@ -3077,10 +3077,10 @@ index a4f98ebae..d1acdb8ad 100644
 2.30.1.457.gf011795891
 
 
-From 6031058f24a8878f144bcf6c52f5fafd52a552f8 Mon Sep 17 00:00:00 2001
+From 4f52784723f4b824fd34f9f262bcdd1d3099fde7 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:58 +0000
-Subject: [PATCH 30/33] btrfs: skip logging inodes already logged when logging
+Subject: [PATCH 30/34] btrfs: skip logging inodes already logged when logging
  new entries
 
 When logging new directory entries of a directory, we log the inodes of
@@ -3135,10 +3135,10 @@ index d1acdb8ad..8234d7898 100644
 2.30.1.457.gf011795891
 
 
-From 7af922b93b1d6da4f03e3f2e82ad13be730b0843 Mon Sep 17 00:00:00 2001
+From b84b81b31c301b615c33b8eb98d86518c213a575 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:59 +0000
-Subject: [PATCH 31/33] btrfs: remove unnecessary check_parent_dirs_for_sync()
+Subject: [PATCH 31/34] btrfs: remove unnecessary check_parent_dirs_for_sync()
 
 Whenever we fsync an inode, if it is a directory, a regular file that was
 created in the current transaction or has last_unlink_trans set to the
@@ -3357,10 +3357,10 @@ index 8234d7898..3b00d98b3 100644
 2.30.1.457.gf011795891
 
 
-From 80456774fb6f285289748e1a5a440d362fa0ba0c Mon Sep 17 00:00:00 2001
+From 214c7feae8c592b6b0327a53ca2c862f213cfaad Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:35:00 +0000
-Subject: [PATCH 32/33] btrfs: make concurrent fsyncs wait less when waiting
+Subject: [PATCH 32/34] btrfs: make concurrent fsyncs wait less when waiting
  for a transaction commit
 
 Often an fsync needs to fallback to a transaction commit for several
@@ -3656,10 +3656,10 @@ index 31ca81bad..935bd6958 100644
 2.30.1.457.gf011795891
 
 
-From ad152dddda552d1c584c72e5c31d3b3479942286 Mon Sep 17 00:00:00 2001
+From c096c8bfd3aa3541ff4fe9ea6c7ca075b1502a45 Mon Sep 17 00:00:00 2001
 From: Nikolay Borisov <nborisov@suse.com>
 Date: Mon, 8 Feb 2021 10:26:54 +0200
-Subject: [PATCH 33/33] btrfs: Fix race between extent freeing/allocation when
+Subject: [PATCH 33/34] btrfs: Fix race between extent freeing/allocation when
  using bitmaps
 
 During allocation the allocator will try to allocate an extent using
@@ -3730,6 +3730,90 @@ index 4d8897879..98bbcbbef 100644
  	spin_unlock(&ctl->tree_lock);
  
  	return ret;
+-- 
+2.30.1.457.gf011795891
+
+
+From 3f183b2d68f158c5f145cb0d3bba4f64c49e6d4d Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Tue, 16 Feb 2021 15:43:22 -0500
+Subject: [PATCH 34/34] btrfs: do not error out if the extent ref hash doesn't
+ match
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The tree checker checks the extent ref hash at read and write time to
+make sure we do not corrupt the file system.  Generally extent
+references go inline, but if we have enough of them we need to make an
+item, which looks like
+
+key.objectid	= <bytenr>
+key.type	= <BTRFS_EXTENT_DATA_REF_KEY|BTRFS_TREE_BLOCK_REF_KEY>
+key.offset	= hash(tree, owner, offset)
+
+However if key.offset collide with an unrelated extent reference we'll
+simply key.offset++ until we get something that doesn't collide.
+Obviously this doesn't match at tree checker time, and thus we error
+while writing out the transaction.  This is relatively easy to
+reproduce, simply do something like the following
+
+xfs_io -f -c "pwrite 0 1M" file
+offset=2
+
+for i in {0..10000}
+do
+	xfs_io -c "reflink file 0 ${offset}M 1M" file
+	offset=$(( offset + 2 ))
+done
+
+xfs_io -c "reflink file 0 17999258914816 1M" file
+xfs_io -c "reflink file 0 35998517829632 1M" file
+xfs_io -c "reflink file 0 53752752058368 1M" file
+
+btrfs filesystem sync
+
+And the sync will error out because we'll abort the transaction.  The
+magic values above are used because they generate hash collisions with
+the first file in the main subvol.
+
+The fix for this is to remove the hash value check from tree checker, as
+we have no idea which offset ours should belong to.
+
+[HH: small context fixex for 5.10]
+Reported-by: Tuomas Lähdekorpi <tuomas.lahdekorpi@gmail.com>
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/tree-checker.c | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/fs/btrfs/tree-checker.c b/fs/btrfs/tree-checker.c
+index 582061c7b..2429d668d 100644
+--- a/fs/btrfs/tree-checker.c
++++ b/fs/btrfs/tree-checker.c
+@@ -1453,22 +1453,10 @@ static int check_extent_data_ref(struct extent_buffer *leaf,
+ 		return -EUCLEAN;
+ 	}
+ 	for (; ptr < end; ptr += sizeof(*dref)) {
+-		u64 root_objectid;
+-		u64 owner;
+ 		u64 offset;
+-		u64 hash;
+ 
+ 		dref = (struct btrfs_extent_data_ref *)ptr;
+-		root_objectid = btrfs_extent_data_ref_root(leaf, dref);
+-		owner = btrfs_extent_data_ref_objectid(leaf, dref);
+ 		offset = btrfs_extent_data_ref_offset(leaf, dref);
+-		hash = hash_extent_data_ref(root_objectid, owner, offset);
+-		if (unlikely(hash != key->offset)) {
+-			extent_err(leaf, slot,
+-	"invalid extent data ref hash, item has 0x%016llx key has 0x%016llx",
+-				   hash, key->offset);
+-			return -EUCLEAN;
+-		}
+ 		if (unlikely(!IS_ALIGNED(offset, leaf->fs_info->sectorsize))) {
+ 			extent_err(leaf, slot,
+ 	"invalid extent data backref offset, have %llu expect aligned to %u",
 -- 
 2.30.1.457.gf011795891
 
