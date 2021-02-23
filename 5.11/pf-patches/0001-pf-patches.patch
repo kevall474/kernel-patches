@@ -1,4 +1,4 @@
-From 1251fb8d060f740bc4cbbe19de6018f826302ea3 Mon Sep 17 00:00:00 2001
+From 3e9f850d2127f1dfcf28230994a0e22359db7d5a Mon Sep 17 00:00:00 2001
 From: Thomas Gleixner <tglx@linutronix.de>
 Date: Sat, 5 Dec 2020 17:19:18 +0100
 Subject: [PATCH 1/5] genirq, i2c: Provide and use generic_dispatch_irq()
@@ -104,7 +104,7 @@ index cc1a09406..6c2a75eb6 100644
 2.30.1.457.gf011795891
 
 
-From 69e625fb54b27b939f8a497b2ee3fb4b666ecac5 Mon Sep 17 00:00:00 2001
+From 6ad3a209b20e1a5d6a88fa3f6c4634387370ddf3 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@archlinux.org>
 Date: Mon, 4 Jan 2021 18:29:37 +0000
 Subject: [PATCH 2/5] HID: logitech-hidpp: add support for Unified Battery
@@ -470,7 +470,7 @@ index 7eb9a6ddb..d459e2dbe 100644
 2.30.1.457.gf011795891
 
 
-From c926f94d529c9ff36318d7a4aaa1730dd4e3e32e Mon Sep 17 00:00:00 2001
+From 865b62a80e9021e9dee15503c8596a9829af0f4a Mon Sep 17 00:00:00 2001
 From: Charan Teja Reddy <charante@codeaurora.org>
 Date: Mon, 18 Jan 2021 22:42:18 +0530
 Subject: [PATCH 3/5] mm/compaction: correct deferral logic for proactive
@@ -572,7 +572,7 @@ index 190ccdaa6..302536037 100644
 2.30.1.457.gf011795891
 
 
-From 9401cd2b04cb10f76551f28c6fa60f7cf5bd361d Mon Sep 17 00:00:00 2001
+From f2e4554f9ccc57fdbf0e1874f510c147c6ea072b Mon Sep 17 00:00:00 2001
 From: Thomas Hebb <tommyhebb@gmail.com>
 Date: Tue, 16 Feb 2021 00:44:40 -0800
 Subject: [PATCH 4/5] z3fold: prevent reclaim/free race for headless pages
@@ -673,167 +673,44 @@ index dacb0d70f..36d810cac 100644
 2.30.1.457.gf011795891
 
 
-From eec15318add411c0ecee60a2ebbb4e8645abca7b Mon Sep 17 00:00:00 2001
+From 53eda55b5c006c086042fa2075de58aa1a029362 Mon Sep 17 00:00:00 2001
 From: Jan Kara <jack@suse.cz>
-Date: Tue, 16 Feb 2021 14:38:49 +0100
-Subject: [PATCH 5/5] Revert "block: Do not discard buffers under a mounted
- filesystem"
+Date: Sat, 20 Feb 2021 11:36:36 +0100
+Subject: [PATCH 5/5] block: Try to handle busy underlying device on discard
 
-Apparently there are several userspace programs that depend on being
-able to call BLKDISCARD ioctl without the ability to grab bdev
-exclusively - namely FUSE filesystems have the device open without
-O_EXCL (the kernel has the bdev open with O_EXCL) so the commit breaks
-fstrim(8) for such filesystems. Also LVM when shrinking LV opens PV and
-discards ranges released from LV but that PV may be already open
-exclusively by someone else (see bugzilla link below for more details).
-
-This reverts commit 384d87ef2c954fc58e6c5fd8253e4a1984f5fe02.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=211167
-Signed-off-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 ---
- block/ioctl.c          | 16 ++++++----------
- fs/block_dev.c         | 33 ++++-----------------------------
- include/linux/blkdev.h |  7 -------
- 3 files changed, 10 insertions(+), 46 deletions(-)
+ fs/block_dev.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/block/ioctl.c b/block/ioctl.c
-index d61d65207..d523f134f 100644
---- a/block/ioctl.c
-+++ b/block/ioctl.c
-@@ -103,7 +103,8 @@ static int blk_ioctl_discard(struct block_device *bdev, fmode_t mode,
- 	uint64_t range[2];
- 	uint64_t start, len;
- 	struct request_queue *q = bdev_get_queue(bdev);
--	int err;
-+	struct address_space *mapping = bdev->bd_inode->i_mapping;
-+
- 
- 	if (!(mode & FMODE_WRITE))
- 		return -EBADF;
-@@ -124,11 +125,7 @@ static int blk_ioctl_discard(struct block_device *bdev, fmode_t mode,
- 
- 	if (start + len > i_size_read(bdev->bd_inode))
- 		return -EINVAL;
--
--	err = truncate_bdev_range(bdev, mode, start, start + len - 1);
--	if (err)
--		return err;
--
-+	truncate_inode_pages_range(mapping, start, start + len - 1);
- 	return blkdev_issue_discard(bdev, start >> 9, len >> 9,
- 				    GFP_KERNEL, flags);
- }
-@@ -137,8 +134,8 @@ static int blk_ioctl_zeroout(struct block_device *bdev, fmode_t mode,
- 		unsigned long arg)
- {
- 	uint64_t range[2];
-+	struct address_space *mapping;
- 	uint64_t start, end, len;
--	int err;
- 
- 	if (!(mode & FMODE_WRITE))
- 		return -EBADF;
-@@ -160,9 +157,8 @@ static int blk_ioctl_zeroout(struct block_device *bdev, fmode_t mode,
- 		return -EINVAL;
- 
- 	/* Invalidate the page cache, including dirty pages */
--	err = truncate_bdev_range(bdev, mode, start, end);
--	if (err)
--		return err;
-+	mapping = bdev->bd_inode->i_mapping;
-+	truncate_inode_pages_range(mapping, start, end);
- 
- 	return blkdev_issue_zeroout(bdev, start >> 9, len >> 9, GFP_KERNEL,
- 			BLKDEV_ZERO_NOUNMAP);
 diff --git a/fs/block_dev.c b/fs/block_dev.c
-index 235b50426..f4028ae9c 100644
+index 235b50426..c33151020 100644
 --- a/fs/block_dev.c
 +++ b/fs/block_dev.c
-@@ -103,31 +103,6 @@ void invalidate_bdev(struct block_device *bdev)
- }
- EXPORT_SYMBOL(invalidate_bdev);
- 
--/*
-- * Drop all buffers & page cache for given bdev range. This function bails
-- * with error if bdev has other exclusive owner (such as filesystem).
-- */
--int truncate_bdev_range(struct block_device *bdev, fmode_t mode,
--			loff_t lstart, loff_t lend)
--{
--	/*
--	 * If we don't hold exclusive handle for the device, upgrade to it
--	 * while we discard the buffer cache to avoid discarding buffers
--	 * under live filesystem.
--	 */
--	if (!(mode & FMODE_EXCL)) {
--		int err = bd_prepare_to_claim(bdev, truncate_bdev_range);
--		if (err)
+@@ -118,13 +118,22 @@ int truncate_bdev_range(struct block_device *bdev, fmode_t mode,
+ 	if (!(mode & FMODE_EXCL)) {
+ 		int err = bd_prepare_to_claim(bdev, truncate_bdev_range);
+ 		if (err)
 -			return err;
--	}
--
--	truncate_inode_pages_range(bdev->bd_inode->i_mapping, lstart, lend);
--	if (!(mode & FMODE_EXCL))
--		bd_abort_claiming(bdev, truncate_bdev_range);
--	return 0;
--}
--EXPORT_SYMBOL(truncate_bdev_range);
--
- static void set_init_blocksize(struct block_device *bdev)
- {
- 	unsigned int bsize = bdev_logical_block_size(bdev);
-@@ -1756,6 +1731,7 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
- 			     loff_t len)
- {
- 	struct block_device *bdev = I_BDEV(bdev_file_inode(file));
-+	struct address_space *mapping;
- 	loff_t end = start + len - 1;
- 	loff_t isize;
- 	int error;
-@@ -1783,9 +1759,8 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
- 		return -EINVAL;
++			goto invalidate;
+ 	}
  
- 	/* Invalidate the page cache, including dirty pages. */
--	error = truncate_bdev_range(bdev, file->f_mode, start, end);
--	if (error)
--		return error;
-+	mapping = bdev->bd_inode->i_mapping;
-+	truncate_inode_pages_range(mapping, start, end);
- 
- 	switch (mode) {
- 	case FALLOC_FL_ZERO_RANGE:
-@@ -1812,7 +1787,7 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
- 	 * the caller will be given -EBUSY.  The third argument is
- 	 * inclusive, so the rounding here is safe.
- 	 */
--	return invalidate_inode_pages2_range(bdev->bd_inode->i_mapping,
-+	return invalidate_inode_pages2_range(mapping,
- 					     start >> PAGE_SHIFT,
- 					     end >> PAGE_SHIFT);
- }
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index f94ee3089..dcce654e8 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -2015,18 +2015,11 @@ void bdput(struct block_device *);
- 
- #ifdef CONFIG_BLOCK
- void invalidate_bdev(struct block_device *bdev);
--int truncate_bdev_range(struct block_device *bdev, fmode_t mode, loff_t lstart,
--			loff_t lend);
- int sync_blockdev(struct block_device *bdev);
- #else
- static inline void invalidate_bdev(struct block_device *bdev)
- {
- }
--static inline int truncate_bdev_range(struct block_device *bdev, fmode_t mode,
--				      loff_t lstart, loff_t lend)
--{
--	return 0;
--}
- static inline int sync_blockdev(struct block_device *bdev)
- {
+ 	truncate_inode_pages_range(bdev->bd_inode->i_mapping, lstart, lend);
+ 	if (!(mode & FMODE_EXCL))
+ 		bd_abort_claiming(bdev, truncate_bdev_range);
  	return 0;
++
++invalidate:
++	/*
++	 * Someone else has handle exclusively open. Try invalidating instead.
++	 * The 'end' argument is inclusive so the rounding is safe.
++	 */
++	return invalidate_inode_pages2_range(bdev->bd_inode->i_mapping,
++					     lstart >> PAGE_SHIFT,
++					     lend >> PAGE_SHIFT);
+ }
+ EXPORT_SYMBOL(truncate_bdev_range);
+ 
 -- 
 2.30.1.457.gf011795891
 
