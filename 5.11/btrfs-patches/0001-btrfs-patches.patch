@@ -1,7 +1,7 @@
-From 761255c1755241d3a75afdd268fd6985fc122b2c Mon Sep 17 00:00:00 2001
+From 4c8428fddf3bc9477f2e476205c63226c89e3bab Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Mon, 5 Aug 2019 14:31:53 -0400
-Subject: [PATCH 01/34] btrfs: add a force_chunk_alloc to space_info's sysfs
+Subject: [PATCH 01/30] btrfs: add a force_chunk_alloc to space_info's sysfs
 
 In testing various things such as the btrfsck patch to detect over
 allocation of chunks, empty block group deletion, and balance I've had
@@ -113,13 +113,13 @@ index 19b9fffa2..0ea665247 100644
  #define BTRFS_FEATURE_NAME_MAX 13
  static char btrfs_unknown_feature_names[FEAT_MAX][NUM_FEATURE_BITS][BTRFS_FEATURE_NAME_MAX];
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From b23f9ee7f7f14208a6123d4dac5432ffa1b23533 Mon Sep 17 00:00:00 2001
+From 144f048b41f2f6e1d9c4d58fcfe025b727430901 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 24 Jul 2020 12:41:47 -0400
-Subject: [PATCH 02/34] btrfs: do not evaluate the expression with
+Subject: [PATCH 02/30] btrfs: do not evaluate the expression with
  !CONFIG_BTRFS_ASSERT
 
 While investigating a performance issue I noticed that turning off
@@ -143,10 +143,10 @@ Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
-index 4debdbdde..a982ad944 100644
+index 0c8c55a41..ab72ccc05 100644
 --- a/fs/btrfs/ctree.h
 +++ b/fs/btrfs/ctree.h
-@@ -3390,7 +3390,7 @@ static inline void assertfail(const char *expr, const char *file, int line)
+@@ -3395,7 +3395,7 @@ static inline void assertfail(const char *expr, const char *file, int line)
  
  #else
  static inline void assertfail(const char *expr, const char* file, int line) { }
@@ -156,13 +156,13 @@ index 4debdbdde..a982ad944 100644
  
  /*
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From af331b31df878ebc421e09c30d6bf25d9ac19a59 Mon Sep 17 00:00:00 2001
+From 9cccf5cc7b04789c68337ef9440480ffafe28ca8 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:19 -0500
-Subject: [PATCH 03/34] btrfs: do not block on deleted bgs mutex in the cleaner
+Subject: [PATCH 03/30] btrfs: do not block on deleted bgs mutex in the cleaner
 
 While running some stress tests I started getting hung task messages.
 This is because the delete unused bg's code has to take the
@@ -181,10 +181,10 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/fs/btrfs/block-group.c b/fs/btrfs/block-group.c
-index 48ebc106a..16a77d91b 100644
+index 3cf1b953f..1838e997e 100644
 --- a/fs/btrfs/block-group.c
 +++ b/fs/btrfs/block-group.c
-@@ -1262,6 +1262,13 @@ void btrfs_delete_unused_bgs(struct btrfs_fs_info *fs_info)
+@@ -1267,6 +1267,13 @@ void btrfs_delete_unused_bgs(struct btrfs_fs_info *fs_info)
  	if (!test_bit(BTRFS_FS_OPEN, &fs_info->flags))
  		return;
  
@@ -198,7 +198,7 @@ index 48ebc106a..16a77d91b 100644
  	spin_lock(&fs_info->unused_bgs_lock);
  	while (!list_empty(&fs_info->unused_bgs)) {
  		int trimming;
-@@ -1281,8 +1288,6 @@ void btrfs_delete_unused_bgs(struct btrfs_fs_info *fs_info)
+@@ -1286,8 +1293,6 @@ void btrfs_delete_unused_bgs(struct btrfs_fs_info *fs_info)
  
  		btrfs_discard_cancel_work(&fs_info->discard_ctl, block_group);
  
@@ -207,7 +207,7 @@ index 48ebc106a..16a77d91b 100644
  		/* Don't want to race with allocators so take the groups_sem */
  		down_write(&space_info->groups_sem);
  
-@@ -1428,11 +1433,11 @@ void btrfs_delete_unused_bgs(struct btrfs_fs_info *fs_info)
+@@ -1431,11 +1436,11 @@ void btrfs_delete_unused_bgs(struct btrfs_fs_info *fs_info)
  end_trans:
  		btrfs_end_transaction(trans);
  next:
@@ -221,13 +221,13 @@ index 48ebc106a..16a77d91b 100644
  
  flip_async:
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From e13e18169aa52006f3e2d349f41c412ea0620a04 Mon Sep 17 00:00:00 2001
+From d69f0eaffe47e08d94d2674bb91fc2e3d498ff84 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:20 -0500
-Subject: [PATCH 04/34] btrfs: only let one thread pre-flush delayed refs in
+Subject: [PATCH 04/30] btrfs: only let one thread pre-flush delayed refs in
  commit
 
 I've been running a stress test that runs 20 workers in their own
@@ -264,7 +264,7 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  2 files changed, 22 insertions(+), 23 deletions(-)
 
 diff --git a/fs/btrfs/delayed-ref.h b/fs/btrfs/delayed-ref.h
-index 1c977e6d4..6e414785b 100644
+index 3ba140468..467753128 100644
 --- a/fs/btrfs/delayed-ref.h
 +++ b/fs/btrfs/delayed-ref.h
 @@ -135,6 +135,11 @@ struct btrfs_delayed_data_ref {
@@ -294,7 +294,7 @@ index 1c977e6d4..6e414785b 100644
  	u64 run_delayed_start;
  
 diff --git a/fs/btrfs/transaction.c b/fs/btrfs/transaction.c
-index 6af7f2bf9..1b83f072c 100644
+index fbf930676..f370cc7e4 100644
 --- a/fs/btrfs/transaction.c
 +++ b/fs/btrfs/transaction.c
 @@ -909,9 +909,9 @@ bool btrfs_should_end_transaction(struct btrfs_trans_handle *trans)
@@ -309,7 +309,7 @@ index 6af7f2bf9..1b83f072c 100644
  		return true;
  
  	return should_end_transaction(trans);
-@@ -2042,23 +2042,22 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
+@@ -2043,23 +2043,22 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
  	btrfs_trans_release_metadata(trans);
  	trans->block_rsv = NULL;
  
@@ -348,13 +348,13 @@ index 6af7f2bf9..1b83f072c 100644
  	btrfs_create_pending_block_groups(trans);
  
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 0386ebe65d89e177d09d1a949c3873b9bfb6c018 Mon Sep 17 00:00:00 2001
+From 7281bea3478d4e74b7c05434a37c6ee428559c25 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:21 -0500
-Subject: [PATCH 05/34] btrfs: delayed refs pre-flushing should only run the
+Subject: [PATCH 05/30] btrfs: delayed refs pre-flushing should only run the
  heads we have
 
 Previously our delayed ref running used the total number of items as the
@@ -379,10 +379,10 @@ Reviewed-by: Nikolay Borisov <nborisov@suse.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
-index 0c335dae5..b797b6792 100644
+index 6f0c59deb..0943731f7 100644
 --- a/fs/btrfs/extent-tree.c
 +++ b/fs/btrfs/extent-tree.c
-@@ -2160,7 +2160,7 @@ int btrfs_run_delayed_refs(struct btrfs_trans_handle *trans,
+@@ -2113,7 +2113,7 @@ int btrfs_run_delayed_refs(struct btrfs_trans_handle *trans,
  
  	delayed_refs = &trans->transaction->delayed_refs;
  	if (count == 0)
@@ -392,13 +392,13 @@ index 0c335dae5..b797b6792 100644
  again:
  #ifdef SCRAMBLE_DELAYED_REFS
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From d3eb1721a76dbcfdac55033d0814d2a146151f29 Mon Sep 17 00:00:00 2001
+From 95a51de45def4e5437177d2ba4b73d3a3aa5c6c5 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:22 -0500
-Subject: [PATCH 06/34] btrfs: only run delayed refs once before committing
+Subject: [PATCH 06/30] btrfs: only run delayed refs once before committing
 
 We try to pre-flush the delayed refs when committing, because we want to
 do as little work as possible in the critical section of the transaction
@@ -419,10 +419,10 @@ Reviewed-by: Nikolay Borisov <nborisov@suse.com>
  1 file changed, 6 deletions(-)
 
 diff --git a/fs/btrfs/transaction.c b/fs/btrfs/transaction.c
-index 1b83f072c..31598fd79 100644
+index f370cc7e4..85c2da071 100644
 --- a/fs/btrfs/transaction.c
 +++ b/fs/btrfs/transaction.c
-@@ -2061,12 +2061,6 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
+@@ -2062,12 +2062,6 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
  
  	btrfs_create_pending_block_groups(trans);
  
@@ -436,13 +436,13 @@ index 1b83f072c..31598fd79 100644
  		int run_it = 0;
  
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 17c198e14b895bc496f3a692c4b4b2ef85705aed Mon Sep 17 00:00:00 2001
+From aa4587a73465d46b4e6932d643dd5ee9692db70e Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:23 -0500
-Subject: [PATCH 07/34] btrfs: move delayed ref flushing for qgroup into qgroup
+Subject: [PATCH 07/30] btrfs: move delayed ref flushing for qgroup into qgroup
  helper
 
 The commit d67263354541 ("btrfs: qgroup: Make snapshot accounting work
@@ -462,10 +462,10 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/fs/btrfs/transaction.c b/fs/btrfs/transaction.c
-index 31598fd79..cef4d73b7 100644
+index 85c2da071..1a325d691 100644
 --- a/fs/btrfs/transaction.c
 +++ b/fs/btrfs/transaction.c
-@@ -1432,6 +1432,23 @@ static int qgroup_account_snapshot(struct btrfs_trans_handle *trans,
+@@ -1433,6 +1433,23 @@ static int qgroup_account_snapshot(struct btrfs_trans_handle *trans,
  	 */
  	record_root_in_trans(trans, src, 1);
  
@@ -489,7 +489,7 @@ index 31598fd79..cef4d73b7 100644
  	/*
  	 * We are going to commit transaction, see btrfs_commit_transaction()
  	 * comment for reason locking tree_log_mutex
-@@ -1685,12 +1702,6 @@ static noinline int create_pending_snapshot(struct btrfs_trans_handle *trans,
+@@ -1686,12 +1703,6 @@ static noinline int create_pending_snapshot(struct btrfs_trans_handle *trans,
  		goto fail;
  	}
  
@@ -503,13 +503,13 @@ index 31598fd79..cef4d73b7 100644
  	 * Do special qgroup accounting for snapshot, as we do some qgroup
  	 * snapshot hack to do fast snapshot.
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 2842d18d0fe3d3cccdc11bc6c73c40ee0cf33c0e Mon Sep 17 00:00:00 2001
+From a9efffad3f48c5eb2423b75b11d622475ea3d080 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:24 -0500
-Subject: [PATCH 08/34] btrfs: remove bogus BUG_ON in alloc_reserved_tree_block
+Subject: [PATCH 08/30] btrfs: remove bogus BUG_ON in alloc_reserved_tree_block
 
 The fix 361048f586f5 ("Btrfs: fix full backref problem when inserting
 shared block reference") added a delayed ref flushing at subvolume
@@ -569,10 +569,10 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 1 deletion(-)
 
 diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
-index b797b6792..44acf990a 100644
+index 0943731f7..5476ab84e 100644
 --- a/fs/btrfs/extent-tree.c
 +++ b/fs/btrfs/extent-tree.c
-@@ -4491,7 +4491,6 @@ static int alloc_reserved_tree_block(struct btrfs_trans_handle *trans,
+@@ -4426,7 +4426,6 @@ static int alloc_reserved_tree_block(struct btrfs_trans_handle *trans,
  	}
  
  	if (node->type == BTRFS_SHARED_BLOCK_REF_KEY) {
@@ -581,13 +581,13 @@ index b797b6792..44acf990a 100644
  						 BTRFS_SHARED_BLOCK_REF_KEY);
  		btrfs_set_extent_inline_ref_offset(leaf, iref, ref->parent);
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 75e06d6da7864d635e47607c8ed450d2e56340f0 Mon Sep 17 00:00:00 2001
+From be2165897325f6daff90abf0701a41c577dd6778 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:25 -0500
-Subject: [PATCH 09/34] btrfs: stop running all delayed refs during snapshot
+Subject: [PATCH 09/30] btrfs: stop running all delayed refs during snapshot
 
 This was added in commit 361048f586f5 ("Btrfs: fix full backref problem
 when inserting shared block reference") to address a problem where we
@@ -609,10 +609,10 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 6 deletions(-)
 
 diff --git a/fs/btrfs/transaction.c b/fs/btrfs/transaction.c
-index cef4d73b7..e720ed13f 100644
+index 1a325d691..b36d0d711 100644
 --- a/fs/btrfs/transaction.c
 +++ b/fs/btrfs/transaction.c
-@@ -1749,12 +1749,6 @@ static noinline int create_pending_snapshot(struct btrfs_trans_handle *trans,
+@@ -1750,12 +1750,6 @@ static noinline int create_pending_snapshot(struct btrfs_trans_handle *trans,
  		}
  	}
  
@@ -626,13 +626,13 @@ index cef4d73b7..e720ed13f 100644
  	pending->error = ret;
  dir_item_existed:
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 1c7852238ddfb3ad9f20f7de34450ce9e96fa7ae Mon Sep 17 00:00:00 2001
+From d648f66338c6813d707b2b81b66c09959d9db3f6 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:26 -0500
-Subject: [PATCH 10/34] btrfs: run delayed refs less often in
+Subject: [PATCH 10/30] btrfs: run delayed refs less often in
  commit_cowonly_roots
 
 We love running delayed refs in commit_cowonly_roots, but it is a bit
@@ -650,7 +650,7 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 12 insertions(+), 11 deletions(-)
 
 diff --git a/fs/btrfs/transaction.c b/fs/btrfs/transaction.c
-index e720ed13f..8b2ba6984 100644
+index b36d0d711..87035b74a 100644
 --- a/fs/btrfs/transaction.c
 +++ b/fs/btrfs/transaction.c
 @@ -1227,10 +1227,6 @@ static noinline int commit_cowonly_roots(struct btrfs_trans_handle *trans)
@@ -704,13 +704,13 @@ index e720ed13f..8b2ba6984 100644
  		if (ret)
  			return ret;
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 1420ed892d1c3ddd9748606e72ad2b35d46f2073 Mon Sep 17 00:00:00 2001
+From c06f0da51dcaa7a708083764ed8e671c82329c49 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:18 -0400
-Subject: [PATCH 11/34] btrfs: make flush_space take a enum btrfs_flush_state
+Subject: [PATCH 11/30] btrfs: make flush_space take a enum btrfs_flush_state
  instead of int
 
 I got a automated message from somebody who runs clang against our
@@ -747,13 +747,13 @@ index e8347461c..fa8526c31 100644
  	u64 last_tickets_id;
  
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From e8458234760bec87e2a333ef0fdcbfe4156e1699 Mon Sep 17 00:00:00 2001
+From 5455e8c8da18a068769051cfa36a60b604ac7db4 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:19 -0400
-Subject: [PATCH 12/34] btrfs: add a trace point for reserve tickets
+Subject: [PATCH 12/30] btrfs: add a trace point for reserve tickets
 
 While debugging a ENOSPC related performance problem I needed to see the
 time difference between start and end of a reserve ticket, so add a
@@ -862,13 +862,13 @@ index ecd24c719..eb3486568 100644
  	TP_PROTO(const struct extent_buffer *eb, u64 start_ns),
  
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 10c32daa18aa53352368555e900b5ed2ecd0eb4b Mon Sep 17 00:00:00 2001
+From 0e667104da032f866cc608dbc8de4cb04478c98b Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:20 -0400
-Subject: [PATCH 13/34] btrfs: track ordered bytes instead of just dio ordered
+Subject: [PATCH 13/30] btrfs: track ordered bytes instead of just dio ordered
  bytes
 
 We track dio_bytes because the shrink delalloc code needs to know if we
@@ -892,10 +892,10 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  4 files changed, 18 insertions(+), 23 deletions(-)
 
 diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
-index a982ad944..29b711bc6 100644
+index ab72ccc05..347073417 100644
 --- a/fs/btrfs/ctree.h
 +++ b/fs/btrfs/ctree.h
-@@ -797,7 +797,7 @@ struct btrfs_fs_info {
+@@ -802,7 +802,7 @@ struct btrfs_fs_info {
  	/* used to keep from writing metadata until there is a nice batch */
  	struct percpu_counter dirty_metadata_bytes;
  	struct percpu_counter delalloc_bytes;
@@ -1024,13 +1024,13 @@ index 720f4cf73..26dc2b892 100644
  }
  
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From dcce9fae1eec2caf4d0f3dc0b3ba4386a27140f3 Mon Sep 17 00:00:00 2001
+From 1686f482185702fa2b46924b63c557f161bd6dbe Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:21 -0400
-Subject: [PATCH 14/34] btrfs: introduce a FORCE_COMMIT_TRANS flush operation
+Subject: [PATCH 14/30] btrfs: introduce a FORCE_COMMIT_TRANS flush operation
 
 Sole-y for preemptive flushing, we want to be able to force the
 transaction commit without any of the ambiguity of
@@ -1047,10 +1047,10 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  3 files changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
-index 29b711bc6..a9dcfed03 100644
+index 347073417..4fe0d882a 100644
 --- a/fs/btrfs/ctree.h
 +++ b/fs/btrfs/ctree.h
-@@ -2740,6 +2740,7 @@ enum btrfs_flush_state {
+@@ -2745,6 +2745,7 @@ enum btrfs_flush_state {
  	ALLOC_CHUNK_FORCE	=	8,
  	RUN_DELAYED_IPUTS	=	9,
  	COMMIT_TRANS		=	10,
@@ -1092,13 +1092,13 @@ index eb3486568..0a3d35d95 100644
  /*
   * First define the enums in the above macros to be exported to userspace via
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 200d081b2fef898ec7169962a1f20740506ccd1f Mon Sep 17 00:00:00 2001
+From 4e76bb1abca8f52dd183d1639f2d2f7b4e9c3a48 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:22 -0400
-Subject: [PATCH 15/34] btrfs: improve preemptive background space flushing
+Subject: [PATCH 15/30] btrfs: improve preemptive background space flushing
 
 Currently if we ever have to flush space because we do not have enough
 we allocate a ticket and attach it to the space_info, and then
@@ -1144,10 +1144,10 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  3 files changed, 101 insertions(+), 2 deletions(-)
 
 diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
-index a9dcfed03..768337f41 100644
+index 4fe0d882a..d725ebc9f 100644
 --- a/fs/btrfs/ctree.h
 +++ b/fs/btrfs/ctree.h
-@@ -933,6 +933,7 @@ struct btrfs_fs_info {
+@@ -938,6 +938,7 @@ struct btrfs_fs_info {
  	/* Used to reclaim the metadata space in the background. */
  	struct work_struct async_reclaim_work;
  	struct work_struct async_data_reclaim_work;
@@ -1297,13 +1297,13 @@ index 23451988f..8a9e18cdf 100644
  	}
  	spin_unlock(&space_info->lock);
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 802626cb6164cb3624f7f49116226dcdbf137a3f Mon Sep 17 00:00:00 2001
+From 13b1ebdad1eca6eeb1c683242137d437aabe221d Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:23 -0400
-Subject: [PATCH 16/34] btrfs: rename need_do_async_reclaim
+Subject: [PATCH 16/30] btrfs: rename need_do_async_reclaim
 
 All of our normal flushing is asynchronous reclaim, so this helper is
 poorly named.  This is more checking if we need to preemptively flush
@@ -1351,13 +1351,13 @@ index 8a9e18cdf..b062d8379 100644
  			trace_btrfs_trigger_flush(fs_info, space_info->flags,
  						  orig_bytes, flush, "preempt");
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 4ac4366c5435e4106a55a07cade243a9a4a5b4c8 Mon Sep 17 00:00:00 2001
+From 73e21530b29f5ab58cffb9e178f1d6ced030845b Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:24 -0400
-Subject: [PATCH 17/34] btrfs: check reclaim_size in need_preemptive_reclaim
+Subject: [PATCH 17/30] btrfs: check reclaim_size in need_preemptive_reclaim
 
 If we're flushing space for tickets then we have
 space_info->reclaim_size set and we do not need to do background
@@ -1388,13 +1388,13 @@ index b062d8379..67ed12794 100644
  		return 0;
  
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 5c560ec29329c68708d20bb3a3c9a94e0310987d Mon Sep 17 00:00:00 2001
+From 07df776fe2d2c82b7fae1748e672533db784374b Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:25 -0400
-Subject: [PATCH 18/34] btrfs: rework btrfs_calc_reclaim_metadata_size
+Subject: [PATCH 18/30] btrfs: rework btrfs_calc_reclaim_metadata_size
 
 Currently btrfs_calc_reclaim_metadata_size does two things, it returns
 the space currently required for flushing by the tickets, and if there
@@ -1496,13 +1496,13 @@ index 67ed12794..ad61b9fe3 100644
  
  	return (used >= thresh && !btrfs_fs_closing(fs_info) &&
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 3cc596d29e6bf254842e971de0fc737cb9aab747 Mon Sep 17 00:00:00 2001
+From 4639bec649e65dcf8298b896f0a8a52ddb721e2b Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:26 -0400
-Subject: [PATCH 19/34] btrfs: simplify the logic in need_preemptive_flushing
+Subject: [PATCH 19/30] btrfs: simplify the logic in need_preemptive_flushing
 
 A lot of this was added all in one go with no explanation, and is a bit
 unwieldy and confusing.  Simplify the logic to start preemptive flushing
@@ -1638,13 +1638,13 @@ index ad61b9fe3..029db49c1 100644
  			trace_btrfs_trigger_flush(fs_info, space_info->flags,
  						  orig_bytes, flush, "preempt");
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 0656b005bc1c8d7e7f2c6b3cde6e2c49ab48f656 Mon Sep 17 00:00:00 2001
+From 79e688ce58d0aeecf64b33d0dc1e6bff947d6d35 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:27 -0400
-Subject: [PATCH 20/34] btrfs: implement space clamping for preemptive flushing
+Subject: [PATCH 20/30] btrfs: implement space clamping for preemptive flushing
 
 Starting preemptive flushing at 50% of available free space is a good
 start, but some workloads are particularly abusive and can quickly
@@ -1763,7 +1763,7 @@ index 029db49c1..228a03734 100644
  		used += orig_bytes;
  		/*
 diff --git a/fs/btrfs/space-info.h b/fs/btrfs/space-info.h
-index 5646393b9..bcbbfae13 100644
+index 74706f604..f5dee5834 100644
 --- a/fs/btrfs/space-info.h
 +++ b/fs/btrfs/space-info.h
 @@ -22,6 +22,9 @@ struct btrfs_space_info {
@@ -1777,13 +1777,13 @@ index 5646393b9..bcbbfae13 100644
  				   chunks for this space */
  	unsigned int chunk_alloc:1;	/* set if we are allocating a chunk */
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From a97b568cc27539e92f600011542b6b6f1e4e385a Mon Sep 17 00:00:00 2001
+From 39679eeaadd041ae0f2712160e594284bc6135db Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:28 -0400
-Subject: [PATCH 21/34] btrfs: adjust the flush trace point to include the
+Subject: [PATCH 21/30] btrfs: adjust the flush trace point to include the
  source
 
 Since we have normal ticketed flushing and preemptive flushing, adjust
@@ -1920,13 +1920,13 @@ index 0a3d35d95..6d93637ba 100644
  
  DECLARE_EVENT_CLASS(btrfs__reserved_extent,
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From b3204ed531be58cad8b37b948ccd579d67915fc8 Mon Sep 17 00:00:00 2001
+From a68dc6193857a3c1eae0b5666119128e6a0faa22 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:29 -0400
-Subject: [PATCH 22/34] btrfs: add a trace class for dumping the current ENOSPC
+Subject: [PATCH 22/30] btrfs: add a trace class for dumping the current ENOSPC
  state
 
 Often when I'm debugging ENOSPC related issues I have to resort to
@@ -2030,13 +2030,13 @@ index 6d93637ba..74b466dc2 100644
  	TP_PROTO(const struct btrfs_fs_info *fs_info, u64 flags, u64 bytes,
  		 u64 start_ns, int flush, int error),
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 808b30a4d7c5b1d52d1c0a345babc5bb8b4cbb70 Mon Sep 17 00:00:00 2001
+From 1af34fbaf24a243a266501c73ee18010004dfedf Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 20 Mar 2020 14:34:36 -0400
-Subject: [PATCH 23/34] btrfs: restart snapshot delete if we have to end the
+Subject: [PATCH 23/30] btrfs: restart snapshot delete if we have to end the
  transaction
 
 This is to fully fix the deadlock described in
@@ -2058,10 +2058,10 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 16 insertions(+)
 
 diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
-index 44acf990a..e125aa8c8 100644
+index 5476ab84e..76e4dd284 100644
 --- a/fs/btrfs/extent-tree.c
 +++ b/fs/btrfs/extent-tree.c
-@@ -5412,6 +5412,7 @@ int btrfs_drop_snapshot(struct btrfs_root *root, int update_ref, int for_reloc)
+@@ -5344,6 +5344,7 @@ int btrfs_drop_snapshot(struct btrfs_root *root, int update_ref, int for_reloc)
  	 * already dropped.
  	 */
  	set_bit(BTRFS_ROOT_DELETING, &root->state);
@@ -2069,7 +2069,7 @@ index 44acf990a..e125aa8c8 100644
  	if (btrfs_disk_key_objectid(&root_item->drop_progress) == 0) {
  		level = btrfs_header_level(root->node);
  		path->nodes[level] = btrfs_lock_root_node(root);
-@@ -5423,7 +5424,9 @@ int btrfs_drop_snapshot(struct btrfs_root *root, int update_ref, int for_reloc)
+@@ -5355,7 +5356,9 @@ int btrfs_drop_snapshot(struct btrfs_root *root, int update_ref, int for_reloc)
  		btrfs_disk_key_to_cpu(&key, &root_item->drop_progress);
  		memcpy(&wc->update_progress, &key,
  		       sizeof(wc->update_progress));
@@ -2079,7 +2079,7 @@ index 44acf990a..e125aa8c8 100644
  		level = btrfs_root_drop_level(root_item);
  		BUG_ON(level == 0);
  		path->lowest_level = level;
-@@ -5515,6 +5518,18 @@ int btrfs_drop_snapshot(struct btrfs_root *root, int update_ref, int for_reloc)
+@@ -5447,6 +5450,18 @@ int btrfs_drop_snapshot(struct btrfs_root *root, int update_ref, int for_reloc)
  				goto out_end_trans;
  			}
  
@@ -2098,7 +2098,7 @@ index 44acf990a..e125aa8c8 100644
  			btrfs_end_transaction_throttle(trans);
  			if (!for_reloc && btrfs_need_cleaner_sleep(fs_info)) {
  				btrfs_debug(fs_info,
-@@ -5536,6 +5551,7 @@ int btrfs_drop_snapshot(struct btrfs_root *root, int update_ref, int for_reloc)
+@@ -5468,6 +5483,7 @@ int btrfs_drop_snapshot(struct btrfs_root *root, int update_ref, int for_reloc)
  				err = PTR_ERR(trans);
  				goto out_free;
  			}
@@ -2107,640 +2107,13 @@ index 44acf990a..e125aa8c8 100644
  	}
  	btrfs_release_path(path);
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 4b240a356fd1092c500ea582c416cb531db9956a Mon Sep 17 00:00:00 2001
-From: Josef Bacik <josef@toxicpanda.com>
-Date: Fri, 15 Jan 2021 16:48:55 -0500
-Subject: [PATCH 24/34] btrfs: handle ->total_bytes_pinned inside the delayed
- ref itself
-
-Currently we pass things around to figure out if we maybe free'ing data
-based on the state of the delayed refs head.  This makes the accounting
-sort of confusing and hard to follow, as it's distinctly separate from
-the delayed ref heads stuff, but also depends on it entirely.
-
-Fix this by explicitly adjusting the space_info->total_bytes_pinned in
-the delayed refs code.  We now have two places where we modify this
-counter, once where we create the delayed and destroy the delayed refs,
-and once when we pin and unpin the extents.  This means there is a
-slight overlap between delayed refs and the pin/unpin mechanisms, but
-this is simply used by the ENOSPC infrastructure to determine if we need
-to commit the transaction, so there's no adverse affect from this, we
-might simply commit thinking it will give us enough space when it might
-not.
-
-Reviewed-by: Nikolay Borisov <nborisov@suse.com>
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
----
- fs/btrfs/block-group.c | 11 ++---
- fs/btrfs/delayed-ref.c | 53 ++++++++++++++---------
- fs/btrfs/delayed-ref.h | 16 +++++--
- fs/btrfs/extent-tree.c | 97 ++++++------------------------------------
- fs/btrfs/space-info.h  | 17 ++++++++
- 5 files changed, 77 insertions(+), 117 deletions(-)
-
-diff --git a/fs/btrfs/block-group.c b/fs/btrfs/block-group.c
-index 16a77d91b..ac6f78893 100644
---- a/fs/btrfs/block-group.c
-+++ b/fs/btrfs/block-group.c
-@@ -1376,9 +1376,8 @@ void btrfs_delete_unused_bgs(struct btrfs_fs_info *fs_info)
- 		btrfs_space_info_update_bytes_pinned(fs_info, space_info,
- 						     -block_group->pinned);
- 		space_info->bytes_readonly += block_group->pinned;
--		percpu_counter_add_batch(&space_info->total_bytes_pinned,
--				   -block_group->pinned,
--				   BTRFS_TOTAL_BYTES_PINNED_BATCH);
-+		__btrfs_mod_total_bytes_pinned(space_info,
-+					       -block_group->pinned);
- 		block_group->pinned = 0;
- 
- 		spin_unlock(&block_group->lock);
-@@ -2901,10 +2900,8 @@ int btrfs_update_block_group(struct btrfs_trans_handle *trans,
- 			spin_unlock(&cache->lock);
- 			spin_unlock(&cache->space_info->lock);
- 
--			percpu_counter_add_batch(
--					&cache->space_info->total_bytes_pinned,
--					num_bytes,
--					BTRFS_TOTAL_BYTES_PINNED_BATCH);
-+			__btrfs_mod_total_bytes_pinned(cache->space_info,
-+						       num_bytes);
- 			set_extent_dirty(&trans->transaction->pinned_extents,
- 					 bytenr, bytenr + num_bytes - 1,
- 					 GFP_NOFS | __GFP_NOFAIL);
-diff --git a/fs/btrfs/delayed-ref.c b/fs/btrfs/delayed-ref.c
-index 353cc2994..1edb0095f 100644
---- a/fs/btrfs/delayed-ref.c
-+++ b/fs/btrfs/delayed-ref.c
-@@ -648,12 +648,12 @@ static int insert_delayed_ref(struct btrfs_trans_handle *trans,
-  */
- static noinline void update_existing_head_ref(struct btrfs_trans_handle *trans,
- 			 struct btrfs_delayed_ref_head *existing,
--			 struct btrfs_delayed_ref_head *update,
--			 int *old_ref_mod_ret)
-+			 struct btrfs_delayed_ref_head *update)
- {
- 	struct btrfs_delayed_ref_root *delayed_refs =
- 		&trans->transaction->delayed_refs;
- 	struct btrfs_fs_info *fs_info = trans->fs_info;
-+	u64 flags = btrfs_ref_head_to_space_flags(existing);
- 	int old_ref_mod;
- 
- 	BUG_ON(existing->is_data != update->is_data);
-@@ -701,8 +701,6 @@ static noinline void update_existing_head_ref(struct btrfs_trans_handle *trans,
- 	 * currently, for refs we just added we know we're a-ok.
- 	 */
- 	old_ref_mod = existing->total_ref_mod;
--	if (old_ref_mod_ret)
--		*old_ref_mod_ret = old_ref_mod;
- 	existing->ref_mod += update->ref_mod;
- 	existing->total_ref_mod += update->ref_mod;
- 
-@@ -724,6 +722,24 @@ static noinline void update_existing_head_ref(struct btrfs_trans_handle *trans,
- 			trans->delayed_ref_updates += csum_leaves;
- 		}
- 	}
-+
-+	/*
-+	 * This handles the following conditions:
-+	 *
-+	 * 1. We had a ref mod of 0 or more and went negative, indicating that
-+	 *    we may be freeing space, so add our space to the
-+	 *    total_bytes_pinned counter.
-+	 * 2. We were negative and went to 0 or positive, so no longer can say
-+	 *    that the space would be pinned, decrement our counter from the
-+	 *    total_bytes_pinned counter.
-+	 */
-+	if (existing->total_ref_mod < 0 && old_ref_mod >= 0)
-+		btrfs_mod_total_bytes_pinned(fs_info, flags,
-+					     existing->num_bytes);
-+	else if (existing->total_ref_mod >= 0 && old_ref_mod < 0)
-+		btrfs_mod_total_bytes_pinned(fs_info, flags,
-+					     -existing->num_bytes);
-+
- 	spin_unlock(&existing->lock);
- }
- 
-@@ -798,8 +814,7 @@ static noinline struct btrfs_delayed_ref_head *
- add_delayed_ref_head(struct btrfs_trans_handle *trans,
- 		     struct btrfs_delayed_ref_head *head_ref,
- 		     struct btrfs_qgroup_extent_record *qrecord,
--		     int action, int *qrecord_inserted_ret,
--		     int *old_ref_mod, int *new_ref_mod)
-+		     int action, int *qrecord_inserted_ret)
- {
- 	struct btrfs_delayed_ref_head *existing;
- 	struct btrfs_delayed_ref_root *delayed_refs;
-@@ -821,8 +836,7 @@ add_delayed_ref_head(struct btrfs_trans_handle *trans,
- 	existing = htree_insert(&delayed_refs->href_root,
- 				&head_ref->href_node);
- 	if (existing) {
--		update_existing_head_ref(trans, existing, head_ref,
--					 old_ref_mod);
-+		update_existing_head_ref(trans, existing, head_ref);
- 		/*
- 		 * we've updated the existing ref, free the newly
- 		 * allocated ref
-@@ -830,14 +844,17 @@ add_delayed_ref_head(struct btrfs_trans_handle *trans,
- 		kmem_cache_free(btrfs_delayed_ref_head_cachep, head_ref);
- 		head_ref = existing;
- 	} else {
--		if (old_ref_mod)
--			*old_ref_mod = 0;
-+		u64 flags = btrfs_ref_head_to_space_flags(head_ref);
-+
- 		if (head_ref->is_data && head_ref->ref_mod < 0) {
- 			delayed_refs->pending_csums += head_ref->num_bytes;
- 			trans->delayed_ref_updates +=
- 				btrfs_csum_bytes_to_leaves(trans->fs_info,
- 							   head_ref->num_bytes);
- 		}
-+		if (head_ref->ref_mod < 0)
-+			btrfs_mod_total_bytes_pinned(trans->fs_info, flags,
-+						     head_ref->num_bytes);
- 		delayed_refs->num_heads++;
- 		delayed_refs->num_heads_ready++;
- 		atomic_inc(&delayed_refs->num_entries);
-@@ -845,8 +862,6 @@ add_delayed_ref_head(struct btrfs_trans_handle *trans,
- 	}
- 	if (qrecord_inserted_ret)
- 		*qrecord_inserted_ret = qrecord_inserted;
--	if (new_ref_mod)
--		*new_ref_mod = head_ref->total_ref_mod;
- 
- 	return head_ref;
- }
-@@ -909,8 +924,7 @@ static void init_delayed_ref_common(struct btrfs_fs_info *fs_info,
-  */
- int btrfs_add_delayed_tree_ref(struct btrfs_trans_handle *trans,
- 			       struct btrfs_ref *generic_ref,
--			       struct btrfs_delayed_extent_op *extent_op,
--			       int *old_ref_mod, int *new_ref_mod)
-+			       struct btrfs_delayed_extent_op *extent_op)
- {
- 	struct btrfs_fs_info *fs_info = trans->fs_info;
- 	struct btrfs_delayed_tree_ref *ref;
-@@ -977,8 +991,7 @@ int btrfs_add_delayed_tree_ref(struct btrfs_trans_handle *trans,
- 	 * the spin lock
- 	 */
- 	head_ref = add_delayed_ref_head(trans, head_ref, record,
--					action, &qrecord_inserted,
--					old_ref_mod, new_ref_mod);
-+					action, &qrecord_inserted);
- 
- 	ret = insert_delayed_ref(trans, delayed_refs, head_ref, &ref->node);
- 	spin_unlock(&delayed_refs->lock);
-@@ -1006,8 +1019,7 @@ int btrfs_add_delayed_tree_ref(struct btrfs_trans_handle *trans,
-  */
- int btrfs_add_delayed_data_ref(struct btrfs_trans_handle *trans,
- 			       struct btrfs_ref *generic_ref,
--			       u64 reserved, int *old_ref_mod,
--			       int *new_ref_mod)
-+			       u64 reserved)
- {
- 	struct btrfs_fs_info *fs_info = trans->fs_info;
- 	struct btrfs_delayed_data_ref *ref;
-@@ -1073,8 +1085,7 @@ int btrfs_add_delayed_data_ref(struct btrfs_trans_handle *trans,
- 	 * the spin lock
- 	 */
- 	head_ref = add_delayed_ref_head(trans, head_ref, record,
--					action, &qrecord_inserted,
--					old_ref_mod, new_ref_mod);
-+					action, &qrecord_inserted);
- 
- 	ret = insert_delayed_ref(trans, delayed_refs, head_ref, &ref->node);
- 	spin_unlock(&delayed_refs->lock);
-@@ -1117,7 +1128,7 @@ int btrfs_add_delayed_extent_op(struct btrfs_trans_handle *trans,
- 	spin_lock(&delayed_refs->lock);
- 
- 	add_delayed_ref_head(trans, head_ref, NULL, BTRFS_UPDATE_DELAYED_HEAD,
--			     NULL, NULL, NULL);
-+			     NULL);
- 
- 	spin_unlock(&delayed_refs->lock);
- 
-diff --git a/fs/btrfs/delayed-ref.h b/fs/btrfs/delayed-ref.h
-index 6e414785b..467753128 100644
---- a/fs/btrfs/delayed-ref.h
-+++ b/fs/btrfs/delayed-ref.h
-@@ -326,6 +326,16 @@ static inline void btrfs_put_delayed_ref(struct btrfs_delayed_ref_node *ref)
- 	}
- }
- 
-+static inline u64 btrfs_ref_head_to_space_flags(
-+				struct btrfs_delayed_ref_head *head_ref)
-+{
-+	if (head_ref->is_data)
-+		return BTRFS_BLOCK_GROUP_DATA;
-+	else if (head_ref->is_system)
-+		return BTRFS_BLOCK_GROUP_SYSTEM;
-+	return BTRFS_BLOCK_GROUP_METADATA;
-+}
-+
- static inline void btrfs_put_delayed_ref_head(struct btrfs_delayed_ref_head *head)
- {
- 	if (refcount_dec_and_test(&head->refs))
-@@ -334,12 +344,10 @@ static inline void btrfs_put_delayed_ref_head(struct btrfs_delayed_ref_head *hea
- 
- int btrfs_add_delayed_tree_ref(struct btrfs_trans_handle *trans,
- 			       struct btrfs_ref *generic_ref,
--			       struct btrfs_delayed_extent_op *extent_op,
--			       int *old_ref_mod, int *new_ref_mod);
-+			       struct btrfs_delayed_extent_op *extent_op);
- int btrfs_add_delayed_data_ref(struct btrfs_trans_handle *trans,
- 			       struct btrfs_ref *generic_ref,
--			       u64 reserved, int *old_ref_mod,
--			       int *new_ref_mod);
-+			       u64 reserved);
- int btrfs_add_delayed_extent_op(struct btrfs_trans_handle *trans,
- 				u64 bytenr, u64 num_bytes,
- 				struct btrfs_delayed_extent_op *extent_op);
-diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
-index e125aa8c8..91b139680 100644
---- a/fs/btrfs/extent-tree.c
-+++ b/fs/btrfs/extent-tree.c
-@@ -82,41 +82,6 @@ void btrfs_free_excluded_extents(struct btrfs_block_group *cache)
- 			  EXTENT_UPTODATE);
- }
- 
--static u64 generic_ref_to_space_flags(struct btrfs_ref *ref)
--{
--	if (ref->type == BTRFS_REF_METADATA) {
--		if (ref->tree_ref.root == BTRFS_CHUNK_TREE_OBJECTID)
--			return BTRFS_BLOCK_GROUP_SYSTEM;
--		else
--			return BTRFS_BLOCK_GROUP_METADATA;
--	}
--	return BTRFS_BLOCK_GROUP_DATA;
--}
--
--static void add_pinned_bytes(struct btrfs_fs_info *fs_info,
--			     struct btrfs_ref *ref)
--{
--	struct btrfs_space_info *space_info;
--	u64 flags = generic_ref_to_space_flags(ref);
--
--	space_info = btrfs_find_space_info(fs_info, flags);
--	ASSERT(space_info);
--	percpu_counter_add_batch(&space_info->total_bytes_pinned, ref->len,
--		    BTRFS_TOTAL_BYTES_PINNED_BATCH);
--}
--
--static void sub_pinned_bytes(struct btrfs_fs_info *fs_info,
--			     struct btrfs_ref *ref)
--{
--	struct btrfs_space_info *space_info;
--	u64 flags = generic_ref_to_space_flags(ref);
--
--	space_info = btrfs_find_space_info(fs_info, flags);
--	ASSERT(space_info);
--	percpu_counter_add_batch(&space_info->total_bytes_pinned, -ref->len,
--		    BTRFS_TOTAL_BYTES_PINNED_BATCH);
--}
--
- /* simple helper to search for an existing data extent at a given offset */
- int btrfs_lookup_data_extent(struct btrfs_fs_info *fs_info, u64 start, u64 len)
- {
-@@ -1388,7 +1353,6 @@ int btrfs_inc_extent_ref(struct btrfs_trans_handle *trans,
- 			 struct btrfs_ref *generic_ref)
- {
- 	struct btrfs_fs_info *fs_info = trans->fs_info;
--	int old_ref_mod, new_ref_mod;
- 	int ret;
- 
- 	ASSERT(generic_ref->type != BTRFS_REF_NOT_SET &&
-@@ -1397,17 +1361,12 @@ int btrfs_inc_extent_ref(struct btrfs_trans_handle *trans,
- 	       generic_ref->tree_ref.root == BTRFS_TREE_LOG_OBJECTID);
- 
- 	if (generic_ref->type == BTRFS_REF_METADATA)
--		ret = btrfs_add_delayed_tree_ref(trans, generic_ref,
--				NULL, &old_ref_mod, &new_ref_mod);
-+		ret = btrfs_add_delayed_tree_ref(trans, generic_ref, NULL);
- 	else
--		ret = btrfs_add_delayed_data_ref(trans, generic_ref, 0,
--						 &old_ref_mod, &new_ref_mod);
-+		ret = btrfs_add_delayed_data_ref(trans, generic_ref, 0);
- 
- 	btrfs_ref_tree_mod(fs_info, generic_ref);
- 
--	if (ret == 0 && old_ref_mod < 0 && new_ref_mod >= 0)
--		sub_pinned_bytes(fs_info, generic_ref);
--
- 	return ret;
- }
- 
-@@ -1796,20 +1755,9 @@ void btrfs_cleanup_ref_head_accounting(struct btrfs_fs_info *fs_info,
- 	int nr_items = 1;	/* Dropping this ref head update. */
- 
- 	if (head->total_ref_mod < 0) {
--		struct btrfs_space_info *space_info;
--		u64 flags;
--
--		if (head->is_data)
--			flags = BTRFS_BLOCK_GROUP_DATA;
--		else if (head->is_system)
--			flags = BTRFS_BLOCK_GROUP_SYSTEM;
--		else
--			flags = BTRFS_BLOCK_GROUP_METADATA;
--		space_info = btrfs_find_space_info(fs_info, flags);
--		ASSERT(space_info);
--		percpu_counter_add_batch(&space_info->total_bytes_pinned,
--				   -head->num_bytes,
--				   BTRFS_TOTAL_BYTES_PINNED_BATCH);
-+		u64 flags = btrfs_ref_head_to_space_flags(head);
-+		btrfs_mod_total_bytes_pinned(fs_info, flags,
-+					     -head->num_bytes);
- 
- 		/*
- 		 * We had csum deletions accounted for in our delayed refs rsv,
-@@ -2572,8 +2520,7 @@ static int pin_down_extent(struct btrfs_trans_handle *trans,
- 	spin_unlock(&cache->lock);
- 	spin_unlock(&cache->space_info->lock);
- 
--	percpu_counter_add_batch(&cache->space_info->total_bytes_pinned,
--		    num_bytes, BTRFS_TOTAL_BYTES_PINNED_BATCH);
-+	__btrfs_mod_total_bytes_pinned(cache->space_info, num_bytes);
- 	set_extent_dirty(&trans->transaction->pinned_extents, bytenr,
- 			 bytenr + num_bytes - 1, GFP_NOFS | __GFP_NOFAIL);
- 	return 0;
-@@ -2784,8 +2731,7 @@ static int unpin_extent_range(struct btrfs_fs_info *fs_info,
- 		cache->pinned -= len;
- 		btrfs_space_info_update_bytes_pinned(fs_info, space_info, -len);
- 		space_info->max_extent_size = 0;
--		percpu_counter_add_batch(&space_info->total_bytes_pinned,
--			    -len, BTRFS_TOTAL_BYTES_PINNED_BATCH);
-+		__btrfs_mod_total_bytes_pinned(space_info, -len);
- 		if (cache->ro) {
- 			space_info->bytes_readonly += len;
- 			readonly = true;
-@@ -3318,7 +3264,6 @@ void btrfs_free_tree_block(struct btrfs_trans_handle *trans,
- {
- 	struct btrfs_fs_info *fs_info = root->fs_info;
- 	struct btrfs_ref generic_ref = { 0 };
--	int pin = 1;
- 	int ret;
- 
- 	btrfs_init_generic_ref(&generic_ref, BTRFS_DROP_DELAYED_REF,
-@@ -3327,13 +3272,9 @@ void btrfs_free_tree_block(struct btrfs_trans_handle *trans,
- 			    root->root_key.objectid);
- 
- 	if (root->root_key.objectid != BTRFS_TREE_LOG_OBJECTID) {
--		int old_ref_mod, new_ref_mod;
--
- 		btrfs_ref_tree_mod(fs_info, &generic_ref);
--		ret = btrfs_add_delayed_tree_ref(trans, &generic_ref, NULL,
--						 &old_ref_mod, &new_ref_mod);
-+		ret = btrfs_add_delayed_tree_ref(trans, &generic_ref, NULL);
- 		BUG_ON(ret); /* -ENOMEM */
--		pin = old_ref_mod >= 0 && new_ref_mod < 0;
- 	}
- 
- 	if (last_ref && btrfs_header_generation(buf) == trans->transid) {
-@@ -3345,7 +3286,6 @@ void btrfs_free_tree_block(struct btrfs_trans_handle *trans,
- 				goto out;
- 		}
- 
--		pin = 0;
- 		cache = btrfs_lookup_block_group(fs_info, buf->start);
- 
- 		if (btrfs_header_flag(buf, BTRFS_HEADER_FLAG_WRITTEN)) {
-@@ -3362,9 +3302,6 @@ void btrfs_free_tree_block(struct btrfs_trans_handle *trans,
- 		trace_btrfs_reserved_extent_free(fs_info, buf->start, buf->len);
- 	}
- out:
--	if (pin)
--		add_pinned_bytes(fs_info, &generic_ref);
--
- 	if (last_ref) {
- 		/*
- 		 * Deleting the buffer, clear the corrupt flag since it doesn't
-@@ -3378,7 +3315,6 @@ void btrfs_free_tree_block(struct btrfs_trans_handle *trans,
- int btrfs_free_extent(struct btrfs_trans_handle *trans, struct btrfs_ref *ref)
- {
- 	struct btrfs_fs_info *fs_info = trans->fs_info;
--	int old_ref_mod, new_ref_mod;
- 	int ret;
- 
- 	if (btrfs_is_testing(fs_info))
-@@ -3394,14 +3330,11 @@ int btrfs_free_extent(struct btrfs_trans_handle *trans, struct btrfs_ref *ref)
- 	     ref->data_ref.ref_root == BTRFS_TREE_LOG_OBJECTID)) {
- 		/* unlocks the pinned mutex */
- 		btrfs_pin_extent(trans, ref->bytenr, ref->len, 1);
--		old_ref_mod = new_ref_mod = 0;
- 		ret = 0;
- 	} else if (ref->type == BTRFS_REF_METADATA) {
--		ret = btrfs_add_delayed_tree_ref(trans, ref, NULL,
--						 &old_ref_mod, &new_ref_mod);
-+		ret = btrfs_add_delayed_tree_ref(trans, ref, NULL);
- 	} else {
--		ret = btrfs_add_delayed_data_ref(trans, ref, 0,
--						 &old_ref_mod, &new_ref_mod);
-+		ret = btrfs_add_delayed_data_ref(trans, ref, 0);
- 	}
- 
- 	if (!((ref->type == BTRFS_REF_METADATA &&
-@@ -3410,9 +3343,6 @@ int btrfs_free_extent(struct btrfs_trans_handle *trans, struct btrfs_ref *ref)
- 	       ref->data_ref.ref_root == BTRFS_TREE_LOG_OBJECTID)))
- 		btrfs_ref_tree_mod(fs_info, ref);
- 
--	if (ret == 0 && old_ref_mod >= 0 && new_ref_mod < 0)
--		add_pinned_bytes(fs_info, ref);
--
- 	return ret;
- }
- 
-@@ -4527,7 +4457,6 @@ int btrfs_alloc_reserved_file_extent(struct btrfs_trans_handle *trans,
- 				     struct btrfs_key *ins)
- {
- 	struct btrfs_ref generic_ref = { 0 };
--	int ret;
- 
- 	BUG_ON(root->root_key.objectid == BTRFS_TREE_LOG_OBJECTID);
- 
-@@ -4535,9 +4464,7 @@ int btrfs_alloc_reserved_file_extent(struct btrfs_trans_handle *trans,
- 			       ins->objectid, ins->offset, 0);
- 	btrfs_init_data_ref(&generic_ref, root->root_key.objectid, owner, offset);
- 	btrfs_ref_tree_mod(root->fs_info, &generic_ref);
--	ret = btrfs_add_delayed_data_ref(trans, &generic_ref,
--					 ram_bytes, NULL, NULL);
--	return ret;
-+	return btrfs_add_delayed_data_ref(trans, &generic_ref, ram_bytes);
- }
- 
- /*
-@@ -4730,7 +4657,7 @@ struct extent_buffer *btrfs_alloc_tree_block(struct btrfs_trans_handle *trans,
- 		btrfs_init_tree_ref(&generic_ref, level, root_objectid);
- 		btrfs_ref_tree_mod(fs_info, &generic_ref);
- 		ret = btrfs_add_delayed_tree_ref(trans, &generic_ref,
--						 extent_op, NULL, NULL);
-+						 extent_op);
- 		if (ret)
- 			goto out_free_delayed;
- 	}
-diff --git a/fs/btrfs/space-info.h b/fs/btrfs/space-info.h
-index bcbbfae13..aced1f3f7 100644
---- a/fs/btrfs/space-info.h
-+++ b/fs/btrfs/space-info.h
-@@ -155,4 +155,21 @@ static inline void btrfs_space_info_free_bytes_may_use(
- int btrfs_reserve_data_bytes(struct btrfs_fs_info *fs_info, u64 bytes,
- 			     enum btrfs_reserve_flush_enum flush);
- 
-+static inline void __btrfs_mod_total_bytes_pinned(
-+					struct btrfs_space_info *space_info,
-+					s64 mod)
-+{
-+	percpu_counter_add_batch(&space_info->total_bytes_pinned, mod,
-+				 BTRFS_TOTAL_BYTES_PINNED_BATCH);
-+}
-+
-+static inline void btrfs_mod_total_bytes_pinned(struct btrfs_fs_info *fs_info,
-+						u64 flags, s64 mod)
-+{
-+	struct btrfs_space_info *space_info = btrfs_find_space_info(fs_info,
-+								    flags);
-+	ASSERT(space_info);
-+	__btrfs_mod_total_bytes_pinned(space_info, mod);
-+}
-+
- #endif /* BTRFS_SPACE_INFO_H */
--- 
-2.30.1.457.gf011795891
-
-
-From 78b8809f86c68ddbca8a6bb73c814e8115f2c5e3 Mon Sep 17 00:00:00 2001
-From: Josef Bacik <josef@toxicpanda.com>
-Date: Fri, 15 Jan 2021 16:48:56 -0500
-Subject: [PATCH 25/34] btrfs: account for new extents being deleted in
- total_bytes_pinned
-
-My recent patch set "A variety of lock contention fixes", found here
-
-https://github.com/btrfs/linux/issues/86
-
-that reduce lock contention on the extent root by running delayed refs
-less often resulted in a regression in generic/371.  This test
-fallocate()'s the fs until it's full, deletes all the files, and then
-tries to fallocate() until full again.
-
-Before these patches we would run all of the delayed refs during
-flushing, and then would commit the transaction because we had plenty of
-pinned space to recover in order to allocate.  However my patches made
-it so we weren't running the delayed refs as aggressively, which meant
-that we appeared to have less pinned space when we were deciding to
-commit the transaction.
-
-We use the space_info->total_bytes_pinned to approximate how much space
-we have pinned.  It's approximate because if we remove a reference to an
-extent we may free it, but there may be more references to it than we
-know of at that point, but we account it as pinned at the creation time,
-and then it's properly accounted when the delayed ref runs.
-
-The way we account for pinned space is if the
-delayed_ref_head->total_ref_mod is < 0, because that is clearly a
-free'ing option.  However there is another case, and that is where
-->total_ref_mod == 0 && ->must_insert_reserved == 1.
-
-When we allocate a new extent, we have ->total_ref_mod == 1 and we have
-->must_insert_reserved == 1.  This is used to indicate that it is a
-brand new extent and will need to have its extent entry added before we
-modify any references on the delayed ref head.  But if we subsequently
-remove that extent reference, our ->total_ref_mod will be 0, and that
-space will be pinned and freed.  Accounting for this case properly
-allows for generic/371 to pass with my delayed refs patches applied.
-
-It's important to note that this problem exists without the referenced
-patches, it just was uncovered by them.
-
-Reviewed-by: Nikolay Borisov <nborisov@suse.com>
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
----
- fs/btrfs/delayed-ref.c |  7 +++++++
- fs/btrfs/extent-tree.c | 34 ++++++++++++++++++++--------------
- 2 files changed, 27 insertions(+), 14 deletions(-)
-
-diff --git a/fs/btrfs/delayed-ref.c b/fs/btrfs/delayed-ref.c
-index 1edb0095f..33247f2d0 100644
---- a/fs/btrfs/delayed-ref.c
-+++ b/fs/btrfs/delayed-ref.c
-@@ -732,6 +732,9 @@ static noinline void update_existing_head_ref(struct btrfs_trans_handle *trans,
- 	 * 2. We were negative and went to 0 or positive, so no longer can say
- 	 *    that the space would be pinned, decrement our counter from the
- 	 *    total_bytes_pinned counter.
-+	 * 3. We are now at 0 and have ->must_insert_reserved set, which means
-+	 *    this was a new allocation and then we dropped it, and thus must
-+	 *    add our space to the total_bytes_pinned counter.
- 	 */
- 	if (existing->total_ref_mod < 0 && old_ref_mod >= 0)
- 		btrfs_mod_total_bytes_pinned(fs_info, flags,
-@@ -739,6 +742,10 @@ static noinline void update_existing_head_ref(struct btrfs_trans_handle *trans,
- 	else if (existing->total_ref_mod >= 0 && old_ref_mod < 0)
- 		btrfs_mod_total_bytes_pinned(fs_info, flags,
- 					     -existing->num_bytes);
-+	else if (existing->total_ref_mod == 0 &&
-+		 existing->must_insert_reserved)
-+		btrfs_mod_total_bytes_pinned(fs_info, flags,
-+					     existing->num_bytes);
- 
- 	spin_unlock(&existing->lock);
- }
-diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
-index 91b139680..a77f52f77 100644
---- a/fs/btrfs/extent-tree.c
-+++ b/fs/btrfs/extent-tree.c
-@@ -1754,23 +1754,29 @@ void btrfs_cleanup_ref_head_accounting(struct btrfs_fs_info *fs_info,
- {
- 	int nr_items = 1;	/* Dropping this ref head update. */
- 
--	if (head->total_ref_mod < 0) {
-+	/*
-+	 * We had csum deletions accounted for in our delayed refs rsv, we need
-+	 * to drop the csum leaves for this update from our delayed_refs_rsv.
-+	 */
-+	if (head->total_ref_mod < 0 && head->is_data) {
-+		spin_lock(&delayed_refs->lock);
-+		delayed_refs->pending_csums -= head->num_bytes;
-+		spin_unlock(&delayed_refs->lock);
-+		nr_items += btrfs_csum_bytes_to_leaves(fs_info,
-+						       head->num_bytes);
-+	}
-+
-+	/*
-+	 * We were dropping refs, or had a new ref and dropped it, and thus must
-+	 * adjust down our total_bytes_pinned, the space may or may not have
-+	 * been pinned and so is accounted for properly in the pinned space by
-+	 * now.
-+	 */
-+	if (head->total_ref_mod < 0 ||
-+	    (head->total_ref_mod == 0 && head->must_insert_reserved)) {
- 		u64 flags = btrfs_ref_head_to_space_flags(head);
- 		btrfs_mod_total_bytes_pinned(fs_info, flags,
- 					     -head->num_bytes);
--
--		/*
--		 * We had csum deletions accounted for in our delayed refs rsv,
--		 * we need to drop the csum leaves for this update from our
--		 * delayed_refs_rsv.
--		 */
--		if (head->is_data) {
--			spin_lock(&delayed_refs->lock);
--			delayed_refs->pending_csums -= head->num_bytes;
--			spin_unlock(&delayed_refs->lock);
--			nr_items += btrfs_csum_bytes_to_leaves(fs_info,
--				head->num_bytes);
--		}
- 	}
- 
- 	btrfs_delayed_refs_rsv_release(fs_info, nr_items);
--- 
-2.30.1.457.gf011795891
-
-
-From 86ee402ceff988eed7599fea85d6d1e98f86f739 Mon Sep 17 00:00:00 2001
+From 18454d8261ad1eaa155fc71c2cc24b81e14565cb Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:54 +0000
-Subject: [PATCH 26/34] btrfs: remove unnecessary directory inode item update
+Subject: [PATCH 24/30] btrfs: remove unnecessary directory inode item update
  when deleting dir entry
 
 When we remove a directory entry, as part of an unlink operation, if the
@@ -2851,13 +2224,13 @@ index 254c2ee43..5ad1b84a1 100644
  	btrfs_free_path(path);
  out_unlock:
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 1fcf07852969f3fd69ac0cbd108c86ea27ea35c5 Mon Sep 17 00:00:00 2001
+From cc987cf2c5e0ea2482d0f3b8e8504281401c678e Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:55 +0000
-Subject: [PATCH 27/34] btrfs: stop setting nbytes when filling inode item for
+Subject: [PATCH 25/30] btrfs: stop setting nbytes when filling inode item for
  logging
 
 When we fill an inode item for logging we are setting its nbytes field
@@ -2913,13 +2286,13 @@ index 5ad1b84a1..69bd20364 100644
  	btrfs_set_token_inode_sequence(&token, item, inode_peek_iversion(inode));
  	btrfs_set_token_inode_transid(&token, item, trans->transid);
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From f1d799cee6d0b5efcdf8780e6e14a128ef333247 Mon Sep 17 00:00:00 2001
+From 63e84c10a3bb6e8e9ccff9a69caaa8dc2b6bfb04 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:56 +0000
-Subject: [PATCH 28/34] btrfs: avoid logging new ancestor inodes when logging
+Subject: [PATCH 26/30] btrfs: avoid logging new ancestor inodes when logging
  new inode
 
 When we fsync a new file, created in the current transaction, we check
@@ -3016,13 +2389,13 @@ index 69bd20364..a4f98ebae 100644
  					      LOG_INODE_EXISTS, ctx);
  			if (ret)
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 994eb5cdaafce086044e1fe709f9e5554763d268 Mon Sep 17 00:00:00 2001
+From 99b42e64517e0088518d371554941468f5fb8595 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:57 +0000
-Subject: [PATCH 29/34] btrfs: skip logging directories already logged when
+Subject: [PATCH 27/30] btrfs: skip logging directories already logged when
  logging all parents
 
 Some times when we fsync an inode we need to do a full log of all its
@@ -3074,13 +2447,13 @@ index a4f98ebae..d1acdb8ad 100644
  				ctx->log_new_dentries = false;
  			ret = btrfs_log_inode(trans, root, BTRFS_I(dir_inode),
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 4f52784723f4b824fd34f9f262bcdd1d3099fde7 Mon Sep 17 00:00:00 2001
+From 02ba5ebebe885b1d07097da48cafe278d8e18933 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:58 +0000
-Subject: [PATCH 30/34] btrfs: skip logging inodes already logged when logging
+Subject: [PATCH 28/30] btrfs: skip logging inodes already logged when logging
  new entries
 
 When logging new directory entries of a directory, we log the inodes of
@@ -3132,13 +2505,13 @@ index d1acdb8ad..8234d7898 100644
  				break;
  			}
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From b84b81b31c301b615c33b8eb98d86518c213a575 Mon Sep 17 00:00:00 2001
+From 6019c9c4635b275b6828a67c9336ebd2f0589189 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:59 +0000
-Subject: [PATCH 31/34] btrfs: remove unnecessary check_parent_dirs_for_sync()
+Subject: [PATCH 29/30] btrfs: remove unnecessary check_parent_dirs_for_sync()
 
 Whenever we fsync an inode, if it is a directory, a regular file that was
 created in the current transaction or has last_unlink_trans set to the
@@ -3354,13 +2727,13 @@ index 8234d7898..3b00d98b3 100644
  	 * Skip already logged inodes or inodes corresponding to tmpfiles
  	 * (since logging them is pointless, a link count of 0 means they
 -- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
 
-From 214c7feae8c592b6b0327a53ca2c862f213cfaad Mon Sep 17 00:00:00 2001
+From c0fcba8a94aa020e6e5701e9aaedef61eda887f8 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:35:00 +0000
-Subject: [PATCH 32/34] btrfs: make concurrent fsyncs wait less when waiting
+Subject: [PATCH 30/30] btrfs: make concurrent fsyncs wait less when waiting
  for a transaction commit
 
 Often an fsync needs to fallback to a transaction commit for several
@@ -3527,7 +2900,7 @@ Signed-off-by: Filipe Manana <fdmanana@suse.com>
  3 files changed, 34 insertions(+), 8 deletions(-)
 
 diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
-index 0e41459b8..7c9e0b99e 100644
+index f851a1a63..9d21e295f 100644
 --- a/fs/btrfs/file.c
 +++ b/fs/btrfs/file.c
 @@ -2241,6 +2241,7 @@ int btrfs_sync_file(struct file *file, loff_t start, loff_t end, int datasync)
@@ -3539,7 +2912,7 @@ index 0e41459b8..7c9e0b99e 100644
  	ret = btrfs_log_dentry_safe(trans, dentry, &ctx);
  	btrfs_release_log_ctx_extents(&ctx);
 diff --git a/fs/btrfs/transaction.c b/fs/btrfs/transaction.c
-index 8b2ba6984..3d03f5647 100644
+index 87035b74a..182dfb3a5 100644
 --- a/fs/btrfs/transaction.c
 +++ b/fs/btrfs/transaction.c
 @@ -107,6 +107,11 @@ static const unsigned int btrfs_blocked_trans_types[TRANS_STATE_MAX] = {
@@ -3578,7 +2951,7 @@ index 8b2ba6984..3d03f5647 100644
  	btrfs_put_transaction(cur_trans);
  out:
  	return ret;
-@@ -2100,11 +2106,15 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
+@@ -2101,11 +2107,15 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
  
  	spin_lock(&fs_info->trans_lock);
  	if (cur_trans->state >= TRANS_STATE_COMMIT_START) {
@@ -3596,7 +2969,7 @@ index 8b2ba6984..3d03f5647 100644
  
  		if (TRANS_ABORTED(cur_trans))
  			ret = cur_trans->aborted;
-@@ -2118,13 +2128,19 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
+@@ -2119,13 +2129,19 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
  	wake_up(&fs_info->transaction_blocked_wait);
  
  	if (cur_trans->list.prev != &fs_info->trans_list) {
@@ -3618,7 +2991,7 @@ index 8b2ba6984..3d03f5647 100644
  			ret = READ_ONCE(prev_trans->aborted);
  
  			btrfs_put_transaction(prev_trans);
-@@ -2343,6 +2359,13 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
+@@ -2344,6 +2360,13 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans)
  	if (ret)
  		goto scrub_continue;
  
@@ -3653,167 +3026,5 @@ index 31ca81bad..935bd6958 100644
  	struct btrfs_fs_info *fs_info;
  	struct list_head new_bgs;
 -- 
-2.30.1.457.gf011795891
-
-
-From c096c8bfd3aa3541ff4fe9ea6c7ca075b1502a45 Mon Sep 17 00:00:00 2001
-From: Nikolay Borisov <nborisov@suse.com>
-Date: Mon, 8 Feb 2021 10:26:54 +0200
-Subject: [PATCH 33/34] btrfs: Fix race between extent freeing/allocation when
- using bitmaps
-
-During allocation the allocator will try to allocate an extent using
-cluster policy. Once the current cluster is exhausted it will remove the
-its entry under btrfs_free_cluster::lock and subsequently acquire
-btrfs_free_space_ctl::tree_lock to dispose of the already-deleted
-entry and adjust btrfs_free_space_ctl::total_bitmap. This poses a
-problem because there exists a race condition between removing the
-entry under one lock and doing the necessary accounting holding a
-different lock since extent freeing only uses the 2nd lock. This can
-result in the following situation:
-
-T1:                                    T2:
-btrfs_alloc_from_cluster               insert_into_bitmap <holds tree_lock>
- if (entry->bytes == 0)                   if (block_group && !list_empty(&block_group->cluster_list)) {
-    rb_erase(entry)
-
- spin_unlock(&cluster->lock);
-   (total_bitmaps is still 4)           spin_lock(&cluster->lock);
-                                         <doesn't find entry in cluster->root>
- spin_lock(&ctl->tree_lock);             <goes to new_bitmap label, adds
-<blocked since T2 holds tree_lock>       <a new entry and calls add_new_bitmap>
-					    recalculate_thresholds  <crashes,
-                                              due to total_bitmaps
-					      becoming 5 and triggering
-					      an ASSERT>
-
-To fix this ensure that once depleted, the cluster entry is deleted when
-both cluster lock and tree locks are held in the allocator (T1), this
-ensures that even if there is a race with a concurrent
-insert_into_bitmap call it will correctly find the entry in the cluster
-and add the new space to it.
-
-Signed-off-by: Nikolay Borisov <nborisov@suse.com>
-Cc: <stable@vger.kernel.org>
----
- fs/btrfs/free-space-cache.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/fs/btrfs/free-space-cache.c b/fs/btrfs/free-space-cache.c
-index 4d8897879..98bbcbbef 100644
---- a/fs/btrfs/free-space-cache.c
-+++ b/fs/btrfs/free-space-cache.c
-@@ -3024,8 +3024,6 @@ u64 btrfs_alloc_from_cluster(struct btrfs_block_group *block_group,
- 			entry->bytes -= bytes;
- 		}
- 
--		if (entry->bytes == 0)
--			rb_erase(&entry->offset_index, &cluster->root);
- 		break;
- 	}
- out:
-@@ -3042,7 +3040,9 @@ u64 btrfs_alloc_from_cluster(struct btrfs_block_group *block_group,
- 	ctl->free_space -= bytes;
- 	if (!entry->bitmap && !btrfs_free_space_trimmed(entry))
- 		ctl->discardable_bytes[BTRFS_STAT_CURR] -= bytes;
-+	spin_lock(&cluster->lock);
- 	if (entry->bytes == 0) {
-+		rb_erase(&entry->offset_index, &cluster->root);
- 		ctl->free_extents--;
- 		if (entry->bitmap) {
- 			kmem_cache_free(btrfs_free_space_bitmap_cachep,
-@@ -3055,6 +3055,7 @@ u64 btrfs_alloc_from_cluster(struct btrfs_block_group *block_group,
- 		kmem_cache_free(btrfs_free_space_cachep, entry);
- 	}
- 
-+	spin_unlock(&cluster->lock);
- 	spin_unlock(&ctl->tree_lock);
- 
- 	return ret;
--- 
-2.30.1.457.gf011795891
-
-
-From 3f183b2d68f158c5f145cb0d3bba4f64c49e6d4d Mon Sep 17 00:00:00 2001
-From: Josef Bacik <josef@toxicpanda.com>
-Date: Tue, 16 Feb 2021 15:43:22 -0500
-Subject: [PATCH 34/34] btrfs: do not error out if the extent ref hash doesn't
- match
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-The tree checker checks the extent ref hash at read and write time to
-make sure we do not corrupt the file system.  Generally extent
-references go inline, but if we have enough of them we need to make an
-item, which looks like
-
-key.objectid	= <bytenr>
-key.type	= <BTRFS_EXTENT_DATA_REF_KEY|BTRFS_TREE_BLOCK_REF_KEY>
-key.offset	= hash(tree, owner, offset)
-
-However if key.offset collide with an unrelated extent reference we'll
-simply key.offset++ until we get something that doesn't collide.
-Obviously this doesn't match at tree checker time, and thus we error
-while writing out the transaction.  This is relatively easy to
-reproduce, simply do something like the following
-
-xfs_io -f -c "pwrite 0 1M" file
-offset=2
-
-for i in {0..10000}
-do
-	xfs_io -c "reflink file 0 ${offset}M 1M" file
-	offset=$(( offset + 2 ))
-done
-
-xfs_io -c "reflink file 0 17999258914816 1M" file
-xfs_io -c "reflink file 0 35998517829632 1M" file
-xfs_io -c "reflink file 0 53752752058368 1M" file
-
-btrfs filesystem sync
-
-And the sync will error out because we'll abort the transaction.  The
-magic values above are used because they generate hash collisions with
-the first file in the main subvol.
-
-The fix for this is to remove the hash value check from tree checker, as
-we have no idea which offset ours should belong to.
-
-[HH: small context fixex for 5.10]
-Reported-by: Tuomas Lähdekorpi <tuomas.lahdekorpi@gmail.com>
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
----
- fs/btrfs/tree-checker.c | 12 ------------
- 1 file changed, 12 deletions(-)
-
-diff --git a/fs/btrfs/tree-checker.c b/fs/btrfs/tree-checker.c
-index 582061c7b..2429d668d 100644
---- a/fs/btrfs/tree-checker.c
-+++ b/fs/btrfs/tree-checker.c
-@@ -1453,22 +1453,10 @@ static int check_extent_data_ref(struct extent_buffer *leaf,
- 		return -EUCLEAN;
- 	}
- 	for (; ptr < end; ptr += sizeof(*dref)) {
--		u64 root_objectid;
--		u64 owner;
- 		u64 offset;
--		u64 hash;
- 
- 		dref = (struct btrfs_extent_data_ref *)ptr;
--		root_objectid = btrfs_extent_data_ref_root(leaf, dref);
--		owner = btrfs_extent_data_ref_objectid(leaf, dref);
- 		offset = btrfs_extent_data_ref_offset(leaf, dref);
--		hash = hash_extent_data_ref(root_objectid, owner, offset);
--		if (unlikely(hash != key->offset)) {
--			extent_err(leaf, slot,
--	"invalid extent data ref hash, item has 0x%016llx key has 0x%016llx",
--				   hash, key->offset);
--			return -EUCLEAN;
--		}
- 		if (unlikely(!IS_ALIGNED(offset, leaf->fs_info->sectorsize))) {
- 			extent_err(leaf, slot,
- 	"invalid extent data backref offset, have %llu expect aligned to %u",
--- 
-2.30.1.457.gf011795891
+2.31.0.rc1
 
