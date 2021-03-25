@@ -1,4 +1,4 @@
-From 71f9c95320a17927571e4a120fa78a7e7ba2f377 Mon Sep 17 00:00:00 2001
+From 4c7e03cde7c0bb45cd64f70a606cdfe721389bca Mon Sep 17 00:00:00 2001
 From: Nick Terrell <terrelln@fb.com>
 Date: Fri, 11 Sep 2020 16:49:00 -0700
 Subject: [PATCH 1/3] lib: zstd: Add kernel-specific API
@@ -306,7 +306,7 @@ index 9a4871636..c8cf69001 100644
  			goto finish;
  		}
 diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index 4bcbacfe3..380d4e09d 100644
+index 7a774c9e4..8d044de86 100644
 --- a/fs/f2fs/compress.c
 +++ b/fs/f2fs/compress.c
 @@ -321,22 +321,22 @@ static const struct f2fs_compress_ops f2fs_lz4_ops = {
@@ -436,7 +436,7 @@ index 4bcbacfe3..380d4e09d 100644
  	}
  
 diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
-index 32f64abc2..e29ea1202 100644
+index d963ae790..67b194ba1 100644
 --- a/fs/pstore/platform.c
 +++ b/fs/pstore/platform.c
 @@ -218,7 +218,7 @@ static int zbufsize_842(size_t size)
@@ -3427,10 +3427,10 @@ index 66cd487a3..3116b551b 100644
  MODULE_LICENSE("Dual BSD/GPL");
  MODULE_DESCRIPTION("Zstd Decompressor");
 -- 
-2.30.1.457.gf011795891
+2.31.0
 
 
-From 43be870faa31fba7c44137b0c44bffac9f927c58 Mon Sep 17 00:00:00 2001
+From f87bdb71325c96f111a60f105b0cb8e4eee9da58 Mon Sep 17 00:00:00 2001
 From: Nick Terrell <terrelln@fb.com>
 Date: Mon, 14 Sep 2020 12:54:12 -0700
 Subject: [PATCH 2/3] lib: zstd: Add decompress_sources.h for decompress_unzstd
@@ -3487,10 +3487,10 @@ index 000000000..d2fe10af0
 +#include "zstd_common.c"
 +#include "decompress.c"
 -- 
-2.30.1.457.gf011795891
+2.31.0
 
 
-From 2aedcb98733d2b0f896de0a8b9eca27447ae7721 Mon Sep 17 00:00:00 2001
+From 16fd1f20aaf618bddd89244b902a7e23f971eb51 Mon Sep 17 00:00:00 2001
 From: Nick Terrell <terrelln@fb.com>
 Date: Fri, 11 Sep 2020 16:37:08 -0700
 Subject: [PATCH 3/3] lib: zstd: Upgrade to latest upstream zstd version 1.4.6
@@ -3554,7 +3554,7 @@ Signed-off-by: Nick Terrell <terrelln@fb.com>
 ---
  include/linux/zstd.h                          |    9 +-
  include/linux/zstd_errors.h                   |   76 +
- include/linux/zstd_lib.h                      | 3021 ++++++++----
+ include/linux/zstd_lib.h                      | 3020 ++++++++----
  lib/zstd/Makefile                             |   35 +-
  lib/zstd/bitstream.h                          |  380 --
  lib/zstd/common/bitstream.h                   |  437 ++
@@ -3565,18 +3565,18 @@ Signed-off-by: Nick Terrell <terrelln@fb.com>
  lib/zstd/common/entropy_common.c              |  355 ++
  lib/zstd/common/error_private.c               |   55 +
  lib/zstd/common/error_private.h               |   66 +
- lib/zstd/common/fse.h                         |  709 +++
+ lib/zstd/common/fse.h                         |  707 +++
  lib/zstd/common/fse_decompress.c              |  380 ++
- lib/zstd/common/huf.h                         |  352 ++
+ lib/zstd/common/huf.h                         |  351 ++
  lib/zstd/common/mem.h                         |  258 +
  lib/zstd/common/zstd_common.c                 |   83 +
  lib/zstd/common/zstd_deps.h                   |  124 +
  lib/zstd/common/zstd_internal.h               |  438 ++
  lib/zstd/compress.c                           | 3518 --------------
  lib/zstd/compress/fse_compress.c              |  625 +++
- lib/zstd/compress/hist.c                      |  165 +
+ lib/zstd/compress/hist.c                      |  164 +
  lib/zstd/compress/hist.h                      |   75 +
- lib/zstd/compress/huf_compress.c              |  764 +++
+ lib/zstd/compress/huf_compress.c              |  763 +++
  lib/zstd/compress/zstd_compress.c             | 4157 +++++++++++++++++
  lib/zstd/compress/zstd_compress_internal.h    | 1103 +++++
  lib/zstd/compress/zstd_compress_literals.c    |  158 +
@@ -3597,7 +3597,7 @@ Signed-off-by: Nick Terrell <terrelln@fb.com>
  lib/zstd/compress/zstd_opt.c                  | 1200 +++++
  lib/zstd/compress/zstd_opt.h                  |   50 +
  lib/zstd/decompress.c                         | 2571 ----------
- lib/zstd/decompress/huf_decompress.c          | 1205 +++++
+ lib/zstd/decompress/huf_decompress.c          | 1204 +++++
  lib/zstd/decompress/zstd_ddict.c              |  241 +
  lib/zstd/decompress/zstd_ddict.h              |   44 +
  lib/zstd/decompress/zstd_decompress.c         | 1836 ++++++++
@@ -3619,7 +3619,7 @@ Signed-off-by: Nick Terrell <terrelln@fb.com>
  lib/zstd/zstd_decompress_module.c             |   96 +
  lib/zstd/zstd_internal.h                      |  273 --
  lib/zstd/zstd_opt.h                           | 1014 ----
- 67 files changed, 24317 insertions(+), 12966 deletions(-)
+ 67 files changed, 24310 insertions(+), 12966 deletions(-)
  create mode 100644 include/linux/zstd_errors.h
  delete mode 100644 lib/zstd/bitstream.h
  create mode 100644 lib/zstd/common/bitstream.h
@@ -3717,7 +3717,7 @@ index 7373bedc8..bbabd0aa8 100644
   * zstd_get_frame_header() - extracts parameters from a zstd or skippable frame
 diff --git a/include/linux/zstd_errors.h b/include/linux/zstd_errors.h
 new file mode 100644
-index 000000000..5d0688650
+index 000000000..bac010321
 --- /dev/null
 +++ b/include/linux/zstd_errors.h
 @@ -0,0 +1,76 @@
@@ -3740,7 +3740,7 @@ index 000000000..5d0688650
 +
 +
 +/* =====   ZSTDERRORLIB_API : control library symbols visibility   ===== */
-+#define ZSTDERRORLIB_VISIBILITY 
++#define ZSTDERRORLIB_VISIBILITY
 +#define ZSTDERRORLIB_API ZSTDERRORLIB_VISIBILITY
 +
 +/*-*********************************************
@@ -3798,10 +3798,10 @@ index 000000000..5d0688650
 +
 +#endif /* ZSTD_ERRORS_H_398273423 */
 diff --git a/include/linux/zstd_lib.h b/include/linux/zstd_lib.h
-index 249575e24..e478214a4 100644
+index 249575e24..3904b00ee 100644
 --- a/include/linux/zstd_lib.h
 +++ b/include/linux/zstd_lib.h
-@@ -1,1157 +1,2104 @@
+@@ -1,1157 +1,2103 @@
  /*
 - * Copyright (c) 2016-present, Yann Collet, Facebook, Inc.
 + * Copyright (c) 2016-2020, Yann Collet, Facebook, Inc.
@@ -3851,7 +3851,7 @@ index 249575e24..e478214a4 100644
 - *  - a single step, reusing a dictionary (described as Fast dictionary API)
 - ******************************************************************************/
 +/* =====   ZSTDLIB_API : control library symbols visibility   ===== */
-+#define ZSTDLIB_VISIBILITY 
++#define ZSTDLIB_VISIBILITY
 +#define ZSTDLIB_API ZSTDLIB_VISIBILITY
 +
 +
@@ -5026,13 +5026,18 @@ index 249575e24..e478214a4 100644
 - * ZSTD_resetCStream() - reset the context using parameters from creation
 - * @zcs:            The zstd streaming compression context to reset.
 - * @pledgedSrcSize: Optionally the source size, or zero if unknown.
-- *
++/*!
++ * Equivalent to:
+  *
 - * Resets the context using the parameters from creation. Skips dictionary
 - * loading, since it can be reused. If `pledgedSrcSize` is non-zero the frame
 - * content size is always written into the frame header.
 - *
 - * Return:          Zero or an error, which can be checked using ZSTD_isError().
-- */
++ *     ZSTD_CCtx_reset(zcs, ZSTD_reset_session_only);
++ *     ZSTD_CCtx_refCDict(zcs, NULL); // clear the dictionary (if any)
++ *     ZSTD_CCtx_setParameter(zcs, ZSTD_c_compressionLevel, compressionLevel);
+  */
 -size_t ZSTD_resetCStream(ZSTD_CStream *zcs, unsigned long long pledgedSrcSize);
 -/**
 - * ZSTD_compressStream() - streaming compress some of input into output
@@ -5043,18 +5048,19 @@ index 249575e24..e478214a4 100644
 - *          read. Note that it may not consume the entire input, in which case
 - *          `input->pos < input->size`, and it's up to the caller to present
 - *          remaining data again.
-+/*!
-+ * Equivalent to:
-  *
+- *
 - * The `input` and `output` buffers may be any size. Guaranteed to make some
 - * forward progress if `input` and `output` are not empty.
 - *
 - * Return:  A hint for the number of bytes to use as the input for the next
 - *          function call or an error, which can be checked using
 - *          ZSTD_isError().
-+ *     ZSTD_CCtx_reset(zcs, ZSTD_reset_session_only);
-+ *     ZSTD_CCtx_refCDict(zcs, NULL); // clear the dictionary (if any)
-+ *     ZSTD_CCtx_setParameter(zcs, ZSTD_c_compressionLevel, compressionLevel);
++ZSTDLIB_API size_t ZSTD_initCStream(ZSTD_CStream* zcs, int compressionLevel);
++/*!
++ * Alternative for ZSTD_compressStream2(zcs, output, input, ZSTD_e_continue).
++ * NOTE: The return value is different. ZSTD_compressStream() returns a hint for
++ * the next read size (if non-zero and not an error). ZSTD_compressStream2()
++ * returns the minimum nb of bytes left to flush (if non-zero and not an error).
   */
 -size_t ZSTD_compressStream(ZSTD_CStream *zcs, ZSTD_outBuffer *output,
 -	ZSTD_inBuffer *input);
@@ -5070,13 +5076,7 @@ index 249575e24..e478214a4 100644
 - *
 - * Return:  The number of bytes still present within internal buffers or an
 - *          error, which can be checked using ZSTD_isError().
-+ZSTDLIB_API size_t ZSTD_initCStream(ZSTD_CStream* zcs, int compressionLevel);
-+/*!
-+ * Alternative for ZSTD_compressStream2(zcs, output, input, ZSTD_e_continue).
-+ * NOTE: The return value is different. ZSTD_compressStream() returns a hint for
-+ * the next read size (if non-zero and not an error). ZSTD_compressStream2()
-+ * returns the minimum nb of bytes left to flush (if non-zero and not an error).
-  */
+- */
 -size_t ZSTD_flushStream(ZSTD_CStream *zcs, ZSTD_outBuffer *output);
 -/**
 - * ZSTD_endStream() - flush internal buffers into output and end the frame
@@ -5606,28 +5606,33 @@ index 249575e24..e478214a4 100644
 +    unsigned targetLength;    /**< acceptable match size for optimal parser (only) : larger == more compression, slower */
 +    ZSTD_strategy strategy;   /**< see ZSTD_strategy definition above */
 +} ZSTD_compressionParameters;
- 
++
 +typedef struct {
 +    int contentSizeFlag; /**< 1: content size will be in frame header (when known) */
 +    int checksumFlag;    /**< 1: generate a 32-bits checksum using XXH64 algorithm at end of frame, for error detection */
 +    int noDictIDFlag;    /**< 1: no dictID will be saved into frame header (dictID is only useful for dictionary compression) */
 +} ZSTD_frameParameters;
  
--/* --- Constants ---*/
--#define ZSTD_MAGICNUMBER            0xFD2FB528   /* >= v0.8.0 */
--#define ZSTD_MAGIC_SKIPPABLE_START  0x184D2A50U
 +typedef struct {
 +    ZSTD_compressionParameters cParams;
 +    ZSTD_frameParameters fParams;
 +} ZSTD_parameters;
  
--#define ZSTD_CONTENTSIZE_UNKNOWN (0ULL - 1)
--#define ZSTD_CONTENTSIZE_ERROR   (0ULL - 2)
+-/* --- Constants ---*/
+-#define ZSTD_MAGICNUMBER            0xFD2FB528   /* >= v0.8.0 */
+-#define ZSTD_MAGIC_SKIPPABLE_START  0x184D2A50U
 +typedef enum {
 +    ZSTD_dct_auto = 0,       /* dictionary is "full" when starting with ZSTD_MAGIC_DICTIONARY, otherwise it is "rawContent" */
 +    ZSTD_dct_rawContent = 1, /* ensures dictionary is always loaded as rawContent, even if it starts with ZSTD_MAGIC_DICTIONARY */
 +    ZSTD_dct_fullDict = 2    /* refuses to load a dictionary if it does not respect Zstandard's specification, starting with ZSTD_MAGIC_DICTIONARY */
 +} ZSTD_dictContentType_e;
+ 
+-#define ZSTD_CONTENTSIZE_UNKNOWN (0ULL - 1)
+-#define ZSTD_CONTENTSIZE_ERROR   (0ULL - 2)
++typedef enum {
++    ZSTD_dlm_byCopy = 0,  /**< Copy dictionary content internally */
++    ZSTD_dlm_byRef = 1    /**< Reference dictionary content -- the dictionary buffer must outlive its users. */
++} ZSTD_dictLoadMethod_e;
  
 -#define ZSTD_WINDOWLOG_MAX_32  27
 -#define ZSTD_WINDOWLOG_MAX_64  27
@@ -5664,9 +5669,11 @@ index 249575e24..e478214a4 100644
 - * Compressed size functions
 - **************************************/
 +typedef enum {
-+    ZSTD_dlm_byCopy = 0,  /**< Copy dictionary content internally */
-+    ZSTD_dlm_byRef = 1    /**< Reference dictionary content -- the dictionary buffer must outlive its users. */
-+} ZSTD_dictLoadMethod_e;
++    ZSTD_f_zstd1 = 0,           /* zstd frame format, specified in zstd_compression_format.md (default) */
++    ZSTD_f_zstd1_magicless = 1  /* Variant of zstd frame format, without initial 4-bytes magic number.
++                                 * Useful to save 4 bytes per generated frame.
++                                 * Decoder cannot recognise automatically this format, requiring this instruction. */
++} ZSTD_format_e;
  
 -/**
 - * ZSTD_findFrameCompressedSize() - returns the size of a compressed frame
@@ -5681,11 +5688,10 @@ index 249575e24..e478214a4 100644
 - */
 -size_t ZSTD_findFrameCompressedSize(const void *src, size_t srcSize);
 +typedef enum {
-+    ZSTD_f_zstd1 = 0,           /* zstd frame format, specified in zstd_compression_format.md (default) */
-+    ZSTD_f_zstd1_magicless = 1  /* Variant of zstd frame format, without initial 4-bytes magic number.
-+                                 * Useful to save 4 bytes per generated frame.
-+                                 * Decoder cannot recognise automatically this format, requiring this instruction. */
-+} ZSTD_format_e;
++    /* Note: this enum controls ZSTD_d_forceIgnoreChecksum */
++    ZSTD_d_validateChecksum = 0,
++    ZSTD_d_ignoreChecksum = 1
++} ZSTD_forceIgnoreChecksum_e;
  
 -/*-*************************************
 - * Decompressed size functions
@@ -5699,12 +5705,6 @@ index 249575e24..e478214a4 100644
 - * Return:   The frame content size stored in the frame header if known.
 - *           `ZSTD_CONTENTSIZE_UNKNOWN` if the content size isn't stored in the
 - *           frame header. `ZSTD_CONTENTSIZE_ERROR` on invalid input.
-+typedef enum {
-+    /* Note: this enum controls ZSTD_d_forceIgnoreChecksum */
-+    ZSTD_d_validateChecksum = 0,
-+    ZSTD_d_ignoreChecksum = 1
-+} ZSTD_forceIgnoreChecksum_e;
-+
 +typedef enum {
 +    /* Note: this enum and the behavior it controls are effectively internal
 +     * implementation details of the compressor. They are expected to continue
@@ -5807,7 +5807,8 @@ index 249575e24..e478214a4 100644
 + * zc can be used to insert custom compression params.
 + * This function invokes ZSTD_compress2
 + * @return : number of sequences extracted
-+ */
+  */
+-unsigned long long ZSTD_getFrameContentSize(const void *src, size_t srcSize);
 +ZSTDLIB_API size_t ZSTD_getSequences(ZSTD_CCtx* zc, ZSTD_Sequence* outSeqs,
 +    size_t outSeqsSize, const void* src, size_t srcSize);
 +
@@ -5838,8 +5839,7 @@ index 249575e24..e478214a4 100644
 + *
 + *  Note 2 : only single-threaded compression is supported.
 + *  ZSTD_estimateCCtxSize_usingCCtxParams() will return an error code if ZSTD_c_nbWorkers is >= 1.
-  */
--unsigned long long ZSTD_getFrameContentSize(const void *src, size_t srcSize);
++ */
 +ZSTDLIB_API size_t ZSTD_estimateCCtxSize(int compressionLevel);
 +ZSTDLIB_API size_t ZSTD_estimateCCtxSize_usingCParams(ZSTD_compressionParameters cParams);
 +ZSTDLIB_API size_t ZSTD_estimateCCtxSize_usingCCtxParams(const ZSTD_CCtx_params* params);
@@ -6147,7 +6147,10 @@ index 249575e24..e478214a4 100644
 +/*! ZSTD_CCtxParams_init_advanced() :
 + *  Initializes the compression and frame parameters of cctxParams according to
 + *  params. All other parameters are reset to their default values.
-+ */
+  */
+-ZSTD_compressionParameters ZSTD_adjustCParams(
+-	ZSTD_compressionParameters cParams, unsigned long long srcSize,
+-	size_t dictSize);
 +ZSTDLIB_API size_t ZSTD_CCtxParams_init_advanced(ZSTD_CCtx_params* cctxParams, ZSTD_parameters params);
 +
 +/*! ZSTD_CCtxParams_setParameter() :
@@ -6157,10 +6160,7 @@ index 249575e24..e478214a4 100644
 + *  ZSTD_CCtx_setParametersUsingCCtxParams().
 + * @result : a code representing success or failure (which can be tested with
 + *           ZSTD_isError()).
-  */
--ZSTD_compressionParameters ZSTD_adjustCParams(
--	ZSTD_compressionParameters cParams, unsigned long long srcSize,
--	size_t dictSize);
++ */
 +ZSTDLIB_API size_t ZSTD_CCtxParams_setParameter(ZSTD_CCtx_params* params, ZSTD_cParameter param, int value);
  
 -/*--- Advanced decompression functions ---*/
@@ -6249,7 +6249,8 @@ index 249575e24..e478214a4 100644
 +/* ZSTD_d_format
 + * experimental parameter,
 + * allowing selection between ZSTD_format_e input compression formats
-+ */
+  */
+-unsigned int ZSTD_isFrame(const void *buffer, size_t size);
 +#define ZSTD_d_format ZSTD_d_experimentalParam1
 +/* ZSTD_d_stableOutBuffer
 + * Experimental parameter.
@@ -6280,8 +6281,7 @@ index 249575e24..e478214a4 100644
 + * is because zstd needs to reference data in the ZSTD_outBuffer to regenerate
 + * matches. Normally zstd maintains its own buffer for this purpose, but passing
 + * this flag tells zstd to use the user provided buffer.
-  */
--unsigned int ZSTD_isFrame(const void *buffer, size_t size);
++ */
 +#define ZSTD_d_stableOutBuffer ZSTD_d_experimentalParam2
  
 -/**
@@ -6377,7 +6377,8 @@ index 249575e24..e478214a4 100644
 + * pledgedSrcSize must be correct.
 + * If srcSize is not known at init time, use value ZSTD_CONTENTSIZE_UNKNOWN.
 + * Note : this prototype will be marked as deprecated and generate compilation warnings on reaching v1.5.x
-+ */
+  */
+-unsigned int ZSTD_getDictID_fromDict(const void *dict, size_t dictSize);
 +ZSTDLIB_API size_t
 +ZSTD_initCStream_advanced(ZSTD_CStream* zcs,
 +                    const void* dict, size_t dictSize,
@@ -6391,8 +6392,7 @@ index 249575e24..e478214a4 100644
 + *
 + * note : cdict will just be referenced, and must outlive compression session
 + * Note : this prototype will be marked as deprecated and generate compilation warnings on reaching v1.5.x
-  */
--unsigned int ZSTD_getDictID_fromDict(const void *dict, size_t dictSize);
++ */
 +ZSTDLIB_API size_t ZSTD_initCStream_usingCDict(ZSTD_CStream* zcs, const ZSTD_CDict* cdict);
 +
 +/**! ZSTD_initCStream_usingCDict_advanced() :
@@ -6455,8 +6455,7 @@ index 249575e24..e478214a4 100644
 + * consumed (input actually compressed) and produced (output) for current frame.
 + * Note : (ingested - consumed) is amount of input data buffered internally, not yet compressed.
 + * Aggregates progression inside active worker threads.
-  */
--unsigned int ZSTD_getDictID_fromDDict(const ZSTD_DDict *ddict);
++ */
 +ZSTDLIB_API ZSTD_frameProgression ZSTD_getFrameProgression(const ZSTD_CCtx* cctx);
 +
 +/*! ZSTD_toFlushNow() :
@@ -6471,10 +6470,11 @@ index 249575e24..e478214a4 100644
 + *    but everything it has produced has also been flushed so far,
 + *    therefore flush speed is limited by production speed of oldest job
 + *    irrespective of the speed of concurrent (and newer) jobs.
-+ */
+  */
+-unsigned int ZSTD_getDictID_fromDDict(const ZSTD_DDict *ddict);
 +ZSTDLIB_API size_t ZSTD_toFlushNow(ZSTD_CCtx* cctx);
-+
  
++
 +/*=====   Advanced Streaming decompression functions  =====*/
  /**
 - * ZSTD_getDictID_fromFrame() - returns the dictionary id stored in a zstd frame
@@ -6482,15 +6482,15 @@ index 249575e24..e478214a4 100644
 - * @srcSize: The size of the source buffer. It must be at least as large as the
 - *           frame header. `ZSTD_frameHeaderSize_max` is always large enough.
 + * This function is deprecated, and is equivalent to:
++ *
++ *     ZSTD_DCtx_reset(zds, ZSTD_reset_session_only);
++ *     ZSTD_DCtx_loadDictionary(zds, dict, dictSize);
   *
 - * Return:   The dictionary id required to decompress the frame stored within
 - *           `src` or 0 if the dictionary id could not be decoded. It can return
 - *           0 if the frame does not require a dictionary, the dictionary id
 - *           wasn't stored in the frame, `src` is not a zstd frame, or `srcSize`
 - *           is too small.
-+ *     ZSTD_DCtx_reset(zds, ZSTD_reset_session_only);
-+ *     ZSTD_DCtx_loadDictionary(zds, dict, dictSize);
-+ *
 + * note: no dictionary will be used if dict == NULL or dictSize < 8
 + * Note : this prototype will be marked as deprecated and generate compilation warnings on reaching v1.5.x
   */
@@ -6526,12 +6526,12 @@ index 249575e24..e478214a4 100644
 - * @srcSize:    The size of the source buffer. `ZSTD_frameHeaderSize_max` is
 - *              always large enough to succeed.
 + * This function is deprecated, and is equivalent to:
-+ *
-+ *     ZSTD_DCtx_reset(zds, ZSTD_reset_session_only);
   *
 - * Return:      0 on success. If more data is required it returns how many bytes
 - *              must be provided to make forward progress. Otherwise it returns
 - *              an error, which can be checked using ZSTD_isError().
++ *     ZSTD_DCtx_reset(zds, ZSTD_reset_session_only);
++ *
 + * re-use decompression parameters from previous init; saves dictionary loading
 + * Note : this prototype will be marked as deprecated and generate compilation warnings on reaching v1.5.x
   */
@@ -6942,7 +6942,6 @@ index 249575e24..e478214a4 100644
 +
 +
 +#endif   /* ZSTD_H_ZSTD_STATIC_LINKING_ONLY */
-+
 diff --git a/lib/zstd/Makefile b/lib/zstd/Makefile
 index f5d778e7e..06bf0790b 100644
 --- a/lib/zstd/Makefile
@@ -8804,10 +8803,10 @@ index 000000000..17f5563c6
 +#endif /* ERROR_H_MODULE */
 diff --git a/lib/zstd/common/fse.h b/lib/zstd/common/fse.h
 new file mode 100644
-index 000000000..d9c4abab0
+index 000000000..406e478a8
 --- /dev/null
 +++ b/lib/zstd/common/fse.h
-@@ -0,0 +1,709 @@
+@@ -0,0 +1,707 @@
 +/* ******************************************************************
 + * FSE : Finite State Entropy codec
 + * Public Prototypes declaration
@@ -9515,8 +9514,6 @@ index 000000000..d9c4abab0
 +
 +
 +#endif /* FSE_STATIC_LINKING_ONLY */
-+
-+
 diff --git a/lib/zstd/common/fse_decompress.c b/lib/zstd/common/fse_decompress.c
 new file mode 100644
 index 000000000..fdf46a4ef
@@ -9905,10 +9902,10 @@ index 000000000..fdf46a4ef
 +#endif   /* FSE_COMMONDEFS_ONLY */
 diff --git a/lib/zstd/common/huf.h b/lib/zstd/common/huf.h
 new file mode 100644
-index 000000000..3cb032114
+index 000000000..2d36d2a2e
 --- /dev/null
 +++ b/lib/zstd/common/huf.h
-@@ -0,0 +1,352 @@
+@@ -0,0 +1,351 @@
 +/* ******************************************************************
 + * huff0 huffman codec,
 + * part of Finite State Entropy library
@@ -10260,7 +10257,6 @@ index 000000000..3cb032114
 +#endif
 +
 +#endif /* HUF_STATIC_LINKING_ONLY */
-+
 diff --git a/lib/zstd/common/mem.h b/lib/zstd/common/mem.h
 new file mode 100644
 index 000000000..54832a6da
@@ -10616,7 +10612,7 @@ index 000000000..939e9f08f
 +}
 diff --git a/lib/zstd/common/zstd_deps.h b/lib/zstd/common/zstd_deps.h
 new file mode 100644
-index 000000000..4a6d35f1d
+index 000000000..394aaf246
 --- /dev/null
 +++ b/lib/zstd/common/zstd_deps.h
 @@ -0,0 +1,124 @@
@@ -10693,7 +10689,7 @@ index 000000000..4a6d35f1d
 +#endif /* ZSTD_DEPS_MATH64 */
 +#endif /* ZSTD_DEPS_NEED_MATH64 */
 +
-+/* 
++/*
 + * This is only requested when DEBUGLEVEL >= 1, meaning
 + * it is disabled in production.
 + * Need:
@@ -10710,7 +10706,7 @@ index 000000000..4a6d35f1d
 +#endif /* ZSTD_DEPS_ASSERT */
 +#endif /* ZSTD_DEPS_NEED_ASSERT */
 +
-+/* 
++/*
 + * This is only requested when DEBUGLEVEL >= 2, meaning
 + * it is disabled in production.
 + * Need:
@@ -10727,7 +10723,7 @@ index 000000000..4a6d35f1d
 +#endif /* ZSTD_DEPS_IO */
 +#endif /* ZSTD_DEPS_NEED_IO */
 +
-+/* 
++/*
 + * Only requested when MSAN is enabled.
 + * Need:
 + * intptr_t
@@ -15345,10 +15341,10 @@ index 000000000..ce2fe1b23
 +#endif   /* FSE_COMMONDEFS_ONLY */
 diff --git a/lib/zstd/compress/hist.c b/lib/zstd/compress/hist.c
 new file mode 100644
-index 000000000..83cb58d8c
+index 000000000..8b175dcfc
 --- /dev/null
 +++ b/lib/zstd/compress/hist.c
-@@ -0,0 +1,165 @@
+@@ -0,0 +1,164 @@
 +/* ******************************************************************
 + * hist : Histogram functions
 + * part of Finite State Entropy project
@@ -15513,7 +15509,6 @@ index 000000000..83cb58d8c
 +    *maxSymbolValuePtr = 255;
 +    return HIST_countFast_wksp(count, maxSymbolValuePtr, source, sourceSize, workSpace, workSpaceSize);
 +}
-+
 diff --git a/lib/zstd/compress/hist.h b/lib/zstd/compress/hist.h
 new file mode 100644
 index 000000000..fb9ead683
@@ -15597,10 +15592,10 @@ index 000000000..fb9ead683
 +                           const void* src, size_t srcSize);
 diff --git a/lib/zstd/compress/huf_compress.c b/lib/zstd/compress/huf_compress.c
 new file mode 100644
-index 000000000..9f77d05f4
+index 000000000..535ad135f
 --- /dev/null
 +++ b/lib/zstd/compress/huf_compress.c
-@@ -0,0 +1,764 @@
+@@ -0,0 +1,763 @@
 +/* ******************************************************************
 + * Huffman encoder, part of New Generation Entropy library
 + * Copyright (c) 2013-2020, Yann Collet, Facebook, Inc.
@@ -16364,7 +16359,6 @@ index 000000000..9f77d05f4
 +                                 workSpace, wkspSize,
 +                                 hufTable, repeat, preferRepeat, bmi2);
 +}
-+
 diff --git a/lib/zstd/compress/zstd_compress.c b/lib/zstd/compress/zstd_compress.c
 new file mode 100644
 index 000000000..1c179e677
@@ -30590,10 +30584,10 @@ index 3116b551b..000000000
 -MODULE_DESCRIPTION("Zstd Decompressor");
 diff --git a/lib/zstd/decompress/huf_decompress.c b/lib/zstd/decompress/huf_decompress.c
 new file mode 100644
-index 000000000..17976824b
+index 000000000..989970246
 --- /dev/null
 +++ b/lib/zstd/decompress/huf_decompress.c
-@@ -0,0 +1,1205 @@
+@@ -0,0 +1,1204 @@
 +/* ******************************************************************
 + * huff0 huffman decoder,
 + * part of Finite State Entropy library
@@ -31798,7 +31792,6 @@ index 000000000..17976824b
 +#endif
 +    }
 +}
-+
 diff --git a/lib/zstd/decompress/zstd_ddict.c b/lib/zstd/decompress/zstd_ddict.c
 new file mode 100644
 index 000000000..599e58226
@@ -32098,7 +32091,7 @@ index 000000000..1da6e5bd8
 +#endif /* ZSTD_DDICT_H */
 diff --git a/lib/zstd/decompress/zstd_decompress.c b/lib/zstd/decompress/zstd_decompress.c
 new file mode 100644
-index 000000000..9bf9b6ec5
+index 000000000..176abba52
 --- /dev/null
 +++ b/lib/zstd/decompress/zstd_decompress.c
 @@ -0,0 +1,1836 @@
@@ -33606,7 +33599,7 @@ index 000000000..9bf9b6ec5
 +{
 +    if (ZSTD_DCtx_isOverflow(zds, neededInBuffSize, neededOutBuffSize))
 +        zds->oversizedDuration++;
-+    else 
++    else
 +        zds->oversizedDuration = 0;
 +}
 +
@@ -33786,7 +33779,7 @@ index 000000000..9bf9b6ec5
 +
 +                {   int const tooSmall = (zds->inBuffSize < neededInBuffSize) || (zds->outBuffSize < neededOutBuffSize);
 +                    int const tooLarge = ZSTD_DCtx_isOversizedTooLong(zds);
-+                    
++
 +                    if (tooSmall || tooLarge) {
 +                        size_t const bufferSize = neededInBuffSize + neededOutBuffSize;
 +                        DEBUGLOG(4, "inBuff  : from %u to %u",
@@ -41509,5 +41502,5 @@ index 55e1b4cba..000000000
 -
 -#endif /* ZSTD_OPT_H_91842398743 */
 -- 
-2.30.1.457.gf011795891
+2.31.0
 
