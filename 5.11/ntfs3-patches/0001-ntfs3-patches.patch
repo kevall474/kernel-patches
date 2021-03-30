@@ -1,7 +1,7 @@
-From 861c863af00acacd4927c605461a06b1d708da58 Mon Sep 17 00:00:00 2001
+From 6c71cdd591d66fbd30080b8081782b798b803da6 Mon Sep 17 00:00:00 2001
 From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Date: Fri, 12 Feb 2021 19:24:07 +0300
-Subject: [PATCH 01/14] fs/ntfs3: Add headers and misc files
+Subject: [PATCH 01/15] fs/ntfs3: Add headers and misc files
 
 This adds headers and misc files
 
@@ -19,7 +19,7 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/debug.h b/fs/ntfs3/debug.h
 new file mode 100644
-index 0000000..dfaa4c7
+index 000000000..dfaa4c79d
 --- /dev/null
 +++ b/fs/ntfs3/debug.h
 @@ -0,0 +1,64 @@
@@ -89,7 +89,7 @@ index 0000000..dfaa4c7
 +// clang-format on
 diff --git a/fs/ntfs3/ntfs.h b/fs/ntfs3/ntfs.h
 new file mode 100644
-index 0000000..b6a97b6
+index 000000000..b6a97b628
 --- /dev/null
 +++ b/fs/ntfs3/ntfs.h
 @@ -0,0 +1,1236 @@
@@ -1331,7 +1331,7 @@ index 0000000..b6a97b6
 +// clang-format on
 diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
 new file mode 100644
-index 0000000..25069b8
+index 000000000..25069b8c4
 --- /dev/null
 +++ b/fs/ntfs3/ntfs_fs.h
 @@ -0,0 +1,1073 @@
@@ -2410,7 +2410,7 @@ index 0000000..25069b8
 +}
 diff --git a/fs/ntfs3/upcase.c b/fs/ntfs3/upcase.c
 new file mode 100644
-index 0000000..f43af9c
+index 000000000..f43af9cad
 --- /dev/null
 +++ b/fs/ntfs3/upcase.c
 @@ -0,0 +1,100 @@
@@ -2515,13 +2515,13 @@ index 0000000..f43af9c
 +	return l1 - l2;
 +}
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From ded7bd061f9dd55b5bbc97308ded6e15fefe1873 Mon Sep 17 00:00:00 2001
+From 3c158b7171fba70d09ae6bd89ec3bc16a40b9394 Mon Sep 17 00:00:00 2001
 From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Date: Fri, 12 Feb 2021 19:24:08 +0300
-Subject: [PATCH 02/14] fs/ntfs3: Add initialization of super block
+Subject: [PATCH 02/15] fs/ntfs3: Add initialization of super block
 
 This adds initialization of super block
 
@@ -2539,7 +2539,7 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
 new file mode 100644
-index 0000000..ecf3aaa
+index 000000000..ecf3aaad7
 --- /dev/null
 +++ b/fs/ntfs3/fsntfs.c
 @@ -0,0 +1,2535 @@
@@ -5080,7 +5080,7 @@ index 0000000..ecf3aaa
 +}
 diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
 new file mode 100644
-index 0000000..7386714
+index 000000000..73867148a
 --- /dev/null
 +++ b/fs/ntfs3/index.c
 @@ -0,0 +1,2646 @@
@@ -7732,7 +7732,7 @@ index 0000000..7386714
 +}
 diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
 new file mode 100644
-index 0000000..1ab2e50
+index 000000000..1ab2e500b
 --- /dev/null
 +++ b/fs/ntfs3/inode.c
 @@ -0,0 +1,2058 @@
@@ -9796,7 +9796,7 @@ index 0000000..1ab2e50
 +};
 diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
 new file mode 100644
-index 0000000..7d09d3e
+index 000000000..7d09d3eaa
 --- /dev/null
 +++ b/fs/ntfs3/super.c
 @@ -0,0 +1,1502 @@
@@ -11303,13 +11303,13 @@ index 0000000..7d09d3e
 +module_init(init_ntfs_fs);
 +module_exit(exit_ntfs_fs);
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From ec135e939627242a899d5052eec21ee33e9da8d7 Mon Sep 17 00:00:00 2001
+From 018d4318bddd14cfe0dff36f57747542f19b9e8a Mon Sep 17 00:00:00 2001
 From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Date: Fri, 12 Feb 2021 19:24:09 +0300
-Subject: [PATCH 03/14] fs/ntfs3: Add bitmap
+Subject: [PATCH 03/15] fs/ntfs3: Add bitmap
 
 This adds bitmap
 
@@ -11323,7 +11323,7 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/bitfunc.c b/fs/ntfs3/bitfunc.c
 new file mode 100644
-index 0000000..2de5fae
+index 000000000..2de5faef2
 --- /dev/null
 +++ b/fs/ntfs3/bitfunc.c
 @@ -0,0 +1,135 @@
@@ -11464,7 +11464,7 @@ index 0000000..2de5fae
 +}
 diff --git a/fs/ntfs3/bitmap.c b/fs/ntfs3/bitmap.c
 new file mode 100644
-index 0000000..b1f6d6b
+index 000000000..b1f6d6b17
 --- /dev/null
 +++ b/fs/ntfs3/bitmap.c
 @@ -0,0 +1,1495 @@
@@ -12964,13 +12964,13 @@ index 0000000..b1f6d6b
 +	return err;
 +}
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From 7110ac8837f6ecce2f789250c8166a25afec2143 Mon Sep 17 00:00:00 2001
+From 47da739a65da4754ca51f9b9bbba8b7e4f758b69 Mon Sep 17 00:00:00 2001
 From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Date: Fri, 12 Feb 2021 19:24:10 +0300
-Subject: [PATCH 04/14] fs/ntfs3: Add file operations and implementation
+Subject: [PATCH 04/15] fs/ntfs3: Add file operations and implementation
 
 This adds file operations and implementation
 
@@ -12992,7 +12992,7 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/dir.c b/fs/ntfs3/dir.c
 new file mode 100644
-index 0000000..2b5114c
+index 000000000..2b5114c5e
 --- /dev/null
 +++ b/fs/ntfs3/dir.c
 @@ -0,0 +1,583 @@
@@ -13581,7 +13581,7 @@ index 0000000..2b5114c
 +};
 diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
 new file mode 100644
-index 0000000..d5bbe06
+index 000000000..d5bbe06dd
 --- /dev/null
 +++ b/fs/ntfs3/file.c
 @@ -0,0 +1,1130 @@
@@ -14717,7 +14717,7 @@ index 0000000..d5bbe06
 +};
 diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
 new file mode 100644
-index 0000000..cf1fa47
+index 000000000..cf1fa474c
 --- /dev/null
 +++ b/fs/ntfs3/frecord.c
 @@ -0,0 +1,3083 @@
@@ -17806,7 +17806,7 @@ index 0000000..cf1fa47
 +}
 diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
 new file mode 100644
-index 0000000..5e3b928
+index 000000000..5e3b92898
 --- /dev/null
 +++ b/fs/ntfs3/namei.c
 @@ -0,0 +1,592 @@
@@ -18404,7 +18404,7 @@ index 0000000..5e3b928
 +};
 diff --git a/fs/ntfs3/record.c b/fs/ntfs3/record.c
 new file mode 100644
-index 0000000..0d4a625
+index 000000000..0d4a6251b
 --- /dev/null
 +++ b/fs/ntfs3/record.c
 @@ -0,0 +1,609 @@
@@ -19019,7 +19019,7 @@ index 0000000..0d4a625
 +}
 diff --git a/fs/ntfs3/run.c b/fs/ntfs3/run.c
 new file mode 100644
-index 0000000..354c6ba
+index 000000000..354c6baa0
 --- /dev/null
 +++ b/fs/ntfs3/run.c
 @@ -0,0 +1,1120 @@
@@ -20144,13 +20144,13 @@ index 0000000..354c6ba
 +	return 0;
 +}
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From 5e2f950518940ae10e39bca802f14c8b5812fff9 Mon Sep 17 00:00:00 2001
+From eddb95cdb08c1a18c846e3453e5492db44f7e05d Mon Sep 17 00:00:00 2001
 From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Date: Fri, 12 Feb 2021 19:24:11 +0300
-Subject: [PATCH 05/14] fs/ntfs3: Add attrib operations
+Subject: [PATCH 05/15] fs/ntfs3: Add attrib operations
 
 This adds attrib operations
 
@@ -20166,7 +20166,7 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
 new file mode 100644
-index 0000000..7c85a6d
+index 000000000..7c85a6d33
 --- /dev/null
 +++ b/fs/ntfs3/attrib.c
 @@ -0,0 +1,2085 @@
@@ -22257,7 +22257,7 @@ index 0000000..7c85a6d
 +}
 diff --git a/fs/ntfs3/attrlist.c b/fs/ntfs3/attrlist.c
 new file mode 100644
-index 0000000..04a30b5
+index 000000000..04a30b58c
 --- /dev/null
 +++ b/fs/ntfs3/attrlist.c
 @@ -0,0 +1,457 @@
@@ -22720,7 +22720,7 @@ index 0000000..04a30b5
 +}
 diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
 new file mode 100644
-index 0000000..ffe3293
+index 000000000..ffe329315
 --- /dev/null
 +++ b/fs/ntfs3/xattr.c
 @@ -0,0 +1,1050 @@
@@ -23775,13 +23775,13 @@ index 0000000..ffe3293
 +	NULL,
 +};
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From 1504daeafc52f35a4e817c4dd41f8f55c34d506f Mon Sep 17 00:00:00 2001
+From 68978082223d232eef1d5dddae84f5c83ab4dcff Mon Sep 17 00:00:00 2001
 From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Date: Fri, 12 Feb 2021 19:24:12 +0300
-Subject: [PATCH 06/14] fs/ntfs3: Add compression
+Subject: [PATCH 06/15] fs/ntfs3: Add compression
 
 This patch adds different types of NTFS-applicable compressions:
 - lznt
@@ -23810,7 +23810,7 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/lib/decompress_common.c b/fs/ntfs3/lib/decompress_common.c
 new file mode 100644
-index 0000000..83c9e93
+index 000000000..83c9e93ae
 --- /dev/null
 +++ b/fs/ntfs3/lib/decompress_common.c
 @@ -0,0 +1,332 @@
@@ -24148,7 +24148,7 @@ index 0000000..83c9e93
 +}
 diff --git a/fs/ntfs3/lib/decompress_common.h b/fs/ntfs3/lib/decompress_common.h
 new file mode 100644
-index 0000000..66297f3
+index 000000000..66297f398
 --- /dev/null
 +++ b/fs/ntfs3/lib/decompress_common.h
 @@ -0,0 +1,352 @@
@@ -24506,7 +24506,7 @@ index 0000000..66297f3
 +}
 diff --git a/fs/ntfs3/lib/lib.h b/fs/ntfs3/lib/lib.h
 new file mode 100644
-index 0000000..f508fba
+index 000000000..f508fbad2
 --- /dev/null
 +++ b/fs/ntfs3/lib/lib.h
 @@ -0,0 +1,26 @@
@@ -24538,7 +24538,7 @@ index 0000000..f508fba
 +		   size_t uncompressed_size);
 diff --git a/fs/ntfs3/lib/lzx_decompress.c b/fs/ntfs3/lib/lzx_decompress.c
 new file mode 100644
-index 0000000..77a381a
+index 000000000..77a381a69
 --- /dev/null
 +++ b/fs/ntfs3/lib/lzx_decompress.c
 @@ -0,0 +1,683 @@
@@ -25227,7 +25227,7 @@ index 0000000..77a381a
 +}
 diff --git a/fs/ntfs3/lib/xpress_decompress.c b/fs/ntfs3/lib/xpress_decompress.c
 new file mode 100644
-index 0000000..3d98f36
+index 000000000..3d98f36a9
 --- /dev/null
 +++ b/fs/ntfs3/lib/xpress_decompress.c
 @@ -0,0 +1,155 @@
@@ -25388,7 +25388,7 @@ index 0000000..3d98f36
 +}
 diff --git a/fs/ntfs3/lznt.c b/fs/ntfs3/lznt.c
 new file mode 100644
-index 0000000..34822f0
+index 000000000..34822f02d
 --- /dev/null
 +++ b/fs/ntfs3/lznt.c
 @@ -0,0 +1,452 @@
@@ -25845,13 +25845,13 @@ index 0000000..34822f0
 +	return PtrOffset(unc, unc_chunk);
 +}
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From 74f722742929acc159f245a844e35d3acd8dd5c3 Mon Sep 17 00:00:00 2001
+From 853a7d1ecfa7fa3ffda8b7f332ad4c3e972ed7c7 Mon Sep 17 00:00:00 2001
 From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Date: Fri, 12 Feb 2021 19:24:13 +0300
-Subject: [PATCH 07/14] fs/ntfs3: Add NTFS journal
+Subject: [PATCH 07/15] fs/ntfs3: Add NTFS journal
 
 This adds NTFS journal
 
@@ -25863,7 +25863,7 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/fslog.c b/fs/ntfs3/fslog.c
 new file mode 100644
-index 0000000..140847d
+index 000000000..140847de2
 --- /dev/null
 +++ b/fs/ntfs3/fslog.c
 @@ -0,0 +1,5204 @@
@@ -31072,13 +31072,13 @@ index 0000000..140847d
 +	return err;
 +}
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From d7618224dc85c9e5c90a87f2949764ca5b35259d Mon Sep 17 00:00:00 2001
+From 080f1fd13459d988ada18360a2ab84f519f32cf9 Mon Sep 17 00:00:00 2001
 From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Date: Fri, 12 Feb 2021 19:24:14 +0300
-Subject: [PATCH 08/14] fs/ntfs3: Add Kconfig, Makefile and doc
+Subject: [PATCH 08/15] fs/ntfs3: Add Kconfig, Makefile and doc
 
 This adds Kconfig, Makefile and doc
 
@@ -31094,7 +31094,7 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/Documentation/filesystems/ntfs3.rst b/Documentation/filesystems/ntfs3.rst
 new file mode 100644
-index 0000000..fb29067
+index 000000000..fb2906736
 --- /dev/null
 +++ b/Documentation/filesystems/ntfs3.rst
 @@ -0,0 +1,107 @@
@@ -31207,7 +31207,7 @@ index 0000000..fb29067
 +
 diff --git a/fs/ntfs3/Kconfig b/fs/ntfs3/Kconfig
 new file mode 100644
-index 0000000..4dde88e
+index 000000000..4dde88e79
 --- /dev/null
 +++ b/fs/ntfs3/Kconfig
 @@ -0,0 +1,45 @@
@@ -31258,7 +31258,7 @@ index 0000000..4dde88e
 +	  If you don't know what Access Control Lists are, say N
 diff --git a/fs/ntfs3/Makefile b/fs/ntfs3/Makefile
 new file mode 100644
-index 0000000..b9aacc0
+index 000000000..b9aacc061
 --- /dev/null
 +++ b/fs/ntfs3/Makefile
 @@ -0,0 +1,31 @@
@@ -31295,13 +31295,13 @@ index 0000000..b9aacc0
 +		)
 \ No newline at end of file
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From 93585fd36349095c85267ce849963eeec353ea16 Mon Sep 17 00:00:00 2001
+From e60f08a2b8a0518880229df6afc45431c6805ee4 Mon Sep 17 00:00:00 2001
 From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Date: Fri, 12 Feb 2021 19:24:15 +0300
-Subject: [PATCH 09/14] fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
+Subject: [PATCH 09/15] fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
 
 This adds NTFS3 in fs/Kconfig and fs/Makefile
 
@@ -31312,7 +31312,7 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
  2 files changed, 2 insertions(+)
 
 diff --git a/fs/Kconfig b/fs/Kconfig
-index da524c4..0bbad35 100644
+index da524c4d7..0bbad356a 100644
 --- a/fs/Kconfig
 +++ b/fs/Kconfig
 @@ -145,6 +145,7 @@ menu "DOS/FAT/EXFAT/NT Filesystems"
@@ -31324,7 +31324,7 @@ index da524c4..0bbad35 100644
  endmenu
  endif # BLOCK
 diff --git a/fs/Makefile b/fs/Makefile
-index 999d1a2..4f5242c 100644
+index 999d1a23f..4f5242cda 100644
 --- a/fs/Makefile
 +++ b/fs/Makefile
 @@ -100,6 +100,7 @@ obj-$(CONFIG_SYSV_FS)		+= sysv/
@@ -31336,13 +31336,13 @@ index 999d1a2..4f5242c 100644
  obj-$(CONFIG_EFS_FS)		+= efs/
  obj-$(CONFIG_JFFS2_FS)		+= jffs2/
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From d2eb17b9ddd7075425eb6cf791d84817fbc34474 Mon Sep 17 00:00:00 2001
+From 1dff17186ce01b6d1ddf03ca26e45026755cfe1f Mon Sep 17 00:00:00 2001
 From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Date: Fri, 12 Feb 2021 19:24:16 +0300
-Subject: [PATCH 10/14] fs/ntfs3: Add MAINTAINERS
+Subject: [PATCH 10/15] fs/ntfs3: Add MAINTAINERS
 
 This adds MAINTAINERS
 
@@ -31352,10 +31352,10 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index bfc1b86..9c28055 100644
+index b6ab9c1a2..09421fc33 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -12667,6 +12667,13 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/aia21/ntfs.git
+@@ -12666,6 +12666,13 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/aia21/ntfs.git
  F:	Documentation/filesystems/ntfs.rst
  F:	fs/ntfs/
  
@@ -31370,13 +31370,13 @@ index bfc1b86..9c28055 100644
  M:	Finn Thain <fthain@telegraphics.com.au>
  L:	linux-m68k@lists.linux-m68k.org
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From 45ecdd38cb996f66ec58efcca888f4064f8769b7 Mon Sep 17 00:00:00 2001
+From dc552fd9e94cee490efc5d099d50daddd721b84a Mon Sep 17 00:00:00 2001
 From: Oleksandr Natalenko <oleksandr@natalenko.name>
 Date: Fri, 12 Feb 2021 20:11:54 +0100
-Subject: [PATCH 11/14] ntfs3-5.11: throw away userns changes from linux-next
+Subject: [PATCH 11/15] ntfs3-5.11: throw away userns changes from linux-next
 
 Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 ---
@@ -31389,7 +31389,7 @@ Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
  6 files changed, 65 insertions(+), 86 deletions(-)
 
 diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
-index d5bbe06..3886a4a 100644
+index d5bbe06dd..3886a4a27 100644
 --- a/fs/ntfs3/file.c
 +++ b/fs/ntfs3/file.c
 @@ -76,8 +76,8 @@ static long ntfs_compat_ioctl(struct file *filp, u32 cmd, unsigned long arg)
@@ -31445,7 +31445,7 @@ index d5bbe06..3886a4a 100644
  			goto out;
  
 diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index 1ab2e50..504d783 100644
+index 1ab2e500b..504d783f6 100644
 --- a/fs/ntfs3/inode.c
 +++ b/fs/ntfs3/inode.c
 @@ -1176,10 +1176,10 @@ ntfs_create_reparse_buffer(struct ntfs_sb_info *sbi, const char *symname,
@@ -31473,7 +31473,7 @@ index 1ab2e50..504d783 100644
  			goto out6;
  	} else
 diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
-index 5e3b928..34d89ec 100644
+index 5e3b92898..34d89ec2a 100644
 --- a/fs/ntfs3/namei.c
 +++ b/fs/ntfs3/namei.c
 @@ -102,8 +102,8 @@ static struct dentry *ntfs_lookup(struct inode *dir, struct dentry *dentry,
@@ -31567,7 +31567,7 @@ index 5e3b928..34d89ec 100644
  		err = finish_open(file, dentry, ntfs_file_open);
  	dput(d);
 diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
-index 25069b8..6e5afe3 100644
+index 25069b8c4..6e5afe3dc 100644
 --- a/fs/ntfs3/ntfs_fs.h
 +++ b/fs/ntfs3/ntfs_fs.h
 @@ -454,12 +454,11 @@ bool dir_is_empty(struct inode *dir);
@@ -31625,7 +31625,7 @@ index 25069b8..6e5afe3 100644
  extern const struct xattr_handler *ntfs_xattr_handlers[];
  
 diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index 7d09d3e..69c8a7d 100644
+index 7d09d3eaa..69c8a7d33 100644
 --- a/fs/ntfs3/super.c
 +++ b/fs/ntfs3/super.c
 @@ -544,14 +544,13 @@ static int ntfs_show_options(struct seq_file *m, struct dentry *root)
@@ -31646,7 +31646,7 @@ index 7d09d3e..69c8a7d 100644
  		seq_printf(m, ",fmask=%04o", ~opts->fs_fmask_inv);
  	if (opts->dmask)
 diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
-index ffe3293..f94f215 100644
+index ffe329315..f94f215c1 100644
 --- a/fs/ntfs3/xattr.c
 +++ b/fs/ntfs3/xattr.c
 @@ -473,8 +473,7 @@ static inline void ntfs_posix_acl_release(struct posix_acl *acl)
@@ -31858,13 +31858,13 @@ index ffe3293..f94f215 100644
  				ACL_TYPE_ACCESS :
  				ACL_TYPE_DEFAULT,
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From 3aaf255c05faca36262920ab656085f5a843d8f2 Mon Sep 17 00:00:00 2001
+From 588e2dd9a3cd028e800f20976e43667d54ca92b6 Mon Sep 17 00:00:00 2001
 From: Oleksandr Natalenko <oleksandr@natalenko.name>
 Date: Mon, 1 Mar 2021 23:33:09 +0100
-Subject: [PATCH 12/14] ntfs3-5.11: update to v22
+Subject: [PATCH 12/15] ntfs3-5.11: update to v22
 
 Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 ---
@@ -31887,7 +31887,7 @@ Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
  16 files changed, 167 insertions(+), 168 deletions(-)
 
 diff --git a/fs/ntfs3/Kconfig b/fs/ntfs3/Kconfig
-index 4dde88e..6e4cbc4 100644
+index 4dde88e79..6e4cbc48a 100644
 --- a/fs/ntfs3/Kconfig
 +++ b/fs/ntfs3/Kconfig
 @@ -28,6 +28,7 @@ config NTFS3_LZX_XPRESS
@@ -31905,7 +31905,7 @@ index 4dde88e..6e4cbc4 100644
 -	  If you don't know what Access Control Lists are, say N
 +	  If you don't know what Access Control Lists are, say N.
 diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
-index 7c85a6d..edd9485 100644
+index 7c85a6d33..edd9485fe 100644
 --- a/fs/ntfs3/attrib.c
 +++ b/fs/ntfs3/attrib.c
 @@ -579,8 +579,8 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
@@ -31920,7 +31920,7 @@ index 7c85a6d..edd9485 100644
  							 3 +
  						 1,
 diff --git a/fs/ntfs3/bitmap.c b/fs/ntfs3/bitmap.c
-index b1f6d6b..8331cd1 100644
+index b1f6d6b17..8331cd15c 100644
 --- a/fs/ntfs3/bitmap.c
 +++ b/fs/ntfs3/bitmap.c
 @@ -277,9 +277,9 @@ static void wnd_add_free_ext(struct wnd_bitmap *wnd, size_t bit, size_t len,
@@ -31961,7 +31961,7 @@ index b1f6d6b..8331cd1 100644
  	}
  
 diff --git a/fs/ntfs3/dir.c b/fs/ntfs3/dir.c
-index 2b5114c..9ec6012 100644
+index 2b5114c5e..9ec6012c4 100644
 --- a/fs/ntfs3/dir.c
 +++ b/fs/ntfs3/dir.c
 @@ -22,7 +22,7 @@
@@ -32014,7 +32014,7 @@ index 2b5114c..9ec6012 100644
  
  	*op = '\0';
 diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
-index 3886a4a..0dbdf23 100644
+index 3886a4a27..0dbdf237c 100644
 --- a/fs/ntfs3/file.c
 +++ b/fs/ntfs3/file.c
 @@ -226,8 +226,8 @@ void ntfs_sparse_cluster(struct inode *inode, struct page *page0, CLST vcn,
@@ -32040,7 +32040,7 @@ index 3886a4a..0dbdf23 100644
  out:
  	inode_unlock(inode);
 diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
-index cf1fa47..1999dae 100644
+index cf1fa474c..1999dae8c 100644
 --- a/fs/ntfs3/frecord.c
 +++ b/fs/ntfs3/frecord.c
 @@ -98,8 +98,8 @@ struct ATTR_STD_INFO *ni_std(struct ntfs_inode *ni)
@@ -32092,7 +32092,7 @@ index cf1fa47..1999dae 100644
  
  			if (new_valid > data_size)
 diff --git a/fs/ntfs3/fslog.c b/fs/ntfs3/fslog.c
-index 140847d..94cc4d1 100644
+index 140847de2..94cc4d100 100644
 --- a/fs/ntfs3/fslog.c
 +++ b/fs/ntfs3/fslog.c
 @@ -392,8 +392,8 @@ static inline u32 lrh_length(const struct LOG_REC_HDR *lr)
@@ -32242,7 +32242,7 @@ index 140847d..94cc4d1 100644
  	if (rst_info.chkdsk_was_run ||
  	    (ra2 && ra2->client_idx[1] == LFS_NO_CLIENT_LE)) {
 diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
-index ecf3aaa..4edd583 100644
+index ecf3aaad7..4edd583c6 100644
 --- a/fs/ntfs3/fsntfs.c
 +++ b/fs/ntfs3/fsntfs.c
 @@ -151,8 +151,8 @@ int ntfs_fix_post_read(struct NTFS_RECORD_HEADER *rhdr, size_t bytes,
@@ -32290,7 +32290,7 @@ index ecf3aaa..4edd583 100644
  	}
  
 diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
-index 7386714..5a2f529 100644
+index 73867148a..5a2f52990 100644
 --- a/fs/ntfs3/index.c
 +++ b/fs/ntfs3/index.c
 @@ -424,9 +424,8 @@ static int scan_nres_bitmap(struct ntfs_inode *ni, struct ATTRIB *bitmap,
@@ -32343,7 +32343,7 @@ index 7386714..5a2f529 100644
  			ntfs_free(re);
  
 diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index 504d783..7f549ba 100644
+index 504d783f6..7f549ba5d 100644
 --- a/fs/ntfs3/inode.c
 +++ b/fs/ntfs3/inode.c
 @@ -243,8 +243,8 @@ static struct inode *ntfs_read_mft(struct inode *inode,
@@ -32441,7 +32441,7 @@ index 504d783..7f549ba 100644
  out1:
  	ni_unlock(ni);
 diff --git a/fs/ntfs3/lznt.c b/fs/ntfs3/lznt.c
-index 34822f0..ead9ab7 100644
+index 34822f02d..ead9ab7d6 100644
 --- a/fs/ntfs3/lznt.c
 +++ b/fs/ntfs3/lznt.c
 @@ -294,8 +294,8 @@ static inline ssize_t decompress_chunk(u8 *unc, u8 *unc_end, const u8 *cmpr,
@@ -32469,7 +32469,7 @@ index 34822f0..ead9ab7 100644
  			if (cmpr_chunk + sizeof(chunk_hdr) + unc_use >
  			    cmpr_end) {
 diff --git a/fs/ntfs3/ntfs.h b/fs/ntfs3/ntfs.h
-index b6a97b6..d3d3d93 100644
+index b6a97b628..d3d3d93a1 100644
 --- a/fs/ntfs3/ntfs.h
 +++ b/fs/ntfs3/ntfs.h
 @@ -1194,7 +1194,8 @@ struct EA_FULL {
@@ -32483,7 +32483,7 @@ index b6a97b6..d3d3d93 100644
  #define SE_SELF_RELATIVE cpu_to_le16(0x8000)
  
 diff --git a/fs/ntfs3/run.c b/fs/ntfs3/run.c
-index 354c6ba..67d1a85 100644
+index 354c6baa0..67d1a856c 100644
 --- a/fs/ntfs3/run.c
 +++ b/fs/ntfs3/run.c
 @@ -433,9 +433,9 @@ bool run_add_entry(struct runs_tree *run, CLST vcn, CLST lcn, CLST len,
@@ -32589,7 +32589,7 @@ index 354c6ba..67d1a85 100644
  	}
  
 diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index 69c8a7d..9648f82 100644
+index 69c8a7d33..9648f82e5 100644
 --- a/fs/ntfs3/super.c
 +++ b/fs/ntfs3/super.c
 @@ -701,9 +701,9 @@ static u32 format_size_gb(const u64 bytes, u32 *mb)
@@ -32634,7 +32634,7 @@ index 69c8a7d..9648f82 100644
  	sbi->volume.ser_num = le64_to_cpu(boot->serial_num);
  	sbi->volume.size = sectors << sbi->sector_bits;
 diff --git a/fs/ntfs3/upcase.c b/fs/ntfs3/upcase.c
-index f43af9c..bd828bc 100644
+index f43af9cad..bd828bc17 100644
 --- a/fs/ntfs3/upcase.c
 +++ b/fs/ntfs3/upcase.c
 @@ -54,10 +54,8 @@ int ntfs_cmp_names(const __le16 *s1, size_t l1, const __le16 *s2, size_t l2,
@@ -32662,7 +32662,7 @@ index f43af9c..bd828bc 100644
 +	return diff2 ? diff2 : diff1;
  }
 diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
-index f94f215..f81329e 100644
+index f94f215c1..f81329ef7 100644
 --- a/fs/ntfs3/xattr.c
 +++ b/fs/ntfs3/xattr.c
 @@ -26,8 +26,8 @@
@@ -32703,13 +32703,13 @@ index f94f215..f81329e 100644
  		goto out;
  	}
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From 6fa17da3c3c47567cfa19d8c4196d4e77a41d209 Mon Sep 17 00:00:00 2001
+From f4aec27e2085ceee033e8a88c07c712a95e43921 Mon Sep 17 00:00:00 2001
 From: Oleksandr Natalenko <oleksandr@natalenko.name>
 Date: Tue, 16 Mar 2021 09:01:09 +0100
-Subject: [PATCH 13/14] ntfs3-5.11: update to v23
+Subject: [PATCH 13/15] ntfs3-5.11: update to v23
 
 Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 ---
@@ -32724,7 +32724,7 @@ Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
  8 files changed, 81 insertions(+), 45 deletions(-)
 
 diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
-index edd9485..188c8b2 100644
+index edd9485fe..188c8b280 100644
 --- a/fs/ntfs3/attrib.c
 +++ b/fs/ntfs3/attrib.c
 @@ -831,7 +831,7 @@ int attr_data_get_block(struct ntfs_inode *ni, CLST vcn, CLST clen, CLST *lcn,
@@ -32753,7 +32753,7 @@ index edd9485..188c8b2 100644
  				   ~(clst_per_frame - 1);
  		}
 diff --git a/fs/ntfs3/attrlist.c b/fs/ntfs3/attrlist.c
-index 04a30b5..ea56136 100644
+index 04a30b58c..ea561361b 100644
 --- a/fs/ntfs3/attrlist.c
 +++ b/fs/ntfs3/attrlist.c
 @@ -101,8 +101,8 @@ int ntfs_load_attr_list(struct ntfs_inode *ni, struct ATTRIB *attr)
@@ -32861,7 +32861,7 @@ index 04a30b5..ea56136 100644
  
  	al->size -= size;
 diff --git a/fs/ntfs3/bitmap.c b/fs/ntfs3/bitmap.c
-index 8331cd1..32aab00 100644
+index 8331cd15c..32aab0031 100644
 --- a/fs/ntfs3/bitmap.c
 +++ b/fs/ntfs3/bitmap.c
 @@ -3,6 +3,11 @@
@@ -33002,7 +33002,7 @@ index 8331cd1..32aab00 100644
  			wnd->uptodated = -1;
  	}
 diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
-index 5a2f529..8ccb4ed 100644
+index 5a2f52990..8ccb4ed5d 100644
 --- a/fs/ntfs3/index.c
 +++ b/fs/ntfs3/index.c
 @@ -551,7 +551,7 @@ int indx_used_bit(struct ntfs_index *indx, struct ntfs_inode *ni, size_t *bit)
@@ -33067,7 +33067,7 @@ index 5a2f529..8ccb4ed 100644
  
  	ds_root = new_de_size + hdr_used - hdr_total;
 diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
-index 6e5afe3..9846567 100644
+index 6e5afe3dc..984656737 100644
 --- a/fs/ntfs3/ntfs_fs.h
 +++ b/fs/ntfs3/ntfs_fs.h
 @@ -698,7 +698,7 @@ static inline bool mi_is_ref(const struct mft_inode *mi,
@@ -33091,7 +33091,7 @@ index 6e5afe3..9846567 100644
  static inline size_t wnd_zeroes(const struct wnd_bitmap *wnd)
  {
 diff --git a/fs/ntfs3/run.c b/fs/ntfs3/run.c
-index 67d1a85..5cdf6ef 100644
+index 67d1a856c..5cdf6efe6 100644
 --- a/fs/ntfs3/run.c
 +++ b/fs/ntfs3/run.c
 @@ -3,6 +3,7 @@
@@ -33112,7 +33112,7 @@ index 67d1a85..5cdf6ef 100644
  
  /* full trusted function. It does not check 'size' for errors */
 diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index 9648f82..3d45e70 100644
+index 9648f82e5..3d45e7055 100644
 --- a/fs/ntfs3/super.c
 +++ b/fs/ntfs3/super.c
 @@ -1449,22 +1449,28 @@ static int __init init_ntfs_fs(void)
@@ -33158,7 +33158,7 @@ index 9648f82..3d45e70 100644
  
  MODULE_LICENSE("GPL");
 diff --git a/fs/ntfs3/upcase.c b/fs/ntfs3/upcase.c
-index bd828bc..9617382 100644
+index bd828bc17..9617382ac 100644
 --- a/fs/ntfs3/upcase.c
 +++ b/fs/ntfs3/upcase.c
 @@ -24,7 +24,16 @@ static inline u16 upcase_unicode_char(const u16 *upcase, u16 chr)
@@ -33180,13 +33180,13 @@ index bd828bc..9617382 100644
  		   const u16 *upcase, bool bothcase)
  {
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
 
-From 89118d2ce4c21cccdba1ce110a75e8644d7e8007 Mon Sep 17 00:00:00 2001
+From 556b00fe6664d92a950731c03fdb6db7b4220283 Mon Sep 17 00:00:00 2001
 From: Oleksandr Natalenko <oleksandr@natalenko.name>
 Date: Sat, 20 Mar 2021 23:29:02 +0100
-Subject: [PATCH 14/14] ntfs3-5.11: update to v24
+Subject: [PATCH 14/15] ntfs3-5.11: update to v24
 
 Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 ---
@@ -33199,7 +33199,7 @@ Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
  6 files changed, 23 insertions(+), 17 deletions(-)
 
 diff --git a/fs/ntfs3/Makefile b/fs/ntfs3/Makefile
-index b9aacc0..b06a06c 100644
+index b9aacc061..b06a06cc0 100644
 --- a/fs/ntfs3/Makefile
 +++ b/fs/ntfs3/Makefile
 @@ -3,6 +3,9 @@
@@ -33213,7 +33213,7 @@ index b9aacc0..b06a06c 100644
  
  ntfs3-y :=	attrib.o \
 diff --git a/fs/ntfs3/fslog.c b/fs/ntfs3/fslog.c
-index 94cc4d1..e9260d4 100644
+index 94cc4d100..e9260d472 100644
 --- a/fs/ntfs3/fslog.c
 +++ b/fs/ntfs3/fslog.c
 @@ -3756,8 +3756,9 @@ static int do_action(struct ntfs_log *log, struct OPEN_ATTR_ENRTY *oe,
@@ -33238,7 +33238,7 @@ index 94cc4d1..e9260d4 100644
  		if (rst_info.initialized) {
  			/* no restart area but the file is not initialized */
 diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
-index 4edd583..ac466ed 100644
+index 4edd583c6..ac466ed9b 100644
 --- a/fs/ntfs3/fsntfs.c
 +++ b/fs/ntfs3/fsntfs.c
 @@ -258,6 +258,7 @@ int ntfs_loadlog_and_replay(struct ntfs_inode *ni, struct ntfs_sb_info *sbi)
@@ -33274,7 +33274,7 @@ index 4edd583..ac466ed 100644
  
  out:
 diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
-index 8ccb4ed..789952d 100644
+index 8ccb4ed5d..789952d37 100644
 --- a/fs/ntfs3/index.c
 +++ b/fs/ntfs3/index.c
 @@ -551,7 +551,7 @@ int indx_used_bit(struct ntfs_index *indx, struct ntfs_inode *ni, size_t *bit)
@@ -33296,7 +33296,7 @@ index 8ccb4ed..789952d 100644
  {
  	u32 to_move;
 diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
-index 9846567..f945345 100644
+index 984656737..f9453457a 100644
 --- a/fs/ntfs3/ntfs_fs.h
 +++ b/fs/ntfs3/ntfs_fs.h
 @@ -524,7 +524,7 @@ int ni_write_frame(struct ntfs_inode *ni, struct page **pages,
@@ -33309,7 +33309,7 @@ index 9846567..f945345 100644
  /* globals from fsntfs.c */
  bool ntfs_fix_pre_write(struct NTFS_RECORD_HEADER *rhdr, size_t bytes);
 diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index 3d45e70..9658768 100644
+index 3d45e7055..96587689c 100644
 --- a/fs/ntfs3/super.c
 +++ b/fs/ntfs3/super.c
 @@ -391,17 +391,13 @@ static int ntfs_remount(struct super_block *sb, int *flags, char *data)
@@ -33338,5 +33338,546 @@ index 3d45e70..9658768 100644
  
  	sync_filesystem(sb);
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
+
+
+From 42d66dec09cd2df98623478da742f6b3e4fc35ef Mon Sep 17 00:00:00 2001
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Date: Sat, 27 Mar 2021 23:27:27 +0100
+Subject: [PATCH 15/15] ntfs3-5.11: update to v25
+
+Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+---
+ fs/ntfs3/frecord.c | 28 +++++++-----------------
+ fs/ntfs3/fslog.c   | 12 ++++++-----
+ fs/ntfs3/fsntfs.c  |  8 +++----
+ fs/ntfs3/index.c   |  4 ++--
+ fs/ntfs3/inode.c   | 54 +++++++++++++---------------------------------
+ fs/ntfs3/namei.c   | 46 ++++++++++++++-------------------------
+ fs/ntfs3/ntfs_fs.h | 21 +++++++++++++-----
+ fs/ntfs3/super.c   | 17 ++++++---------
+ 8 files changed, 75 insertions(+), 115 deletions(-)
+
+diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
+index 1999dae8c..27ccb3706 100644
+--- a/fs/ntfs3/frecord.c
++++ b/fs/ntfs3/frecord.c
+@@ -19,18 +19,6 @@
+ #include "lib/lib.h"
+ #endif
+ 
+-static inline void get_mi_ref(const struct mft_inode *mi, struct MFT_REF *ref)
+-{
+-#ifdef CONFIG_NTFS3_64BIT_CLUSTER
+-	ref->low = cpu_to_le32(mi->rno);
+-	ref->high = cpu_to_le16(mi->rno >> 32);
+-#else
+-	ref->low = cpu_to_le32(mi->rno);
+-	ref->high = 0;
+-#endif
+-	ref->seq = mi->mrec->seq;
+-}
+-
+ static struct mft_inode *ni_ins_mi(struct ntfs_inode *ni, struct rb_root *tree,
+ 				   CLST ino, struct rb_node *ins)
+ {
+@@ -409,7 +397,7 @@ bool ni_add_subrecord(struct ntfs_inode *ni, CLST rno, struct mft_inode **mi)
+ 		return false;
+ 	}
+ 
+-	get_mi_ref(&ni->mi, &m->mrec->parent_ref);
++	mi_get_ref(&ni->mi, &m->mrec->parent_ref);
+ 
+ 	ni_add_mi(ni, m);
+ 	*mi = m;
+@@ -502,7 +490,7 @@ static struct ATTRIB *ni_ins_new_attr(struct ntfs_inode *ni,
+ 	bool le_added = false;
+ 	struct MFT_REF ref;
+ 
+-	get_mi_ref(mi, &ref);
++	mi_get_ref(mi, &ref);
+ 
+ 	if (type != ATTR_LIST && !le && ni->attr_list.size) {
+ 		err = al_add_le(ni, type, name, name_len, svcn, cpu_to_le16(-1),
+@@ -703,7 +691,7 @@ static int ni_try_remove_attr_list(struct ntfs_inode *ni)
+ 
+ 	/* free space in primary record without attribute list */
+ 	free = sbi->record_size - le32_to_cpu(ni->mi.mrec->used) + asize;
+-	get_mi_ref(&ni->mi, &ref);
++	mi_get_ref(&ni->mi, &ref);
+ 
+ 	le = NULL;
+ 	while ((le = al_enumerate(ni, le))) {
+@@ -805,7 +793,7 @@ int ni_create_attr_list(struct ntfs_inode *ni)
+ 		goto out;
+ 	}
+ 
+-	get_mi_ref(&ni->mi, &le->ref);
++	mi_get_ref(&ni->mi, &le->ref);
+ 	ni->attr_list.le = le;
+ 
+ 	attr = NULL;
+@@ -871,7 +859,7 @@ int ni_create_attr_list(struct ntfs_inode *ni)
+ 				      b->name_len, asize, name_off);
+ 		WARN_ON(!attr);
+ 
+-		get_mi_ref(mi, &le_b[nb]->ref);
++		mi_get_ref(mi, &le_b[nb]->ref);
+ 		le_b[nb]->id = attr->id;
+ 
+ 		/* copy all except id */
+@@ -1335,7 +1323,7 @@ int ni_expand_list(struct ntfs_inode *ni)
+ 	bool is_mft = ni->mi.rno == MFT_REC_MFT;
+ 	struct MFT_REF ref;
+ 
+-	get_mi_ref(&ni->mi, &ref);
++	mi_get_ref(&ni->mi, &ref);
+ 	le = NULL;
+ 
+ 	while ((le = al_enumerate(ni, le))) {
+@@ -1545,7 +1533,7 @@ int ni_delete_all(struct ntfs_inode *ni)
+ 		if (!nt3 || attr->name_len) {
+ 			;
+ 		} else if (attr->type == ATTR_REPARSE) {
+-			get_mi_ref(&ni->mi, &ref);
++			mi_get_ref(&ni->mi, &ref);
+ 			ntfs_remove_reparse(sbi, 0, &ref);
+ 		} else if (attr->type == ATTR_ID && !attr->non_res &&
+ 			   le32_to_cpu(attr->res.data_size) >=
+@@ -2225,7 +2213,7 @@ int ni_decompress_file(struct ntfs_inode *ni)
+ 		if (attr->type == ATTR_REPARSE) {
+ 			struct MFT_REF ref;
+ 
+-			get_mi_ref(&ni->mi, &ref);
++			mi_get_ref(&ni->mi, &ref);
+ 			ntfs_remove_reparse(sbi, 0, &ref);
+ 		}
+ 
+diff --git a/fs/ntfs3/fslog.c b/fs/ntfs3/fslog.c
+index e9260d472..fc287a500 100644
+--- a/fs/ntfs3/fslog.c
++++ b/fs/ntfs3/fslog.c
+@@ -984,7 +984,7 @@ static inline void *alloc_rsttbl_from_idx(struct RESTART_TABLE **tbl, u32 vbo)
+ #define NTFSLOG_NO_OLDEST_LSN 0x00000020
+ 
+ /*
+- * Helper struct to work with NTFS $LogFile
++ * Helper struct to work with NTFS LogFile
+  */
+ struct ntfs_log {
+ 	struct ntfs_inode *ni;
+@@ -3803,9 +3803,11 @@ int log_replay(struct ntfs_inode *ni, bool *initialized)
+ 	u32 t32;
+ 
+ 	/* Get the size of page. NOTE: To replay we can use default page */
+-	page_size = norm_file_page(PAGE_SIZE, &l_size,
+-				   PAGE_SIZE >= DefaultLogPageSize &&
+-					   PAGE_SIZE <= DefaultLogPageSize * 2);
++#if PAGE_SIZE >= DefaultLogPageSize && PAGE_SIZE <= DefaultLogPageSize * 2
++	page_size = norm_file_page(PAGE_SIZE, &l_size, true);
++#else
++	page_size = norm_file_page(PAGE_SIZE, &l_size, false);
++#endif
+ 	if (!page_size)
+ 		return -EINVAL;
+ 
+@@ -4082,7 +4084,7 @@ int log_replay(struct ntfs_inode *ni, bool *initialized)
+ 	case 0x20000:
+ 		break;
+ 	default:
+-		ntfs_warn(sbi->sb, "$LogFile version %d.%d is not supported",
++		ntfs_warn(sbi->sb, "\x24LogFile version %d.%d is not supported",
+ 			  log->major_ver, log->minor_ver);
+ 		err = -EOPNOTSUPP;
+ 		log->set_dirty = true;
+diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
+index ac466ed9b..f1d7cea2c 100644
+--- a/fs/ntfs3/fsntfs.c
++++ b/fs/ntfs3/fsntfs.c
+@@ -257,13 +257,13 @@ int ntfs_loadlog_and_replay(struct ntfs_inode *ni, struct ntfs_sb_info *sbi)
+ {
+ 	int err = 0;
+ 	struct super_block *sb = sbi->sb;
+-	struct inode *inode = &ni->vfs_inode;
+ 	bool initialized = false;
+ 	struct MFT_REF ref;
++	struct inode *inode;
+ 
+ 	/* Check for 4GB */
+-	if (inode->i_size >= 0x100000000ull) {
+-		ntfs_err(sb, "$LogFile is too big");
++	if (ni->vfs_inode.i_size >= 0x100000000ull) {
++		ntfs_err(sb, "\x24LogFile is too big");
+ 		err = -EINVAL;
+ 		goto out;
+ 	}
+@@ -1184,7 +1184,7 @@ int ntfs_read_run_nb(struct ntfs_sb_info *sbi, const struct runs_tree *run,
+ 	struct buffer_head *bh;
+ 
+ 	if (!run) {
+-		/* first reading of $Volume + $MFTMirr + $LogFile goes here*/
++		/* first reading of $Volume + $MFTMirr + LogFile goes here*/
+ 		if (vbo > MFT_REC_VOL * sbi->record_size) {
+ 			err = -ENOENT;
+ 			goto out;
+diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
+index 789952d37..931a7241e 100644
+--- a/fs/ntfs3/index.c
++++ b/fs/ntfs3/index.c
+@@ -582,8 +582,8 @@ static const struct NTFS_DE *hdr_find_split(const struct INDEX_HDR *hdr)
+  * inserts some entries at the beginning of the buffer.
+  * It is used to insert entries into a newly-created buffer.
+  */
+-static const struct NTFS_DE *
+-hdr_insert_head(struct INDEX_HDR *hdr, const void *ins, u32 ins_bytes)
++static const struct NTFS_DE *hdr_insert_head(struct INDEX_HDR *hdr,
++					     const void *ins, u32 ins_bytes)
+ {
+ 	u32 to_move;
+ 	struct NTFS_DE *e = hdr_first_de(hdr);
+diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+index 7f549ba5d..419d7b0a8 100644
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -1176,10 +1176,10 @@ ntfs_create_reparse_buffer(struct ntfs_sb_info *sbi, const char *symname,
+ 	return ERR_PTR(err);
+ }
+ 
+-int ntfs_create_inode(struct inode *dir, struct dentry *dentry,
+-		      const struct cpu_str *uni, umode_t mode, dev_t dev,
+-		      const char *symname, u32 size, int excl,
+-		      struct ntfs_fnd *fnd, struct inode **new_inode)
++struct inode *ntfs_create_inode(struct inode *dir, struct dentry *dentry,
++				const struct cpu_str *uni, umode_t mode,
++				dev_t dev, const char *symname, u32 size,
++				int excl, struct ntfs_fnd *fnd)
+ {
+ 	int err;
+ 	struct super_block *sb = dir->i_sb;
+@@ -1209,11 +1209,11 @@ int ntfs_create_inode(struct inode *dir, struct dentry *dentry,
+ 		     S_ISSOCK(mode);
+ 
+ 	if (is_sp)
+-		return -EOPNOTSUPP;
++		return ERR_PTR(-EOPNOTSUPP);
+ 
+ 	dir_root = indx_get_root(&dir_ni->dir, dir_ni, NULL, NULL);
+ 	if (!dir_root)
+-		return -EINVAL;
++		return ERR_PTR(-EINVAL);
+ 
+ 	if (is_dir) {
+ 		/* use parent's directory attributes */
+@@ -1345,18 +1345,10 @@ int ntfs_create_inode(struct inode *dir, struct dentry *dentry,
+ 	if (err)
+ 		goto out4;
+ 
+-	fname = (struct ATTR_FILE_NAME *)(new_de + 1);
+-
+-	new_de->ref.low = cpu_to_le32(ino);
+-#ifdef CONFIG_NTFS3_64BIT_CLUSTER
+-	new_de->ref.high = cpu_to_le16(ino >> 32);
+-	fname->home.high = cpu_to_le16(dir->i_ino >> 32);
+-#endif
+-	new_de->ref.seq = rec->seq;
+-
+-	fname->home.low = cpu_to_le32(dir->i_ino & 0xffffffff);
+-	fname->home.seq = dir_ni->mi.mrec->seq;
++	mi_get_ref(&ni->mi, &new_de->ref);
+ 
++	fname = (struct ATTR_FILE_NAME *)(new_de + 1);
++	mi_get_ref(&dir_ni->mi, &fname->home);
+ 	fname->dup.cr_time = fname->dup.m_time = fname->dup.c_time =
+ 		fname->dup.a_time = std5->cr_time;
+ 	fname->dup.alloc_size = fname->dup.data_size = 0;
+@@ -1638,12 +1630,11 @@ int ntfs_create_inode(struct inode *dir, struct dentry *dentry,
+ 
+ out1:
+ 	if (err)
+-		return err;
++		return ERR_PTR(err);
+ 
+ 	unlock_new_inode(inode);
+ 
+-	*new_inode = inode;
+-	return 0;
++	return inode;
+ }
+ 
+ int ntfs_link_inode(struct inode *inode, struct dentry *dentry)
+@@ -1679,22 +1670,14 @@ int ntfs_link_inode(struct inode *inode, struct dentry *dentry)
+ 		goto out;
+ 
+ 	key_size = le16_to_cpu(new_de->key_size);
+-	fname = (struct ATTR_FILE_NAME *)(new_de + 1);
+-
+ 	err = ni_insert_resident(ni, key_size, ATTR_NAME, NULL, 0, &attr, NULL);
+ 	if (err)
+ 		goto out;
+ 
+-	new_de->ref.low = cpu_to_le32(inode->i_ino);
+-#ifdef CONFIG_NTFS3_64BIT_CLUSTER
+-	new_de->ref.high = cpu_to_le16(inode->i_ino >> 32);
+-	fname->home.high = cpu_to_le16(dir->i_ino >> 32);
+-#endif
+-	new_de->ref.seq = ni->mi.mrec->seq;
+-
+-	fname->home.low = cpu_to_le32(dir->i_ino & 0xffffffff);
+-	fname->home.seq = dir_ni->mi.mrec->seq;
++	mi_get_ref(&ni->mi, &new_de->ref);
+ 
++	fname = (struct ATTR_FILE_NAME *)(new_de + 1);
++	mi_get_ref(&dir_ni->mi, &fname->home);
+ 	fname->dup.cr_time = fname->dup.m_time = fname->dup.c_time =
+ 		fname->dup.a_time = kernel2nt(&inode->i_ctime);
+ 	fname->dup.alloc_size = fname->dup.data_size = 0;
+@@ -1772,14 +1755,7 @@ int ntfs_unlink_inode(struct inode *dir, const struct dentry *dentry)
+ 	ntfs_set_state(sbi, NTFS_DIRTY_DIRTY);
+ 
+ 	/* find name in record */
+-#ifdef CONFIG_NTFS3_64BIT_CLUSTER
+-	ref.low = cpu_to_le32(dir->i_ino & 0xffffffff);
+-	ref.high = cpu_to_le16(dir->i_ino >> 32);
+-#else
+-	ref.low = cpu_to_le32(dir->i_ino & 0xffffffff);
+-	ref.high = 0;
+-#endif
+-	ref.seq = dir_ni->mi.mrec->seq;
++	mi_get_ref(&dir_ni->mi, &ref);
+ 
+ 	le = NULL;
+ 	fname = ni_fname_name(ni, uni, &ref, &le);
+diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+index 34d89ec2a..66805b2d9 100644
+--- a/fs/ntfs3/namei.c
++++ b/fs/ntfs3/namei.c
+@@ -105,18 +105,17 @@ static struct dentry *ntfs_lookup(struct inode *dir, struct dentry *dentry,
+ static int ntfs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
+ 		       bool excl)
+ {
+-	int err;
+ 	struct ntfs_inode *ni = ntfs_i(dir);
+ 	struct inode *inode;
+ 
+ 	ni_lock_dir(ni);
+ 
+-	err = ntfs_create_inode(dir, dentry, NULL, S_IFREG | mode, 0, NULL, 0,
+-				excl, NULL, &inode);
++	inode = ntfs_create_inode(dir, dentry, NULL, S_IFREG | mode,
++				  0, NULL, 0, excl, NULL);
+ 
+ 	ni_unlock(ni);
+ 
+-	return err;
++	return IS_ERR(inode) ? PTR_ERR(inode) : 0;
+ }
+ 
+ /*
+@@ -188,19 +187,18 @@ static int ntfs_unlink(struct inode *dir, struct dentry *dentry)
+ static int ntfs_symlink(struct inode *dir, struct dentry *dentry,
+ 			const char *symname)
+ {
+-	int err;
+ 	u32 size = strlen(symname);
+ 	struct inode *inode;
+ 	struct ntfs_inode *ni = ntfs_i(dir);
+ 
+ 	ni_lock_dir(ni);
+ 
+-	err = ntfs_create_inode(dir, dentry, NULL, S_IFLNK | 0777, 0, symname,
+-				size, 0, NULL, &inode);
++	inode = ntfs_create_inode(dir, dentry, NULL, S_IFLNK | 0777,
++				  0, symname, size, 0, NULL);
+ 
+ 	ni_unlock(ni);
+ 
+-	return err;
++	return IS_ERR(inode) ? PTR_ERR(inode) : 0;
+ }
+ 
+ /*
+@@ -210,18 +208,17 @@ static int ntfs_symlink(struct inode *dir, struct dentry *dentry,
+  */
+ static int ntfs_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode)
+ {
+-	int err;
+ 	struct inode *inode;
+ 	struct ntfs_inode *ni = ntfs_i(dir);
+ 
+ 	ni_lock_dir(ni);
+ 
+-	err = ntfs_create_inode(dir, dentry, NULL, S_IFDIR | mode, 0, NULL, -1,
+-				0, NULL, &inode);
++	inode = ntfs_create_inode(dir, dentry, NULL, S_IFDIR | mode,
++				  0, NULL, -1, 0, NULL);
+ 
+ 	ni_unlock(ni);
+ 
+-	return err;
++	return IS_ERR(inode) ? PTR_ERR(inode) : 0;
+ }
+ 
+ /*
+@@ -331,11 +328,7 @@ static int ntfs_rename(struct inode *old_dir, struct dentry *old_dentry,
+ 	ni_lock_dir(old_dir_ni);
+ 	ni_lock(old_ni);
+ 
+-	old_name->home.low = cpu_to_le32(old_dir->i_ino);
+-#ifdef CONFIG_NTFS3_64BIT_CLUSTER
+-	old_name->home.high = cpu_to_le16(old_dir->i_ino >> 32);
+-#endif
+-	old_name->home.seq = old_dir_ni->mi.mrec->seq;
++	mi_get_ref(&old_dir_ni->mi, &old_name->home);
+ 
+ 	/*get pointer to file_name in mft*/
+ 	fname = ni_fname_name(old_ni, (struct cpu_str *)&old_name->name_len,
+@@ -388,15 +381,8 @@ static int ntfs_rename(struct inode *old_dir, struct dentry *old_dentry,
+ 	}
+ 
+ 	/* Add new name */
+-	new_de->ref.low = cpu_to_le32(old_inode->i_ino);
+-#ifdef CONFIG_NTFS3_64BIT_CLUSTER
+-	new_de->ref.high = cpu_to_le16(old_inode->i_ino >> 32);
+-	new_name->home.high = cpu_to_le16(new_dir->i_ino >> 32);
+-#endif
+-	new_de->ref.seq = old_ni->mi.mrec->seq;
+-
+-	new_name->home.low = cpu_to_le32(new_dir->i_ino);
+-	new_name->home.seq = ntfs_i(new_dir)->mi.mrec->seq;
++	mi_get_ref(&old_ni->mi, &new_de->ref);
++	mi_get_ref(&ntfs_i(new_dir)->mi, &new_name->home);
+ 
+ 	new_de_key_size = le16_to_cpu(new_de->key_size);
+ 
+@@ -532,10 +518,10 @@ static int ntfs_atomic_open(struct inode *dir, struct dentry *dentry,
+ 	file->f_mode |= FMODE_CREATED;
+ 
+ 	/*fnd contains tree's path to insert to*/
+-	err = ntfs_create_inode(dir, dentry, uni, mode, 0, NULL, 0, excl, fnd,
+-				&inode);
+-	if (!err)
+-		err = finish_open(file, dentry, ntfs_file_open);
++	inode = ntfs_create_inode(dir, dentry, uni, mode, 0,
++				  NULL, 0, excl, fnd);
++	err = IS_ERR(inode) ? PTR_ERR(inode)
++			    : finish_open(file, dentry, ntfs_file_open);
+ 	dput(d);
+ 
+ out2:
+diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
+index f9453457a..60986dbc0 100644
+--- a/fs/ntfs3/ntfs_fs.h
++++ b/fs/ntfs3/ntfs_fs.h
+@@ -154,7 +154,7 @@ struct ntfs_index {
+ 	u8 type; // index_mutex_classed
+ };
+ 
+-/* Set when $LogFile is replaying */
++/* Set when LogFile is replaying */
+ #define NTFS_FLAGS_LOG_REPLAYING 0x00000008
+ 
+ /* Set when we changed first MFT's which copy must be updated in $MftMirr */
+@@ -644,10 +644,10 @@ int ntfs_sync_inode(struct inode *inode);
+ int ntfs_flush_inodes(struct super_block *sb, struct inode *i1,
+ 		      struct inode *i2);
+ int inode_write_data(struct inode *inode, const void *data, size_t bytes);
+-int ntfs_create_inode(struct inode *dir, struct dentry *dentry,
+-		      const struct cpu_str *uni, umode_t mode, dev_t dev,
+-		      const char *symname, u32 size, int excl,
+-		      struct ntfs_fnd *fnd, struct inode **new_inode);
++struct inode *ntfs_create_inode(struct inode *dir, struct dentry *dentry,
++				const struct cpu_str *uni, umode_t mode,
++				dev_t dev, const char *symname, u32 size,
++				int excl, struct ntfs_fnd *fnd);
+ int ntfs_link_inode(struct inode *inode, struct dentry *dentry);
+ int ntfs_unlink_inode(struct inode *dir, const struct dentry *dentry);
+ void ntfs_evict_inode(struct inode *inode);
+@@ -705,6 +705,17 @@ static inline bool mi_is_ref(const struct mft_inode *mi,
+ #endif
+ }
+ 
++static inline void mi_get_ref(const struct mft_inode *mi, struct MFT_REF *ref)
++{
++	ref->low = cpu_to_le32(mi->rno);
++#ifdef CONFIG_NTFS3_64BIT_CLUSTER
++	ref->high = cpu_to_le16(mi->rno >> 32);
++#else
++	ref->high = 0;
++#endif
++	ref->seq = mi->mrec->seq;
++}
++
+ /* globals from run.c */
+ bool run_lookup_entry(const struct runs_tree *run, CLST vcn, CLST *lcn,
+ 		      CLST *len, size_t *index);
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index 96587689c..961782c76 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -831,11 +831,7 @@ static int ntfs_init_from_boot(struct super_block *sb, u32 sector_size,
+ 	}
+ 
+ 	clusters = sbi->volume.size >> sbi->cluster_bits;
+-#ifdef CONFIG_NTFS3_64BIT_CLUSTER
+-#if BITS_PER_LONG < 64
+-#error "CONFIG_NTFS3_64BIT_CLUSTER incompatible in 32 bit OS"
+-#endif
+-#else
++#ifndef CONFIG_NTFS3_64BIT_CLUSTER
+ 	/* 32 bits per cluster */
+ 	if (clusters >> 32) {
+ 		ntfs_notice(
+@@ -844,6 +840,8 @@ static int ntfs_init_from_boot(struct super_block *sb, u32 sector_size,
+ 			gb, mb);
+ 		goto out;
+ 	}
++#elif BITS_PER_LONG < 64
++#error "CONFIG_NTFS3_64BIT_CLUSTER incompatible in 32 bit OS"
+ #endif
+ 
+ 	sbi->used.bitmap.nbits = clusters;
+@@ -964,7 +962,7 @@ static int ntfs_fill_super(struct super_block *sb, void *data, int silent)
+ #endif
+ 
+ 	/*
+-	 * Load $Volume. This should be done before $LogFile
++	 * Load $Volume. This should be done before LogFile
+ 	 * 'cause 'sbi->volume.ni' is used 'ntfs_set_state'
+ 	 */
+ 	ref.low = cpu_to_le32(MFT_REC_VOL);
+@@ -1033,13 +1031,13 @@ static int ntfs_fill_super(struct super_block *sb, void *data, int silent)
+ 
+ 	iput(inode);
+ 
+-	/* Load $LogFile to replay */
++	/* Load LogFile to replay */
+ 	ref.low = cpu_to_le32(MFT_REC_LOG);
+ 	ref.seq = cpu_to_le16(MFT_REC_LOG);
+ 	inode = ntfs_iget5(sb, &ref, &NAME_LOGFILE);
+ 	if (IS_ERR(inode)) {
+ 		err = PTR_ERR(inode);
+-		ntfs_err(sb, "Failed to load $LogFile.");
++		ntfs_err(sb, "Failed to load \x24LogFile.");
+ 		inode = NULL;
+ 		goto out;
+ 	}
+@@ -1235,7 +1233,7 @@ static int ntfs_fill_super(struct super_block *sb, void *data, int silent)
+ 	inode = ntfs_iget5(sb, &ref, &NAME_UPCASE);
+ 	if (IS_ERR(inode)) {
+ 		err = PTR_ERR(inode);
+-		ntfs_err(sb, "Failed to load $LogFile.");
++		ntfs_err(sb, "Failed to load \x24LogFile.");
+ 		inode = NULL;
+ 		goto out;
+ 	}
+@@ -1306,7 +1304,6 @@ static int ntfs_fill_super(struct super_block *sb, void *data, int silent)
+ 	}
+ 
+ load_root:
+-
+ 	/* Load root */
+ 	ref.low = cpu_to_le32(MFT_REC_ROOT);
+ 	ref.seq = cpu_to_le16(MFT_REC_ROOT);
+-- 
+2.31.0.97.g1424303384
 
