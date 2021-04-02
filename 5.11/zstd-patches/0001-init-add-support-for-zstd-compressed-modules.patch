@@ -1,6 +1,6 @@
-From 4380ca0a340ddd680759d864e4fbd0e535f908d7 Mon Sep 17 00:00:00 2001
+From 45b0958bc800f967b292cbda01deb505115615a7 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
-Date: Fri, 19 Mar 2021 19:04:05 -0800
+Date: Tue, 30 Mar 2021 12:08:53 +0100
 Subject: [PATCH] init: add support for zstd compressed modules
 
 kmod 28 supports modules compressed in zstd format so let's add this possibility to kernel.
@@ -12,10 +12,10 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  2 files changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 6ba32b82c..0728906bf 100644
+index 7578e0d96..0f1893eb7 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1044,8 +1044,8 @@ endif # INSTALL_MOD_STRIP
+@@ -1045,8 +1045,8 @@ endif # INSTALL_MOD_STRIP
  export mod_strip_cmd
  
  # CONFIG_MODULE_COMPRESS, if defined, will cause module to be compressed
@@ -26,12 +26,12 @@ index 6ba32b82c..0728906bf 100644
  
  mod_compress_cmd = true
  ifdef CONFIG_MODULE_COMPRESS
-@@ -1055,6 +1055,9 @@ ifdef CONFIG_MODULE_COMPRESS
+@@ -1056,6 +1056,9 @@ ifdef CONFIG_MODULE_COMPRESS
    ifdef CONFIG_MODULE_COMPRESS_XZ
      mod_compress_cmd = $(XZ) -f
    endif # CONFIG_MODULE_COMPRESS_XZ
 +  ifdef CONFIG_MODULE_COMPRESS_ZSTD
-+    mod_compress_cmd = $(ZSTD) -T0 -9 --rm -f -q
++    mod_compress_cmd = $(ZSTD) -T0 --rm -f -q -9 --zstd=wlog=21
 +  endif # CONFIG_MODULE_COMPRESS_ZSTD
  endif # CONFIG_MODULE_COMPRESS
  export mod_compress_cmd
@@ -71,5 +71,5 @@ index b7d3c6a12..5805804fa 100644
  
  config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
 -- 
-2.31.0.rc1
+2.31.0.97.g1424303384
 
