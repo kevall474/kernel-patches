@@ -1,4 +1,4 @@
-From a2b61bab005458c1795f572aae2ef4d7935b6eff Mon Sep 17 00:00:00 2001
+From 887961d94318eb151fed12028c7f11373b3f5241 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Sat, 27 Mar 2021 18:42:09 +0100
 Subject: [PATCH 1/2] cpu-5.11: merge graysky's patchset
@@ -11,7 +11,7 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  3 files changed, 415 insertions(+), 17 deletions(-)
 
 diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
-index 814fe0d34..a79ff6379 100644
+index 814fe0d34..1ea6b9950 100644
 --- a/arch/x86/Kconfig.cpu
 +++ b/arch/x86/Kconfig.cpu
 @@ -157,7 +157,7 @@ config MPENTIUM4
@@ -123,7 +123,7 @@ index 814fe0d34..a79ff6379 100644
 +
 +config MZEN3
 +	bool "AMD Zen 3"
-+	depends on GCC_VERSION > 110000
++	depends on GCC_VERSION > 100300
 +	help
 +	  Select this for AMD Family 19h Zen 3 processors.
 +
