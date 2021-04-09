@@ -1,7 +1,7 @@
-From 8fdc0b263e6a5d4513c5c5fc8daf7fff8cde0e9f Mon Sep 17 00:00:00 2001
+From 158f2e7a77e405baba87c5bf068ca8c35c123377 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Mon, 5 Aug 2019 14:31:53 -0400
-Subject: [PATCH 01/31] btrfs: add a force_chunk_alloc to space_info's sysfs
+Subject: [PATCH 01/33] btrfs: add a force_chunk_alloc to space_info's sysfs
 
 In testing various things such as the btrfsck patch to detect over
 allocation of chunks, empty block group deletion, and balance I've had
@@ -116,10 +116,10 @@ index 19b9fffa2..0ea665247 100644
 2.31.0.97.g1424303384
 
 
-From d229f89c4b4f1fbf10bdd08378de35f075f3ffad Mon Sep 17 00:00:00 2001
+From 6673024df76f2f212347223bdf31bf0a1c73ad60 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 24 Jul 2020 12:41:47 -0400
-Subject: [PATCH 02/31] btrfs: do not evaluate the expression with
+Subject: [PATCH 02/33] btrfs: do not evaluate the expression with
  !CONFIG_BTRFS_ASSERT
 
 While investigating a performance issue I noticed that turning off
@@ -159,10 +159,10 @@ index 0c8c55a41..ab72ccc05 100644
 2.31.0.97.g1424303384
 
 
-From acde4b61a6faca1be6d6db914ebf62320491af08 Mon Sep 17 00:00:00 2001
+From c7c9131fd7f585e09d6339d0a6d10589014bdc51 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:19 -0500
-Subject: [PATCH 03/31] btrfs: do not block on deleted bgs mutex in the cleaner
+Subject: [PATCH 03/33] btrfs: do not block on deleted bgs mutex in the cleaner
 
 While running some stress tests I started getting hung task messages.
 This is because the delete unused bg's code has to take the
@@ -224,10 +224,10 @@ index 3cf1b953f..1838e997e 100644
 2.31.0.97.g1424303384
 
 
-From 18a69d1ff756acb8c6fdda99f0be1732c6111ed8 Mon Sep 17 00:00:00 2001
+From 01fe232584dd566222865241b8717938e5acc9b9 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:20 -0500
-Subject: [PATCH 04/31] btrfs: only let one thread pre-flush delayed refs in
+Subject: [PATCH 04/33] btrfs: only let one thread pre-flush delayed refs in
  commit
 
 I've been running a stress test that runs 20 workers in their own
@@ -351,10 +351,10 @@ index fbf930676..f370cc7e4 100644
 2.31.0.97.g1424303384
 
 
-From 9eb6b7c3441216ca58bf818eae7f52d00052fcaf Mon Sep 17 00:00:00 2001
+From 5fab92c729c331d791bbf3835f7b3932aaace769 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:21 -0500
-Subject: [PATCH 05/31] btrfs: delayed refs pre-flushing should only run the
+Subject: [PATCH 05/33] btrfs: delayed refs pre-flushing should only run the
  heads we have
 
 Previously our delayed ref running used the total number of items as the
@@ -395,10 +395,10 @@ index 6f0c59deb..0943731f7 100644
 2.31.0.97.g1424303384
 
 
-From 210d2e2fc56e79a4257341e7ec498cebae75b1a0 Mon Sep 17 00:00:00 2001
+From 90a0aecb9bb1a49b3cea2cbcf15b4e01fe69d3ab Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:22 -0500
-Subject: [PATCH 06/31] btrfs: only run delayed refs once before committing
+Subject: [PATCH 06/33] btrfs: only run delayed refs once before committing
 
 We try to pre-flush the delayed refs when committing, because we want to
 do as little work as possible in the critical section of the transaction
@@ -439,10 +439,10 @@ index f370cc7e4..85c2da071 100644
 2.31.0.97.g1424303384
 
 
-From 7e0e1b6d820928f8a1d7835134ff5a4137ad0688 Mon Sep 17 00:00:00 2001
+From 5bc2cbfe5a3c39bdd2ca90c5e4ff50a876c949f0 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:23 -0500
-Subject: [PATCH 07/31] btrfs: move delayed ref flushing for qgroup into qgroup
+Subject: [PATCH 07/33] btrfs: move delayed ref flushing for qgroup into qgroup
  helper
 
 The commit d67263354541 ("btrfs: qgroup: Make snapshot accounting work
@@ -506,10 +506,10 @@ index 85c2da071..1a325d691 100644
 2.31.0.97.g1424303384
 
 
-From 901c9c97ac2f7de1a36646a4a93d77a2b8051659 Mon Sep 17 00:00:00 2001
+From e903126ad1d36a65958cc10b17737748567cbf7a Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:24 -0500
-Subject: [PATCH 08/31] btrfs: remove bogus BUG_ON in alloc_reserved_tree_block
+Subject: [PATCH 08/33] btrfs: remove bogus BUG_ON in alloc_reserved_tree_block
 
 The fix 361048f586f5 ("Btrfs: fix full backref problem when inserting
 shared block reference") added a delayed ref flushing at subvolume
@@ -584,10 +584,10 @@ index 0943731f7..5476ab84e 100644
 2.31.0.97.g1424303384
 
 
-From d344f56d333984087c8bb8920fca657a3b5e58c2 Mon Sep 17 00:00:00 2001
+From 46138281cf91761396a698448d56bb5c459b4e3b Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:25 -0500
-Subject: [PATCH 09/31] btrfs: stop running all delayed refs during snapshot
+Subject: [PATCH 09/33] btrfs: stop running all delayed refs during snapshot
 
 This was added in commit 361048f586f5 ("Btrfs: fix full backref problem
 when inserting shared block reference") to address a problem where we
@@ -629,10 +629,10 @@ index 1a325d691..b36d0d711 100644
 2.31.0.97.g1424303384
 
 
-From bc6892c448983699fc6f874dafb9cbb51b7a2b7d Mon Sep 17 00:00:00 2001
+From 99763c5171295b434a0f96c80d237a46c6d1bf64 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 18 Dec 2020 14:24:26 -0500
-Subject: [PATCH 10/31] btrfs: run delayed refs less often in
+Subject: [PATCH 10/33] btrfs: run delayed refs less often in
  commit_cowonly_roots
 
 We love running delayed refs in commit_cowonly_roots, but it is a bit
@@ -707,10 +707,10 @@ index b36d0d711..87035b74a 100644
 2.31.0.97.g1424303384
 
 
-From 19eac62b3555e3ebf060ad31c2b3222a55615e55 Mon Sep 17 00:00:00 2001
+From 5d850280ba2822ddc8c0c27a05c30776ee2b1a95 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:18 -0400
-Subject: [PATCH 11/31] btrfs: make flush_space take a enum btrfs_flush_state
+Subject: [PATCH 11/33] btrfs: make flush_space take a enum btrfs_flush_state
  instead of int
 
 I got a automated message from somebody who runs clang against our
@@ -750,10 +750,10 @@ index e8347461c..fa8526c31 100644
 2.31.0.97.g1424303384
 
 
-From 871d55664f1feaffc201122c566dad09aca5d6ff Mon Sep 17 00:00:00 2001
+From 65d4a0494048744181277e5341fa2e97cb52d8c0 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:19 -0400
-Subject: [PATCH 12/31] btrfs: add a trace point for reserve tickets
+Subject: [PATCH 12/33] btrfs: add a trace point for reserve tickets
 
 While debugging a ENOSPC related performance problem I needed to see the
 time difference between start and end of a reserve ticket, so add a
@@ -865,10 +865,10 @@ index ecd24c719..eb3486568 100644
 2.31.0.97.g1424303384
 
 
-From 9c1328a4c16db424cdbba20792f0c0ea98773754 Mon Sep 17 00:00:00 2001
+From 7941487b77cd5731235e35d7112d95660977d375 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:20 -0400
-Subject: [PATCH 13/31] btrfs: track ordered bytes instead of just dio ordered
+Subject: [PATCH 13/33] btrfs: track ordered bytes instead of just dio ordered
  bytes
 
 We track dio_bytes because the shrink delalloc code needs to know if we
@@ -1027,10 +1027,10 @@ index 720f4cf73..26dc2b892 100644
 2.31.0.97.g1424303384
 
 
-From f87479b736b846349d2e989f6d734e4f75713015 Mon Sep 17 00:00:00 2001
+From 232c613cc4a8f44dba52ebcbbaba76a3f1b6f3c2 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:21 -0400
-Subject: [PATCH 14/31] btrfs: introduce a FORCE_COMMIT_TRANS flush operation
+Subject: [PATCH 14/33] btrfs: introduce a FORCE_COMMIT_TRANS flush operation
 
 Sole-y for preemptive flushing, we want to be able to force the
 transaction commit without any of the ambiguity of
@@ -1095,10 +1095,10 @@ index eb3486568..0a3d35d95 100644
 2.31.0.97.g1424303384
 
 
-From ead4f6960d35c54aa7f70ac1db5eb2ae887539c5 Mon Sep 17 00:00:00 2001
+From 32fe33eb979812316830200a935498985f3c5f47 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:22 -0400
-Subject: [PATCH 15/31] btrfs: improve preemptive background space flushing
+Subject: [PATCH 15/33] btrfs: improve preemptive background space flushing
 
 Currently if we ever have to flush space because we do not have enough
 we allocate a ticket and attach it to the space_info, and then
@@ -1300,10 +1300,10 @@ index 23451988f..8a9e18cdf 100644
 2.31.0.97.g1424303384
 
 
-From 34ed13b9efe6fab8c57b26b77c388b6c492ce868 Mon Sep 17 00:00:00 2001
+From c21bc317fbee9c72026efd6d6d5dfac4a00ebf46 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:23 -0400
-Subject: [PATCH 16/31] btrfs: rename need_do_async_reclaim
+Subject: [PATCH 16/33] btrfs: rename need_do_async_reclaim
 
 All of our normal flushing is asynchronous reclaim, so this helper is
 poorly named.  This is more checking if we need to preemptively flush
@@ -1354,10 +1354,10 @@ index 8a9e18cdf..b062d8379 100644
 2.31.0.97.g1424303384
 
 
-From 57cf784b4590d2b616ef1bafa3a609e9ffb81d0a Mon Sep 17 00:00:00 2001
+From cacbc1e25f43ccefa8087214e9cb19e3a14b2e44 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:24 -0400
-Subject: [PATCH 17/31] btrfs: check reclaim_size in need_preemptive_reclaim
+Subject: [PATCH 17/33] btrfs: check reclaim_size in need_preemptive_reclaim
 
 If we're flushing space for tickets then we have
 space_info->reclaim_size set and we do not need to do background
@@ -1391,10 +1391,10 @@ index b062d8379..67ed12794 100644
 2.31.0.97.g1424303384
 
 
-From 56e58052d60fc254c52b2dcc030191c61d3613a3 Mon Sep 17 00:00:00 2001
+From 00069ae4ace01fdad70da72511c1edf3ace30a83 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:25 -0400
-Subject: [PATCH 18/31] btrfs: rework btrfs_calc_reclaim_metadata_size
+Subject: [PATCH 18/33] btrfs: rework btrfs_calc_reclaim_metadata_size
 
 Currently btrfs_calc_reclaim_metadata_size does two things, it returns
 the space currently required for flushing by the tickets, and if there
@@ -1499,10 +1499,10 @@ index 67ed12794..ad61b9fe3 100644
 2.31.0.97.g1424303384
 
 
-From b8a24bf9c793ae608e004a699696ff4a723b3406 Mon Sep 17 00:00:00 2001
+From 143b22b720bbeafd65c9a219f5c1654703a6c3d3 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:26 -0400
-Subject: [PATCH 19/31] btrfs: simplify the logic in need_preemptive_flushing
+Subject: [PATCH 19/33] btrfs: simplify the logic in need_preemptive_flushing
 
 A lot of this was added all in one go with no explanation, and is a bit
 unwieldy and confusing.  Simplify the logic to start preemptive flushing
@@ -1641,10 +1641,10 @@ index ad61b9fe3..029db49c1 100644
 2.31.0.97.g1424303384
 
 
-From f9c0f166e29739835d2b3a1e215e37635568acdd Mon Sep 17 00:00:00 2001
+From d73e3b3f181af9420216ca69bd8a597fd0972196 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:27 -0400
-Subject: [PATCH 20/31] btrfs: implement space clamping for preemptive flushing
+Subject: [PATCH 20/33] btrfs: implement space clamping for preemptive flushing
 
 Starting preemptive flushing at 50% of available free space is a good
 start, but some workloads are particularly abusive and can quickly
@@ -1780,10 +1780,10 @@ index 74706f604..f5dee5834 100644
 2.31.0.97.g1424303384
 
 
-From d2e86c88f31042dacf13f3b1a7c895c2b9bc63a2 Mon Sep 17 00:00:00 2001
+From e13e023fb87c7f43c3a87faf9cec00a4ad335228 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:28 -0400
-Subject: [PATCH 21/31] btrfs: adjust the flush trace point to include the
+Subject: [PATCH 21/33] btrfs: adjust the flush trace point to include the
  source
 
 Since we have normal ticketed flushing and preemptive flushing, adjust
@@ -1923,10 +1923,10 @@ index 0a3d35d95..6d93637ba 100644
 2.31.0.97.g1424303384
 
 
-From 79eb1c25e37fb8a3020f65f146af33c7f077b9f2 Mon Sep 17 00:00:00 2001
+From dc0a832032aa9b260993c06de6766fe62d4698c4 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 9 Oct 2020 09:28:29 -0400
-Subject: [PATCH 22/31] btrfs: add a trace class for dumping the current ENOSPC
+Subject: [PATCH 22/33] btrfs: add a trace class for dumping the current ENOSPC
  state
 
 Often when I'm debugging ENOSPC related issues I have to resort to
@@ -2033,10 +2033,10 @@ index 6d93637ba..74b466dc2 100644
 2.31.0.97.g1424303384
 
 
-From 4f509aa16c7f0554a13a1a3dde3e0839cac71c63 Mon Sep 17 00:00:00 2001
+From ad7bfa1e4114d1185f1dec50b3d1c16f1eaaed07 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 20 Mar 2020 14:34:36 -0400
-Subject: [PATCH 23/31] btrfs: restart snapshot delete if we have to end the
+Subject: [PATCH 23/33] btrfs: restart snapshot delete if we have to end the
  transaction
 
 This is to fully fix the deadlock described in
@@ -2110,10 +2110,10 @@ index 5476ab84e..76e4dd284 100644
 2.31.0.97.g1424303384
 
 
-From f93614391ab323ac5e26e95d3f542f369a188adc Mon Sep 17 00:00:00 2001
+From 7851ceb2df263323aaa5c0b3eec56d83c1c38dcd Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:54 +0000
-Subject: [PATCH 24/31] btrfs: remove unnecessary directory inode item update
+Subject: [PATCH 24/33] btrfs: remove unnecessary directory inode item update
  when deleting dir entry
 
 When we remove a directory entry, as part of an unlink operation, if the
@@ -2227,10 +2227,10 @@ index 254c2ee43..5ad1b84a1 100644
 2.31.0.97.g1424303384
 
 
-From e95426c1ece2c1426407d1ea4f09435af6ab0610 Mon Sep 17 00:00:00 2001
+From 94648b228a014e9b7871a8df706bf59a9e18eb34 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:55 +0000
-Subject: [PATCH 25/31] btrfs: stop setting nbytes when filling inode item for
+Subject: [PATCH 25/33] btrfs: stop setting nbytes when filling inode item for
  logging
 
 When we fill an inode item for logging we are setting its nbytes field
@@ -2289,10 +2289,10 @@ index 5ad1b84a1..69bd20364 100644
 2.31.0.97.g1424303384
 
 
-From aab04a3a422e3a32ed7db07550d326689d53d637 Mon Sep 17 00:00:00 2001
+From 6f2cffcf63adf9e6e83978abea670d36e082d243 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:56 +0000
-Subject: [PATCH 26/31] btrfs: avoid logging new ancestor inodes when logging
+Subject: [PATCH 26/33] btrfs: avoid logging new ancestor inodes when logging
  new inode
 
 When we fsync a new file, created in the current transaction, we check
@@ -2392,10 +2392,10 @@ index 69bd20364..a4f98ebae 100644
 2.31.0.97.g1424303384
 
 
-From 9b7401ea96be6cf640d58f7c563a4f975e048f25 Mon Sep 17 00:00:00 2001
+From e7ae7580adbafc1fb5ca503503d4215f2524e164 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:57 +0000
-Subject: [PATCH 27/31] btrfs: skip logging directories already logged when
+Subject: [PATCH 27/33] btrfs: skip logging directories already logged when
  logging all parents
 
 Some times when we fsync an inode we need to do a full log of all its
@@ -2450,10 +2450,10 @@ index a4f98ebae..d1acdb8ad 100644
 2.31.0.97.g1424303384
 
 
-From 8e40511c29ebd1994d2d27cba6b75eeddee926bc Mon Sep 17 00:00:00 2001
+From 763afbecff5fcdc6026faf242fcaac4762ca9944 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:58 +0000
-Subject: [PATCH 28/31] btrfs: skip logging inodes already logged when logging
+Subject: [PATCH 28/33] btrfs: skip logging inodes already logged when logging
  new entries
 
 When logging new directory entries of a directory, we log the inodes of
@@ -2508,10 +2508,10 @@ index d1acdb8ad..8234d7898 100644
 2.31.0.97.g1424303384
 
 
-From daeed1306619b1b373460be72fa9e86a21653ac6 Mon Sep 17 00:00:00 2001
+From 7ace5d5b89bc44d5e45bc738efa2ea561147be6b Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:34:59 +0000
-Subject: [PATCH 29/31] btrfs: remove unnecessary check_parent_dirs_for_sync()
+Subject: [PATCH 29/33] btrfs: remove unnecessary check_parent_dirs_for_sync()
 
 Whenever we fsync an inode, if it is a directory, a regular file that was
 created in the current transaction or has last_unlink_trans set to the
@@ -2730,10 +2730,10 @@ index 8234d7898..3b00d98b3 100644
 2.31.0.97.g1424303384
 
 
-From f849278dda762c187d387a2f163ad1bf0ef34f22 Mon Sep 17 00:00:00 2001
+From 5b76bc56f1ab2594a77257d09d790b0a9d7fe6ae Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Wed, 27 Jan 2021 10:35:00 +0000
-Subject: [PATCH 30/31] btrfs: make concurrent fsyncs wait less when waiting
+Subject: [PATCH 30/33] btrfs: make concurrent fsyncs wait less when waiting
  for a transaction commit
 
 Often an fsync needs to fallback to a transaction commit for several
@@ -3029,10 +3029,10 @@ index 31ca81bad..935bd6958 100644
 2.31.0.97.g1424303384
 
 
-From c28fb0ac1b519b00c7fa044447084ca208b74ada Mon Sep 17 00:00:00 2001
+From 0c0e921bc9fdf322625ad9779e6c5ff348ae701d Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 24 Mar 2021 09:44:21 -0400
-Subject: [PATCH 31/31] btrfs: use percpu_read_positive instead of sum_positive
+Subject: [PATCH 31/33] btrfs: use percpu_read_positive instead of sum_positive
  for need_preempt
 
 Looking at perf data for a fio workload I noticed that we were spending
@@ -3159,6 +3159,406 @@ index cf2a0cae1..22bdc27be 100644
  	if (ordered >= delalloc)
  		used += fs_info->delayed_refs_rsv.reserved +
  			fs_info->delayed_block_rsv.reserved;
+-- 
+2.31.0.97.g1424303384
+
+
+From c5776af0ebc7d12e01bac3ad9032aa840f18982e Mon Sep 17 00:00:00 2001
+From: Filipe Manana <fdmanana@suse.com>
+Date: Mon, 1 Mar 2021 09:26:42 +0000
+Subject: [PATCH 32/33] btrfs: add btree read ahead for full send operations
+
+When doing a full send we know that we are going to be reading every node
+and leaf of the send root, so we benefit from enabling read ahead for the
+btree.
+
+This change enables read ahead for full send operations only, incremental
+sends will have read ahead enabled in a different way by a separate patch.
+
+The following test script was used to measure the improvement on a box
+using an average, consumer grade, spinning disk and with 16Gb of ram:
+
+  $ cat test.sh
+  #!/bin/bash
+
+  DEV=/dev/sdj
+  MNT=/mnt/sdj
+  MKFS_OPTIONS="--nodesize 16384"     # default, just to be explicit
+  MOUNT_OPTIONS="-o max_inline=2048"  # default, just to be explicit
+
+  mkfs.btrfs -f $MKFS_OPTIONS $DEV > /dev/null
+  mount $MOUNT_OPTIONS $DEV $MNT
+
+  # Create files with inline data to make it easier and faster to create
+  # large btrees.
+  add_files()
+  {
+      local total=$1
+      local start_offset=$2
+      local number_jobs=$3
+      local total_per_job=$(($total / $number_jobs))
+
+      echo "Creating $total new files using $number_jobs jobs"
+      for ((n = 0; n < $number_jobs; n++)); do
+          (
+              local start_num=$(($start_offset + $n * $total_per_job))
+              for ((i = 1; i <= $total_per_job; i++)); do
+                  local file_num=$((start_num + $i))
+                  local file_path="$MNT/file_${file_num}"
+                  xfs_io -f -c "pwrite -S 0xab 0 2000" $file_path > /dev/null
+                  if [ $? -ne 0 ]; then
+                      echo "Failed creating file $file_path"
+                      break
+                  fi
+              done
+          ) &
+          worker_pids[$n]=$!
+      done
+
+      wait ${worker_pids[@]}
+
+      sync
+      echo
+      echo "btree node/leaf count: $(btrfs inspect-internal dump-tree -t 5 $DEV | egrep '^(node|leaf) ' | wc -l)"
+  }
+
+  initial_file_count=500000
+  add_files $initial_file_count 0 4
+
+  echo
+  echo "Creating first snapshot..."
+  btrfs subvolume snapshot -r $MNT $MNT/snap1
+
+  echo
+  echo "Adding more files..."
+  add_files $((initial_file_count / 4)) $initial_file_count 4
+
+  echo
+  echo "Updating 1/50th of the initial files..."
+  for ((i = 1; i < $initial_file_count; i += 50)); do
+      xfs_io -c "pwrite -S 0xcd 0 20" $MNT/file_$i > /dev/null
+  done
+
+  echo
+  echo "Creating second snapshot..."
+  btrfs subvolume snapshot -r $MNT $MNT/snap2
+
+  umount $MNT
+
+  echo 3 > /proc/sys/vm/drop_caches
+  blockdev --flushbufs $DEV &> /dev/null
+  hdparm -F $DEV &> /dev/null
+
+  mount $MOUNT_OPTIONS $DEV $MNT
+
+  echo
+  echo "Testing full send..."
+  start=$(date +%s)
+  btrfs send $MNT/snap1 > /dev/null
+  end=$(date +%s)
+  echo
+  echo "Full send took $((end - start)) seconds"
+
+  umount $MNT
+
+  echo 3 > /proc/sys/vm/drop_caches
+  blockdev --flushbufs $DEV &> /dev/null
+  hdparm -F $DEV &> /dev/null
+
+  mount $MOUNT_OPTIONS $DEV $MNT
+
+  echo
+  echo "Testing incremental send..."
+  start=$(date +%s)
+  btrfs send -p $MNT/snap1 $MNT/snap2 > /dev/null
+  end=$(date +%s)
+  echo
+  echo "Incremental send took $((end - start)) seconds"
+
+  umount $MNT
+
+Before this change, full send duration:
+
+with $initial_file_count == 200000:  165 seconds
+with $initial_file_count == 500000:  407 seconds
+
+After this change, full send duration:
+
+with $initial_file_count == 200000:  149 seconds (-10.2%)
+with $initial_file_count == 500000:  353 seconds (-14.2%)
+
+For $initial_file_count == 200000 there are 62600 nodes and leaves in the
+btree of the first snapshot, while for $initial_file_count == 500000 there
+are 152476 nodes and leaves. The roots were at level 2.
+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+---
+ fs/btrfs/send.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+index 78a35374d..3656d5a3c 100644
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -6670,6 +6670,7 @@ static int full_send_tree(struct send_ctx *sctx)
+ 	path = alloc_path_for_send();
+ 	if (!path)
+ 		return -ENOMEM;
++	path->reada = READA_FORWARD;
+ 
+ 	key.objectid = BTRFS_FIRST_FREE_OBJECTID;
+ 	key.type = BTRFS_INODE_ITEM_KEY;
+-- 
+2.31.0.97.g1424303384
+
+
+From 52df5dc010d94644f52cd37a9dfc00e6491b6d60 Mon Sep 17 00:00:00 2001
+From: Filipe Manana <fdmanana@suse.com>
+Date: Mon, 1 Mar 2021 09:26:43 +0000
+Subject: [PATCH 33/33] btrfs: add btree read ahead for incremental send
+ operations
+
+Currently we do not do btree read ahead when doing an incremental send,
+however we know that we will read and process any node or leaf in the
+send root that has a generation greater than the generation of the parent
+root. So triggering read ahead for such nodes and leafs is beneficial
+for an incremental send.
+
+This change does that, triggers read ahead of any node or leaf in the
+send root that has a generation greater then the generation of the
+parent root. As for the parent root, no readahead is triggered because
+knowing in advance which nodes/leaves are going to be read is not so
+linear and there's often a large time window between visiting nodes or
+leaves of the parent root. So I opted to leave out the parent root,
+and triggering read ahead for its nodes/leaves seemed to have not made
+significant difference.
+
+The following test script was used to measure the improvement on a box
+using an average, consumer grade, spinning disk and with 16Gb of ram:
+
+  $ cat test.sh
+  #!/bin/bash
+
+  DEV=/dev/sdj
+  MNT=/mnt/sdj
+  MKFS_OPTIONS="--nodesize 16384"     # default, just to be explicit
+  MOUNT_OPTIONS="-o max_inline=2048"  # default, just to be explicit
+
+  mkfs.btrfs -f $MKFS_OPTIONS $DEV > /dev/null
+  mount $MOUNT_OPTIONS $DEV $MNT
+
+  # Create files with inline data to make it easier and faster to create
+  # large btrees.
+  add_files()
+  {
+      local total=$1
+      local start_offset=$2
+      local number_jobs=$3
+      local total_per_job=$(($total / $number_jobs))
+
+      echo "Creating $total new files using $number_jobs jobs"
+      for ((n = 0; n < $number_jobs; n++)); do
+          (
+              local start_num=$(($start_offset + $n * $total_per_job))
+              for ((i = 1; i <= $total_per_job; i++)); do
+                  local file_num=$((start_num + $i))
+                  local file_path="$MNT/file_${file_num}"
+                  xfs_io -f -c "pwrite -S 0xab 0 2000" $file_path > /dev/null
+                  if [ $? -ne 0 ]; then
+                      echo "Failed creating file $file_path"
+                      break
+                  fi
+              done
+          ) &
+          worker_pids[$n]=$!
+      done
+
+      wait ${worker_pids[@]}
+
+      sync
+      echo
+      echo "btree node/leaf count: $(btrfs inspect-internal dump-tree -t 5 $DEV | egrep '^(node|leaf) ' | wc -l)"
+  }
+
+  initial_file_count=500000
+  add_files $initial_file_count 0 4
+
+  echo
+  echo "Creating first snapshot..."
+  btrfs subvolume snapshot -r $MNT $MNT/snap1
+
+  echo
+  echo "Adding more files..."
+  add_files $((initial_file_count / 4)) $initial_file_count 4
+
+  echo
+  echo "Updating 1/50th of the initial files..."
+  for ((i = 1; i < $initial_file_count; i += 50)); do
+      xfs_io -c "pwrite -S 0xcd 0 20" $MNT/file_$i > /dev/null
+  done
+
+  echo
+  echo "Creating second snapshot..."
+  btrfs subvolume snapshot -r $MNT $MNT/snap2
+
+  umount $MNT
+
+  echo 3 > /proc/sys/vm/drop_caches
+  blockdev --flushbufs $DEV &> /dev/null
+  hdparm -F $DEV &> /dev/null
+
+  mount $MOUNT_OPTIONS $DEV $MNT
+
+  echo
+  echo "Testing full send..."
+  start=$(date +%s)
+  btrfs send $MNT/snap1 > /dev/null
+  end=$(date +%s)
+  echo
+  echo "Full send took $((end - start)) seconds"
+
+  umount $MNT
+
+  echo 3 > /proc/sys/vm/drop_caches
+  blockdev --flushbufs $DEV &> /dev/null
+  hdparm -F $DEV &> /dev/null
+
+  mount $MOUNT_OPTIONS $DEV $MNT
+
+  echo
+  echo "Testing incremental send..."
+  start=$(date +%s)
+  btrfs send -p $MNT/snap1 $MNT/snap2 > /dev/null
+  end=$(date +%s)
+  echo
+  echo "Incremental send took $((end - start)) seconds"
+
+  umount $MNT
+
+Before this change, incremental send duration:
+
+with $initial_file_count == 200000: 51 seconds
+with $initial_file_count == 500000: 168 seconds
+
+After this change, incremental send duration:
+
+with $initial_file_count == 200000:  39 seconds (-26.7%)
+with $initial_file_count == 500000:  125 seconds (-29.4%)
+
+For $initial_file_count == 200000 there are 62600 nodes and leaves in the
+btree of the first snapshot, and 77759 nodes and leaves in the btree of
+the second snapshot. The root nodes were at level 2.
+
+While for $initial_file_count == 500000 there are 152476 nodes and leaves
+in the btree of the first snapshot, and 190511 nodes and leaves in the
+btree of the second snapshot. The root nodes were at level 2 as well.
+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+---
+ fs/btrfs/send.c | 42 ++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 36 insertions(+), 6 deletions(-)
+
+diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+index 3656d5a3c..297235487 100644
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -6709,15 +6709,35 @@ static int full_send_tree(struct send_ctx *sctx)
+ 	return ret;
+ }
+ 
+-static int tree_move_down(struct btrfs_path *path, int *level)
++static int tree_move_down(struct btrfs_path *path, int *level, u64 reada_min_gen)
+ {
+ 	struct extent_buffer *eb;
++	struct extent_buffer *parent = path->nodes[*level];
++	int slot = path->slots[*level];
++	const int nritems = btrfs_header_nritems(parent);
++	u64 reada_max;
++	u64 reada_done = 0;
+ 
+ 	BUG_ON(*level == 0);
+-	eb = btrfs_read_node_slot(path->nodes[*level], path->slots[*level]);
++	eb = btrfs_read_node_slot(parent, slot);
+ 	if (IS_ERR(eb))
+ 		return PTR_ERR(eb);
+ 
++	/*
++	 * Trigger readahead for the next leaves we will process, so that it is
++	 * very likely that when we need them they are already in memory and we
++	 * will not block on disk IO. For nodes we only do readahead for one,
++	 * since the time window between processing nodes is typically larger.
++	 */
++	reada_max = *level == 1 ? SZ_128K : eb->fs_info->nodesize;
++
++	for (slot++; slot < nritems && reada_done < reada_max; slot++) {
++		if (btrfs_node_ptr_generation(parent, slot) > reada_min_gen) {
++			btrfs_readahead_node_child(parent, slot);
++			reada_done += eb->fs_info->nodesize;
++		}
++	}
++
+ 	path->nodes[*level - 1] = eb;
+ 	path->slots[*level - 1] = 0;
+ 	(*level)--;
+@@ -6757,14 +6777,15 @@ static int tree_move_next_or_upnext(struct btrfs_path *path,
+ static int tree_advance(struct btrfs_path *path,
+ 			int *level, int root_level,
+ 			int allow_down,
+-			struct btrfs_key *key)
++			struct btrfs_key *key,
++			u64 reada_min_gen)
+ {
+ 	int ret;
+ 
+ 	if (*level == 0 || !allow_down) {
+ 		ret = tree_move_next_or_upnext(path, level, root_level);
+ 	} else {
+-		ret = tree_move_down(path, level);
++		ret = tree_move_down(path, level, reada_min_gen);
+ 	}
+ 	if (ret >= 0) {
+ 		if (*level == 0)
+@@ -6838,6 +6859,7 @@ static int btrfs_compare_trees(struct btrfs_root *left_root,
+ 	u64 right_blockptr;
+ 	u64 left_gen;
+ 	u64 right_gen;
++	u64 reada_min_gen;
+ 
+ 	left_path = btrfs_alloc_path();
+ 	if (!left_path) {
+@@ -6917,6 +6939,14 @@ static int btrfs_compare_trees(struct btrfs_root *left_root,
+ 		ret = -ENOMEM;
+ 		goto out;
+ 	}
++	/*
++	 * Our right root is the parent root, while the left root is the "send"
++	 * root. We know that all new nodes/leaves in the left root must have
++	 * a generation greater than the right root's generation, so we trigger
++	 * readahead for those nodes and leaves of the left root, as we know we
++	 * will need to read them at some point.
++	 */
++	reada_min_gen = btrfs_header_generation(right_root->commit_root);
+ 	up_read(&fs_info->commit_root_sem);
+ 
+ 	if (left_level == 0)
+@@ -6941,7 +6971,7 @@ static int btrfs_compare_trees(struct btrfs_root *left_root,
+ 			ret = tree_advance(left_path, &left_level,
+ 					left_root_level,
+ 					advance_left != ADVANCE_ONLY_NEXT,
+-					&left_key);
++					&left_key, reada_min_gen);
+ 			if (ret == -1)
+ 				left_end_reached = ADVANCE;
+ 			else if (ret < 0)
+@@ -6952,7 +6982,7 @@ static int btrfs_compare_trees(struct btrfs_root *left_root,
+ 			ret = tree_advance(right_path, &right_level,
+ 					right_root_level,
+ 					advance_right != ADVANCE_ONLY_NEXT,
+-					&right_key);
++					&right_key, reada_min_gen);
+ 			if (ret == -1)
+ 				right_end_reached = ADVANCE;
+ 			else if (ret < 0)
 -- 
 2.31.0.97.g1424303384
 
