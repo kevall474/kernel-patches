@@ -1,7 +1,7 @@
-From f1ddc25ad78c0263546dd20970834927b077bc0d Mon Sep 17 00:00:00 2001
+From 31d65aa074da0c08660fe606deb8b54fb8292d49 Mon Sep 17 00:00:00 2001
 From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
 Date: Mon, 27 Jan 2020 17:59:54 +0100
-Subject: [PATCH 1/5] ZEN: Add VHBA driver
+Subject: [PATCH 1/2] ZEN: Add VHBA driver
 
 remote git://git.code.sf.net/p/cdemu/code
 tag    vhba-module-20200106

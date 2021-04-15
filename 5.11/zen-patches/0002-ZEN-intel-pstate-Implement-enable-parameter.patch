@@ -1,7 +1,7 @@
-From eab835d8b240a257703968f457a1f42f6105c2a7 Mon Sep 17 00:00:00 2001
+From 8ee16309eb48488eed19125e2c0c7ce6723a0084 Mon Sep 17 00:00:00 2001
 From: Steven Barrett <steven@liquorix.net>
 Date: Wed, 15 Jan 2020 20:43:56 -0600
-Subject: [PATCH 2/5] ZEN: intel-pstate: Implement "enable" parameter
+Subject: [PATCH 2/2] ZEN: intel-pstate: Implement "enable" parameter
 
 If intel-pstate is compiled into the kernel, it will preempt the loading
 of acpi-cpufreq so you can take advantage of hardware p-states without
