@@ -1,7 +1,7 @@
-From 7329bda2c3626cf6cff6bcb81610775471fbfb31 Mon Sep 17 00:00:00 2001
+From 925bef3d8e071988ae0ab6d174db99a726f15d48 Mon Sep 17 00:00:00 2001
 From: Nick Terrell <terrelln@fb.com>
 Date: Fri, 11 Sep 2020 16:49:00 -0700
-Subject: [PATCH 1/3] lib: zstd: Add kernel-specific API
+Subject: [PATCH 1/4] lib: zstd: Add kernel-specific API
 
 This patch:
 - Moves `include/linux/zstd.h` -> `include/linux/zstd_lib.h`
@@ -3491,10 +3491,10 @@ index 66cd487a3..02e92c2cb 100644
 2.31.1.305.gd1b10fc6d8
 
 
-From bc6f5607d97ff46d69457ca6d6dfcc03c06b7079 Mon Sep 17 00:00:00 2001
+From df8e73020c92d6243b9ca458f32ebe26b5f701f5 Mon Sep 17 00:00:00 2001
 From: Nick Terrell <terrelln@fb.com>
 Date: Mon, 14 Sep 2020 12:54:12 -0700
-Subject: [PATCH 2/3] lib: zstd: Add decompress_sources.h for decompress_unzstd
+Subject: [PATCH 2/4] lib: zstd: Add decompress_sources.h for decompress_unzstd
 
 Adds decompress_sources.h which includes every .c file necessary for
 zstd decompression. This is used in decompress_unzstd.c so the internal
@@ -3560,10 +3560,10 @@ index 000000000..d82cea431
 2.31.1.305.gd1b10fc6d8
 
 
-From 307971346cdc53783efa89a26b4140b8fdbc4716 Mon Sep 17 00:00:00 2001
+From bc521b77e5d52a05ab8b798eaf58399dc22c0d97 Mon Sep 17 00:00:00 2001
 From: Nick Terrell <terrelln@fb.com>
 Date: Fri, 11 Sep 2020 16:37:08 -0700
-Subject: [PATCH 3/3] lib: zstd: Upgrade to latest upstream zstd version 1.4.10
+Subject: [PATCH 3/4] lib: zstd: Upgrade to latest upstream zstd version 1.4.10
 
 Upgrade to the latest upstream zstd version 1.4.10.
 
@@ -44062,6 +44062,47 @@ index 55e1b4cba..000000000
 -}
 -
 -#endif /* ZSTD_OPT_H_91842398743 */
+-- 
+2.31.1.305.gd1b10fc6d8
+
+
+From ba23b1b88f3bd1f047b26ba20052c2ee9f52d332 Mon Sep 17 00:00:00 2001
+From: Nick Terrell <terrelln@fb.com>
+Date: Mon, 26 Apr 2021 16:34:03 -0700
+Subject: [PATCH 4/4] MAINTAINERS: Add maintainer entry for zstd
+
+Adds a maintainer entry for zstd listing myself as the maintainer for
+all zstd code, pointing to the upstream issues tracker for bugs, and
+listing my linux repo as the tree.
+
+Signed-off-by: Nick Terrell <terrelln@fb.com>
+---
+ MAINTAINERS | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9450e052f..7025c6724 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19912,6 +19912,18 @@ F:	Documentation/vm/zsmalloc.rst
+ F:	include/linux/zsmalloc.h
+ F:	mm/zsmalloc.c
+ 
++ZSTD
++M:	Nick Terrell <terrelln@fb.com>
++S:	Maintained
++B:	https://github.com/facebook/zstd/issues
++T:	git git://github.com/terrelln/linux.git
++F:	include/linux/zstd*
++F:	lib/zstd/
++F:	lib/decompress_unzstd.c
++F:	crypto/zstd.c
++N:	zstd
++K:	zstd
++
+ ZSWAP COMPRESSED SWAP CACHING
+ M:	Seth Jennings <sjenning@redhat.com>
+ M:	Dan Streetman <ddstreet@ieee.org>
 -- 
 2.31.1.305.gd1b10fc6d8
 
