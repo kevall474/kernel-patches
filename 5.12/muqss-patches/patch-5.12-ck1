@@ -1981,50 +1981,6 @@ index 0416b9c9d410..9ce5fae0f1cf 100644
 
  	ssif_info->stopping = true;
  	del_timer_sync(&ssif_info->watch_timer);
-diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-index 85de313ddec2..03dd537ac072 100644
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -39,13 +39,15 @@ choice
- 	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1100_CPUFREQ || ARM_SA1110_CPUFREQ
-  default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
-+	default CPU_FREQ_DEFAULT_GOV_ONDEMAND if !X86_INTEL_PSTATE
-+	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE_NODEF
- 	help
- 	  This option sets which CPUFreq governor shall be loaded at
- 	  startup. If in doubt, use the default setting.
-
--config CPU_FREQ_DEFAULT_GOV_PERFORMANCE
-+config CPU_FREQ_DEFAULT_GOV_PERFORMANCE_NODEF
- 	bool "performance"
-+	select CPU_FREQ_DEFAULT_GOV_PERFORMANCE
- 	select CPU_FREQ_GOV_PERFORMANCE
- 	help
- 	  Use the CPUFreq governor 'performance' as default. This sets
-@@ -71,7 +73,6 @@ config CPU_FREQ_DEFAULT_GOV_USERSPACE
-
- config CPU_FREQ_DEFAULT_GOV_ONDEMAND
- 	bool "ondemand"
--	depends on !(X86_INTEL_PSTATE && SMP)
- 	select CPU_FREQ_GOV_ONDEMAND
- 	select CPU_FREQ_GOV_PERFORMANCE
- 	help
-@@ -84,7 +85,6 @@ config CPU_FREQ_DEFAULT_GOV_ONDEMAND
-
- config CPU_FREQ_DEFAULT_GOV_CONSERVATIVE
- 	bool "conservative"
--	depends on !(X86_INTEL_PSTATE && SMP)
- 	select CPU_FREQ_GOV_CONSERVATIVE
- 	select CPU_FREQ_GOV_PERFORMANCE
- 	help
-@@ -189,6 +189,7 @@ config CPU_FREQ_GOV_CONSERVATIVE
- config CPU_FREQ_GOV_SCHEDUTIL
- 	bool "'schedutil' cpufreq policy governor"
- 	depends on CPU_FREQ && SMP
-+	default y if (X86_INTEL_PSTATE && SMP)
- 	select CPU_FREQ_GOV_ATTR_SET
- 	select IRQ_WORK
- 	help
 diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c b/drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c
 index 7400d617ae3c..b7f829b0ca11 100644
 --- a/drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c
