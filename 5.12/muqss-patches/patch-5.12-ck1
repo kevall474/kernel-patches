@@ -2027,19 +2027,6 @@ index 85de313ddec2..03dd537ac072 100644
  	select CPU_FREQ_GOV_ATTR_SET
  	select IRQ_WORK
  	help
-diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-index 92701a18bdd9..7f49f2402ffa 100644
---- a/drivers/cpufreq/Kconfig.x86
-+++ b/drivers/cpufreq/Kconfig.x86
-@@ -8,8 +8,6 @@ config X86_INTEL_PSTATE
- 	depends on X86
- 	select ACPI_PROCESSOR if ACPI
- 	select ACPI_CPPC_LIB if X86_64 && ACPI && SCHED_MC_PRIO
--	select CPU_FREQ_GOV_PERFORMANCE
--	select CPU_FREQ_GOV_SCHEDUTIL if SMP
- 	help
- 	  This driver provides a P state for Intel core processors.
- 	  The driver implements an internal governor and will become
 diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c b/drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c
 index 7400d617ae3c..b7f829b0ca11 100644
 --- a/drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c
