@@ -1,7 +1,7 @@
-From ecb366782bef11e34999b6acca8f4c6934360417 Mon Sep 17 00:00:00 2001
+From 8d74d04e9b5625a2d35b37016e3502e7750508bc Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Mon, 5 Aug 2019 14:31:53 -0400
-Subject: [PATCH 1/8] btrfs: add a force_chunk_alloc to space_info's sysfs
+Subject: [PATCH 01/16] btrfs: add a force_chunk_alloc to space_info's sysfs
 
 In testing various things such as the btrfsck patch to detect over
 allocation of chunks, empty block group deletion, and balance I've had
@@ -113,13 +113,13 @@ index 6eb1c50fa..9372ef191 100644
  #define BTRFS_FEATURE_NAME_MAX 13
  static char btrfs_unknown_feature_names[FEAT_MAX][NUM_FEATURE_BITS][BTRFS_FEATURE_NAME_MAX];
 -- 
-2.31.1.305.gd1b10fc6d8
+2.31.1.362.g311531c9de
 
 
-From cfa86900d0709f2c4df94560b967a1596707a091 Mon Sep 17 00:00:00 2001
+From 361beece748e5164582b9a9a84958af5f07b95c5 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 24 Jul 2020 12:41:47 -0400
-Subject: [PATCH 2/8] btrfs: do not evaluate the expression with
+Subject: [PATCH 02/16] btrfs: do not evaluate the expression with
  !CONFIG_BTRFS_ASSERT
 
 While investigating a performance issue I noticed that turning off
@@ -156,13 +156,13 @@ index 9ae776ab3..3420c1262 100644
  
  /*
 -- 
-2.31.1.305.gd1b10fc6d8
+2.31.1.362.g311531c9de
 
 
-From caf1f496fec91f2e97d84c86be7783798cdbbb41 Mon Sep 17 00:00:00 2001
+From 20c8bcdf982903673f0a1179d918a704e14b3980 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 20 Mar 2020 14:34:36 -0400
-Subject: [PATCH 3/8] btrfs: restart snapshot delete if we have to end the
+Subject: [PATCH 03/16] btrfs: restart snapshot delete if we have to end the
  transaction
 
 This is to fully fix the deadlock described in
@@ -233,13 +233,13 @@ index 36a3c973f..8193ae62b 100644
  	}
  	btrfs_release_path(path);
 -- 
-2.31.1.305.gd1b10fc6d8
+2.31.1.362.g311531c9de
 
 
-From a1447ff4be0c648d1c93ff5b2a571e4e7d9e2feb Mon Sep 17 00:00:00 2001
+From ee6147025da6b2e348ddd3b990e95624cd17535c Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 24 Mar 2021 09:44:21 -0400
-Subject: [PATCH 4/8] btrfs: use percpu_read_positive instead of sum_positive
+Subject: [PATCH 04/16] btrfs: use percpu_read_positive instead of sum_positive
  for need_preempt
 
 Looking at perf data for a fio workload I noticed that we were spending
@@ -367,13 +367,13 @@ index 2da6177f4..2dc674b7c 100644
  		used += fs_info->delayed_refs_rsv.reserved +
  			fs_info->delayed_block_rsv.reserved;
 -- 
-2.31.1.305.gd1b10fc6d8
+2.31.1.362.g311531c9de
 
 
-From 861b4792f6a8728d1b724fd3ec464ed490a89e42 Mon Sep 17 00:00:00 2001
+From e9f002262dd5d4a8dcc42047913ad57028164fa7 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Mon, 1 Mar 2021 09:26:42 +0000
-Subject: [PATCH 5/8] btrfs: add btree read ahead for full send operations
+Subject: [PATCH 05/16] btrfs: add btree read ahead for full send operations
 
 When doing a full send we know that we are going to be reading every node
 and leaf of the send root, so we benefit from enabling read ahead for the
@@ -516,13 +516,13 @@ index 8f3238591..6b1065248 100644
  	key.objectid = BTRFS_FIRST_FREE_OBJECTID;
  	key.type = BTRFS_INODE_ITEM_KEY;
 -- 
-2.31.1.305.gd1b10fc6d8
+2.31.1.362.g311531c9de
 
 
-From e974edcf1e6f521c65638d2730377850bdec57b0 Mon Sep 17 00:00:00 2001
+From 93568ac7b33022fabf3a2668660204d852fa3adc Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Mon, 1 Mar 2021 09:26:43 +0000
-Subject: [PATCH 6/8] btrfs: add btree read ahead for incremental send
+Subject: [PATCH 06/16] btrfs: add btree read ahead for incremental send
  operations
 
 Currently we do not do btree read ahead when doing an incremental send,
@@ -767,13 +767,13 @@ index 6b1065248..eb21f4b7b 100644
  				right_end_reached = ADVANCE;
  			else if (ret < 0)
 -- 
-2.31.1.305.gd1b10fc6d8
+2.31.1.362.g311531c9de
 
 
-From 8e7170d210172c93b07a8920261da27c6f21fff4 Mon Sep 17 00:00:00 2001
+From f17185ed9b5418da9cffb745657cae0172b79826 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Mon, 5 Apr 2021 12:32:16 +0100
-Subject: [PATCH 7/8] btrfs: fix race between transaction aborts and fsyncs
+Subject: [PATCH 07/16] btrfs: fix race between transaction aborts and fsyncs
  leading to use-after-free
 
 There is a race between a task aborting a transaction during a commit,
@@ -917,13 +917,13 @@ index acff6bb49..3f2c4ee3e 100644
  
  	btrfs_cleanup_one_transaction(trans->transaction, fs_info);
 -- 
-2.31.1.305.gd1b10fc6d8
+2.31.1.362.g311531c9de
 
 
-From 2cf02c7b991be7c8e6b0570d3e198a6f04d34e03 Mon Sep 17 00:00:00 2001
+From 599db63aac6eefe5bf6c3d09aabca1a5edbe13dc Mon Sep 17 00:00:00 2001
 From: Boris Burkov <boris@bur.io>
 Date: Tue, 6 Apr 2021 15:31:18 -0700
-Subject: [PATCH 8/8] btrfs: return whole extents in fiemap
+Subject: [PATCH 08/16] btrfs: return whole extents in fiemap
 
 `xfs_io -c 'fiemap <off> <len>' <file>`
 can give surprising results on btrfs that differ from xfs.
@@ -983,5 +983,368 @@ index 910769d5f..50c8e34f2 100644
  	u32 flags = 0;
  	u32 found_type;
 -- 
-2.31.1.305.gd1b10fc6d8
+2.31.1.362.g311531c9de
+
+
+From 8adf1207b7d3d340e376c9aa8c8ccc821ba5d389 Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Wed, 28 Apr 2021 13:38:42 -0400
+Subject: [PATCH 09/16] btrfs: check worker before need_preemptive_reclaim
+
+need_preemptive_reclaim() does some calculations, which aren't heavy,
+but if we're already running preemptive reclaim there's no reason to do
+them at all, so re-order the checks so that we don't do the calculation
+if we're already doing reclaim.
+
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/space-info.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index 2dc674b7c..c9a5e003b 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -1588,8 +1588,8 @@ static int __reserve_bytes(struct btrfs_fs_info *fs_info,
+ 		 * the async reclaim as we will panic.
+ 		 */
+ 		if (!test_bit(BTRFS_FS_LOG_RECOVERING, &fs_info->flags) &&
+-		    need_preemptive_reclaim(fs_info, space_info) &&
+-		    !work_busy(&fs_info->preempt_reclaim_work)) {
++		    !work_busy(&fs_info->preempt_reclaim_work) &&
++		    need_preemptive_reclaim(fs_info, space_info)) {
+ 			trace_btrfs_trigger_flush(fs_info, space_info->flags,
+ 						  orig_bytes, flush, "preempt");
+ 			queue_work(system_unbound_wq,
+-- 
+2.31.1.362.g311531c9de
+
+
+From da7ff7f0624c4ed7afdbd308ba6e453139fc3919 Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Wed, 28 Apr 2021 13:38:43 -0400
+Subject: [PATCH 10/16] btrfs: only clamp the first time we have to start
+ flushing
+
+We were clamping the threshold for preemptive reclaim any time we added
+a ticket to wait on, which if we have a lot of threads means we'd
+essentially max out the clamp the first time we start to flush.  Instead
+of doing this, simply do it every time we have to start flushing, this
+will make us ramp up gradually instead of going to max clamping as soon
+as we start needing to do flushing.
+
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/space-info.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index c9a5e003b..33edab17a 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -1561,6 +1561,15 @@ static int __reserve_bytes(struct btrfs_fs_info *fs_info,
+ 		    flush == BTRFS_RESERVE_FLUSH_DATA) {
+ 			list_add_tail(&ticket.list, &space_info->tickets);
+ 			if (!space_info->flush) {
++				/*
++				 * We were forced to add a reserve ticket, so
++				 * our preemptive flushing is unable to keep
++				 * up.  Clamp down on the threshold for the
++				 * preemptive flushing in order to keep up with
++				 * the workload.
++				 */
++				maybe_clamp_preempt(fs_info, space_info);
++
+ 				space_info->flush = 1;
+ 				trace_btrfs_trigger_flush(fs_info,
+ 							  space_info->flags,
+@@ -1572,14 +1581,6 @@ static int __reserve_bytes(struct btrfs_fs_info *fs_info,
+ 			list_add_tail(&ticket.list,
+ 				      &space_info->priority_tickets);
+ 		}
+-
+-		/*
+-		 * We were forced to add a reserve ticket, so our preemptive
+-		 * flushing is unable to keep up.  Clamp down on the threshold
+-		 * for the preemptive flushing in order to keep up with the
+-		 * workload.
+-		 */
+-		maybe_clamp_preempt(fs_info, space_info);
+ 	} else if (!ret && space_info->flags & BTRFS_BLOCK_GROUP_METADATA) {
+ 		used += orig_bytes;
+ 		/*
+-- 
+2.31.1.362.g311531c9de
+
+
+From d0cafe3f64611e145988189480e84a975304f537 Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Wed, 28 Apr 2021 13:38:46 -0400
+Subject: [PATCH 11/16] btrfs: don't include the global rsv size in the
+ preemptive used amount
+
+When deciding if we should preemptively flush space, we will add in the
+amount of space used by all block rsvs.  However this also includes the
+global block rsv, which isn't flushable so shouldn't be accounted for in
+this calculation.  If we decide to use ->bytes_may_use in our used
+calculation we need to subtract the global rsv size from this amount so
+it most closely matches the flushable space.
+
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/space-info.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index 33edab17a..52e3bfedc 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -867,7 +867,7 @@ static bool need_preemptive_reclaim(struct btrfs_fs_info *fs_info,
+ 		used += fs_info->delayed_refs_rsv.reserved +
+ 			fs_info->delayed_block_rsv.reserved;
+ 	else
+-		used += space_info->bytes_may_use;
++		used += space_info->bytes_may_use - global_rsv_size;
+ 
+ 	return (used >= thresh && !btrfs_fs_closing(fs_info) &&
+ 		!test_bit(BTRFS_FS_STATE_REMOUNTING, &fs_info->fs_state));
+-- 
+2.31.1.362.g311531c9de
+
+
+From 7f7ee10c33d122c22d8f4a1d1a970dae336be9d5 Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Wed, 28 Apr 2021 13:38:44 -0400
+Subject: [PATCH 12/16] btrfs: take into account global rsv in
+ need_preemptive_reclaim
+
+Global rsv can't be used for normal allocations, and for very full file
+systems we can decide to try and async flush constantly even though
+there's really not a lot of space to reclaim.  Deal with this by
+including the global block rsv size in the "total used" calculation.
+
+[HH: small context fix for 5.10.x]
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/space-info.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index 52e3bfedc..aeb1f0b7b 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -792,12 +792,14 @@ btrfs_calc_reclaim_metadata_size(struct btrfs_fs_info *fs_info,
+ static bool need_preemptive_reclaim(struct btrfs_fs_info *fs_info,
+ 				    struct btrfs_space_info *space_info)
+ {
++	u64 global_rsv_size = fs_info->global_block_rsv.reserved;
+ 	u64 ordered, delalloc;
+ 	u64 thresh = div_factor_fine(space_info->total_bytes, 98);
+ 	u64 used;
+ 
+ 	/* If we're just plain full then async reclaim just slows us down. */
+-	if ((space_info->bytes_used + space_info->bytes_reserved) >= thresh)
++	if ((space_info->bytes_used + space_info->bytes_reserved +
++	     global_rsv_size) >= thresh)
+ 		return false;
+ 
+ 	/*
+-- 
+2.31.1.362.g311531c9de
+
+
+From 0254da1d834060723eac4c77e249df88855b52df Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Wed, 28 Apr 2021 13:38:45 -0400
+Subject: [PATCH 13/16] btrfs: use the global rsv size in the preemptive thresh
+ calculation
+
+We calculate the amount of "free" space available for normal
+reservations by taking the total space and subtracting out the hard used
+space, which is readonly, used, and reserved space.  However we weren't
+taking into account the global block rsv, which is essentially hard used
+space.  Handle this by subtracting it from the available free space, so
+that our threshold more closely mirrors reality.
+
+[HH: small context fix for 5.10.x]
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/space-info.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index aeb1f0b7b..4e3857474 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -840,8 +840,10 @@ static bool need_preemptive_reclaim(struct btrfs_fs_info *fs_info,
+ 
+ 	thresh = calc_available_free_space(fs_info, space_info,
+ 					   BTRFS_RESERVE_FLUSH_ALL);
+-	thresh += (space_info->total_bytes - space_info->bytes_used -
+-		   space_info->bytes_reserved - space_info->bytes_readonly);
++	used = space_info->bytes_used + space_info->bytes_reserved +
++		space_info->bytes_readonly + global_rsv_size;
++	if (used < space_info->total_bytes)
++		thresh += space_info->total_bytes - used;
+ 	thresh >>= space_info->clamp;
+ 
+ 	used = space_info->bytes_pinned;
+-- 
+2.31.1.362.g311531c9de
+
+
+From f57c590d684f4f97d04fba681315cc8c64ab9849 Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Wed, 28 Apr 2021 13:38:47 -0400
+Subject: [PATCH 14/16] btrfs: only ignore delalloc if delalloc is much smaller
+ than ordered
+
+While testing heavy delalloc workloads I noticed that sometimes we'd
+just stop preemptively flushing when we had loads of delalloc available
+to flush.  This is because we skip preemptive flushing if delalloc <=
+ordered.  However if we start with say 4gib of delalloc, and we flush
+2gib of that, we'll stop flushing there, when we still have 2gib of
+delalloc to flush.
+
+Instead adjust the ordered bytes down by half, this way if 2/3 of our
+outstanding delalloc reservations are tied up by ordered extents we
+don't bother preemptive flushing, as we're getting close to the state
+where we need to wait on ordered extents.
+
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/space-info.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index 4e3857474..cf09b23f3 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -864,8 +864,14 @@ static bool need_preemptive_reclaim(struct btrfs_fs_info *fs_info,
+ 	 * clearly be heavy enough to warrant preemptive flushing.  In the case
+ 	 * of heavy DIO or ordered reservations, preemptive flushing will just
+ 	 * waste time and cause us to slow down.
++	 *
++	 * We want to make sure we truly are maxed out on ordered however, so
++	 * cut ordered in half, and if it's still higher than delalloc then we
++	 * can keep flushing.  This is to avoid the case where we start
++	 * flushing, and now delalloc == ordered and we stop preemptively
++	 * flushing when we could still have several gigs of delalloc to flush.
+ 	 */
+-	ordered = percpu_counter_read_positive(&fs_info->ordered_bytes);
++	ordered = percpu_counter_read_positive(&fs_info->ordered_bytes) >> 1;
+ 	delalloc = percpu_counter_read_positive(&fs_info->delalloc_bytes);
+ 	if (ordered >= delalloc)
+ 		used += fs_info->delayed_refs_rsv.reserved +
+-- 
+2.31.1.362.g311531c9de
+
+
+From d0fb6ba75882f9888a061d63825e310d2c9bf975 Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Wed, 28 Apr 2021 13:38:48 -0400
+Subject: [PATCH 15/16] btrfs: handle preemptive delalloc flushing slightly
+ differently
+
+If we decide to flush delalloc from the preemptive flusher, we really do
+not want to wait on ordered extents, as it gains us nothing.  However
+there was logic to go ahead and wait on ordered extents if there was
+more ordered bytes than delalloc bytes.  We do not want this behavior,
+so pass through whether this flushing is for preemption, and do not wait
+for ordered extents if that's the case.  Also break out of the shrink
+loop after the first flushing, as we just want to one shot shrink
+delalloc.
+
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/space-info.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index cf09b23f3..b2d834b92 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -495,7 +495,8 @@ static inline u64 calc_reclaim_items_nr(struct btrfs_fs_info *fs_info,
+  */
+ static void shrink_delalloc(struct btrfs_fs_info *fs_info,
+ 			    struct btrfs_space_info *space_info,
+-			    u64 to_reclaim, bool wait_ordered)
++			    u64 to_reclaim, bool wait_ordered,
++			    bool for_preempt)
+ {
+ 	struct btrfs_trans_handle *trans;
+ 	u64 delalloc_bytes;
+@@ -532,7 +533,7 @@ static void shrink_delalloc(struct btrfs_fs_info *fs_info,
+ 	 * ordered extents, otherwise we'll waste time trying to flush delalloc
+ 	 * that likely won't give us the space back we need.
+ 	 */
+-	if (ordered_bytes > delalloc_bytes)
++	if (ordered_bytes > delalloc_bytes && !for_preempt)
+ 		wait_ordered = true;
+ 
+ 	loops = 0;
+@@ -551,6 +552,14 @@ static void shrink_delalloc(struct btrfs_fs_info *fs_info,
+ 				break;
+ 		}
+ 
++		/*
++		 * If we are for preemption we just want a one-shot of delalloc
++		 * flushing so we can stop flushing if we decide we don't need
++		 * to anymore.
++		 */
++		if (for_preempt)
++			break;
++
+ 		spin_lock(&space_info->lock);
+ 		if (list_empty(&space_info->tickets) &&
+ 		    list_empty(&space_info->priority_tickets)) {
+@@ -702,7 +711,7 @@ static void flush_space(struct btrfs_fs_info *fs_info,
+ 	case FLUSH_DELALLOC:
+ 	case FLUSH_DELALLOC_WAIT:
+ 		shrink_delalloc(fs_info, space_info, num_bytes,
+-				state == FLUSH_DELALLOC_WAIT);
++				state == FLUSH_DELALLOC_WAIT, for_preempt);
+ 		break;
+ 	case FLUSH_DELAYED_REFS_NR:
+ 	case FLUSH_DELAYED_REFS:
+-- 
+2.31.1.362.g311531c9de
+
+
+From cefc88c16cbb78e3bac695e33488517eb158d897 Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Thu, 29 Apr 2021 10:51:34 -0400
+Subject: [PATCH 16/16] btrfs: avoid RCU stalls while running delayed iputs
+
+Generally a delayed iput is added when we might do the final iput, so
+usually we'll end up sleeping while processing the delayed iputs
+naturally.  However there's no guarantee of this, especially for small
+files.  In production we noticed 5 instances of RCU stalls while testing
+a kernel release overnight across 1000 machines, so this is relatively
+common.
+
+Fix this by adding a cond_resched_lock() to the loop processing delayed
+iputs so we can avoid these sort of stalls.
+
+[HH: snip mangled stack trace]
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: Rik van Riel <riel@surriel.com>
+---
+ fs/btrfs/inode.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+index a52077594..c54626d74 100644
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -3253,6 +3253,7 @@ void btrfs_run_delayed_iputs(struct btrfs_fs_info *fs_info)
+ 		inode = list_first_entry(&fs_info->delayed_iputs,
+ 				struct btrfs_inode, delayed_iput);
+ 		run_delayed_iput_locked(fs_info, inode);
++		cond_resched_lock(&fs_info->delayed_iput_lock);
+ 	}
+ 	spin_unlock(&fs_info->delayed_iput_lock);
+ }
+-- 
+2.31.1.362.g311531c9de
 
