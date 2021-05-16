@@ -1,6 +1,6 @@
-From 7229895c1a6432219d05b02c8702189ab65570b3 Mon Sep 17 00:00:00 2001
+From 6309911c516af3b693c5ca4805dc958ecc511561 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
-Date: Tue, 13 Apr 2021 16:06:05 +0200
+Date: Sun, 16 May 2021 15:07:10 +0200
 Subject: [PATCH] futex: resync from gitlab.collabora.com
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
@@ -53,7 +53,7 @@ index a89eb0acc..a3e760886 100644
 +
  #endif /* _UAPI_LINUX_FUTEX_H */
 diff --git a/kernel/futex.c b/kernel/futex.c
-index 00febd6de..6859dd7ca 100644
+index a8629b695..f923d2da4 100644
 --- a/kernel/futex.c
 +++ b/kernel/futex.c
 @@ -198,6 +198,8 @@ struct futex_pi_state {
@@ -310,7 +310,7 @@ index 00febd6de..6859dd7ca 100644
  static int futex_wait(u32 __user *uaddr, unsigned int flags, u32 val,
  		      ktime_t *abs_time, u32 bitset)
  {
-@@ -3759,6 +3985,43 @@ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
+@@ -3758,6 +3984,43 @@ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
  	return -ENOSYS;
  }
  
@@ -354,7 +354,7 @@ index 00febd6de..6859dd7ca 100644
  
  SYSCALL_DEFINE6(futex, u32 __user *, uaddr, int, op, u32, val,
  		const struct __kernel_timespec __user *, utime,
-@@ -3771,7 +4034,8 @@ SYSCALL_DEFINE6(futex, u32 __user *, uaddr, int, op, u32, val,
+@@ -3770,7 +4033,8 @@ SYSCALL_DEFINE6(futex, u32 __user *, uaddr, int, op, u32, val,
  
  	if (utime && (cmd == FUTEX_WAIT || cmd == FUTEX_LOCK_PI ||
  		      cmd == FUTEX_WAIT_BITSET ||
@@ -364,16 +364,16 @@ index 00febd6de..6859dd7ca 100644
  		if (unlikely(should_fail_futex(!(op & FUTEX_PRIVATE_FLAG))))
  			return -EFAULT;
  		if (get_timespec64(&ts, utime))
-@@ -3780,7 +4044,7 @@ SYSCALL_DEFINE6(futex, u32 __user *, uaddr, int, op, u32, val,
+@@ -3779,7 +4043,7 @@ SYSCALL_DEFINE6(futex, u32 __user *, uaddr, int, op, u32, val,
  			return -EINVAL;
  
  		t = timespec64_to_ktime(ts);
 -		if (cmd == FUTEX_WAIT)
 +		if (cmd == FUTEX_WAIT || cmd == FUTEX_WAIT_MULTIPLE)
  			t = ktime_add_safe(ktime_get(), t);
- 		else if (!(op & FUTEX_CLOCK_REALTIME))
+ 		else if (cmd != FUTEX_LOCK_PI && !(op & FUTEX_CLOCK_REALTIME))
  			t = timens_ktime_to_host(CLOCK_MONOTONIC, t);
-@@ -3794,6 +4058,25 @@ SYSCALL_DEFINE6(futex, u32 __user *, uaddr, int, op, u32, val,
+@@ -3793,6 +4057,25 @@ SYSCALL_DEFINE6(futex, u32 __user *, uaddr, int, op, u32, val,
  	    cmd == FUTEX_CMP_REQUEUE_PI || cmd == FUTEX_WAKE_OP)
  		val2 = (u32) (unsigned long) utime;
  
@@ -399,7 +399,7 @@ index 00febd6de..6859dd7ca 100644
  	return do_futex(uaddr, op, val, tp, uaddr2, val2, val3);
  }
  
-@@ -3956,6 +4239,58 @@ COMPAT_SYSCALL_DEFINE3(get_robust_list, int, pid,
+@@ -3955,6 +4238,58 @@ COMPAT_SYSCALL_DEFINE3(get_robust_list, int, pid,
  #endif /* CONFIG_COMPAT */
  
  #ifdef CONFIG_COMPAT_32BIT_TIME
@@ -458,7 +458,7 @@ index 00febd6de..6859dd7ca 100644
  SYSCALL_DEFINE6(futex_time32, u32 __user *, uaddr, int, op, u32, val,
  		const struct old_timespec32 __user *, utime, u32 __user *, uaddr2,
  		u32, val3)
-@@ -3967,14 +4302,15 @@ SYSCALL_DEFINE6(futex_time32, u32 __user *, uaddr, int, op, u32, val,
+@@ -3966,14 +4301,15 @@ SYSCALL_DEFINE6(futex_time32, u32 __user *, uaddr, int, op, u32, val,
  
  	if (utime && (cmd == FUTEX_WAIT || cmd == FUTEX_LOCK_PI ||
  		      cmd == FUTEX_WAIT_BITSET ||
@@ -474,9 +474,9 @@ index 00febd6de..6859dd7ca 100644
 -		if (cmd == FUTEX_WAIT)
 +		if (cmd == FUTEX_WAIT || cmd == FUTEX_WAIT_MULTIPLE)
  			t = ktime_add_safe(ktime_get(), t);
- 		else if (!(op & FUTEX_CLOCK_REALTIME))
+ 		else if (cmd != FUTEX_LOCK_PI && !(op & FUTEX_CLOCK_REALTIME))
  			t = timens_ktime_to_host(CLOCK_MONOTONIC, t);
-@@ -3984,6 +4320,19 @@ SYSCALL_DEFINE6(futex_time32, u32 __user *, uaddr, int, op, u32, val,
+@@ -3983,6 +4319,19 @@ SYSCALL_DEFINE6(futex_time32, u32 __user *, uaddr, int, op, u32, val,
  	    cmd == FUTEX_CMP_REQUEUE_PI || cmd == FUTEX_WAKE_OP)
  		val2 = (int) (unsigned long) utime;
  
@@ -497,5 +497,5 @@ index 00febd6de..6859dd7ca 100644
  }
  #endif /* CONFIG_COMPAT_32BIT_TIME */
 -- 
-2.31.1.305.gd1b10fc6d8
+2.31.1.527.g2d677e5b15
 

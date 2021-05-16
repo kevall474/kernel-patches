@@ -1,6 +1,6 @@
-From 1b32bce61742f313057e0b3c6bf2551e15add938 Mon Sep 17 00:00:00 2001
+From b059918167d3cba2fdad9813a564334e8cb782fa Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
-Date: Tue, 4 May 2021 01:59:42 +0200
+Date: Sun, 16 May 2021 15:09:09 +0200
 Subject: [PATCH] futex2: resync from gitlab.collabora.com
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
@@ -18,11 +18,11 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  include/linux/fs.h                            |    1 +
  include/linux/syscalls.h                      |   17 +
  include/uapi/asm-generic/unistd.h             |   14 +-
- include/uapi/linux/futex.h                    |   31 +
+ include/uapi/linux/futex.h                    |   32 +
  init/Kconfig                                  |    7 +
  kernel/Makefile                               |    1 +
  kernel/fork.c                                 |    2 +
- kernel/futex2.c                               | 1252 +++++++++++++++++
+ kernel/futex2.c                               | 1266 +++++++++++++++++
  kernel/sys_ni.c                               |    9 +
  tools/arch/x86/include/asm/unistd_64.h        |   12 +
  tools/include/uapi/asm-generic/unistd.h       |   11 +-
@@ -43,7 +43,7 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  .../futex/functional/futex_wait_wouldblock.c  |   33 +-
  .../testing/selftests/futex/functional/run.sh |    6 +
  .../selftests/futex/include/futex2test.h      |  112 ++
- 38 files changed, 2518 insertions(+), 52 deletions(-)
+ 38 files changed, 2533 insertions(+), 52 deletions(-)
  create mode 100644 Documentation/locking/futex2.rst
  create mode 100644 kernel/futex2.c
  create mode 100644 tools/testing/selftests/futex/functional/futex2_requeue.c
@@ -488,14 +488,15 @@ index ce58cff99..2778da551 100644
  /*
   * 32 bit systems traditionally used different
 diff --git a/include/uapi/linux/futex.h b/include/uapi/linux/futex.h
-index a3e760886..793b6e2d8 100644
+index a3e760886..d92e28520 100644
 --- a/include/uapi/linux/futex.h
 +++ b/include/uapi/linux/futex.h
-@@ -44,6 +44,37 @@
+@@ -44,6 +44,38 @@
  #define FUTEX_WAIT_MULTIPLE_PRIVATE	(FUTEX_WAIT_MULTIPLE | \
  					 FUTEX_PRIVATE_FLAG)
  
 +/* Size argument to futex2 syscall */
++#define FUTEX_16	1
 +#define FUTEX_32	2
 +
 +#define FUTEX_SIZE_MASK	0x3
@@ -548,7 +549,7 @@ index 5f5c776ef..11c6487ed 100644
  	bool
  	depends on FUTEX && RT_MUTEXES
 diff --git a/kernel/Makefile b/kernel/Makefile
-index 320f1f394..b6407f92c 100644
+index 605ec3e70..caf7fca27 100644
 --- a/kernel/Makefile
 +++ b/kernel/Makefile
 @@ -57,6 +57,7 @@ obj-$(CONFIG_PROFILING) += profile.o
@@ -574,10 +575,10 @@ index 426cd0c51..9f99273b1 100644
  	}
 diff --git a/kernel/futex2.c b/kernel/futex2.c
 new file mode 100644
-index 000000000..901edf41d
+index 000000000..d278a711b
 --- /dev/null
 +++ b/kernel/futex2.c
-@@ -0,0 +1,1252 @@
+@@ -0,0 +1,1266 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
 + * futex2 system call interface by André Almeida <andrealmeid@collabora.com>
@@ -947,12 +948,24 @@ index 000000000..901edf41d
 + *
 + * Check the comment at futex_enqueue() for more information.
 + */
-+static int futex_get_user(u32 *uval, u32 __user *uaddr)
++static int futex_get_user(u32 *uval, u32 __user *uaddr, unsigned int flag)
 +{
 +	int ret;
 +
 +	pagefault_disable();
-+	ret = __get_user(*uval, uaddr);
++
++        switch (flag) {
++	case FUTEX_16:
++		ret = __get_user(*uval, (u16 __user *) uaddr);
++		break;
++	case FUTEX_32:
++		ret = __get_user(*uval, (u32 __user *) uaddr);
++		break;
++	default:
++		printk("SIZE IS %d\n", flag);
++		BUG();
++	}
++
 +	pagefault_enable();
 +
 +	return ret;
@@ -1097,7 +1110,8 @@ index 000000000..901edf41d
 +		bucket_inc_waiters(bucket);
 +		spin_lock(&bucket->lock);
 +
-+		ret = futex_get_user(&uval, uaddr);
++		ret = futex_get_user(&uval, uaddr,
++				     futexv->objects[i].flags & FUTEX_SIZE_MASK);
 +
 +		if (unlikely(ret)) {
 +			spin_unlock(&bucket->lock);
@@ -1251,6 +1265,7 @@ index 000000000..901edf41d
 +	waiter->index = 0;
 +	waiter->val = val;
 +	waiter->uaddr = uaddr;
++	waiter->flags = flags;
 +	memset(&wait_single.waiter.key, 0, sizeof(struct futex_key));
 +
 +	INIT_LIST_HEAD(&waiter->list);
@@ -1625,7 +1640,7 @@ index 000000000..901edf41d
 +		spin_lock_nested(&b1->lock, SINGLE_DEPTH_NESTING);
 +	}
 +
-+	ret = futex_get_user(&uval, rq1.uaddr);
++	ret = futex_get_user(&uval, rq1.uaddr, FUTEX_32);
 +
 +	if (unlikely(ret)) {
 +		futex_double_unlock(b1, b2);
@@ -3260,5 +3275,5 @@ index 000000000..b9879f1e0
 +	return syscall(__NR_futex_requeue, uaddr1, uaddr2, nr_wake, nr_requeue, cmpval, flags);
 +}
 -- 
-2.31.1.362.g311531c9de
+2.31.1.527.g2d677e5b15
 
