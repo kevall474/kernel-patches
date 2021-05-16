@@ -1,7 +1,7 @@
-From 6d1ff7b57a5c353d3ba1a92e63255849ec6e79b5 Mon Sep 17 00:00:00 2001
+From 65e991f94a77a97854503ec544336e80dadfadfd Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Tue, 23 Jun 2015 01:26:52 -0500
-Subject: [PATCH 01/24] i8042: decrease debug message level to info
+Subject: [PATCH 01/26] i8042: decrease debug message level to info
 
 Author:    Arjan van de Ven <arjan@linux.intel.com>
 
@@ -64,10 +64,10 @@ index abae23af0..f8617c1b2 100644
 2.31.1.527.g2d677e5b15
 
 
-From 17266c00ba7f8e86b31ca46c38e6bea4d2a18ed0 Mon Sep 17 00:00:00 2001
+From 0a24a2900aa3132d29e9573460ed570b33535f80 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Mon, 11 Jan 2016 10:01:44 -0600
-Subject: [PATCH 02/24] Increase the ext4 default commit age
+Subject: [PATCH 02/26] increase the ext4 default commit age
 
 Both the VM and EXT4 have a "commit to disk after X seconds" time.
 Currently the EXT4 time is shorter than our VM time, which is a bit
@@ -100,10 +100,10 @@ index 99d3cd051..1a38f741c 100644
 2.31.1.527.g2d677e5b15
 
 
-From 5e6dfd48ce9b0178f91a1bb959d8eea0ec9bb6ca Mon Sep 17 00:00:00 2001
+From 07e309b06090cdf115bca50f466348efdf001de5 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Mon, 14 Mar 2016 11:22:09 -0600
-Subject: [PATCH 03/24] silence rapl
+Subject: [PATCH 03/26] silence rapl
 
 ---
  drivers/powercap/intel_rapl_common.c | 2 +-
@@ -126,10 +126,10 @@ index fdda2a737..58ecdad26 100644
 2.31.1.527.g2d677e5b15
 
 
-From aecfa022aa783d6f33516499c1283599de88d7a8 Mon Sep 17 00:00:00 2001
+From d0d10900d5017b6d92ea3e912f1a434c7c51f905 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Mon, 14 Mar 2016 11:10:58 -0600
-Subject: [PATCH 04/24] pci pme wakeups
+Subject: [PATCH 04/26] pci pme wakeups
 
 Reduce wakeups for PME checks, which are a workaround for miswired
 boards (sadly, too many of them) in laptops.
@@ -154,10 +154,10 @@ index e4d4e3990..1b62e1fe2 100644
 2.31.1.527.g2d677e5b15
 
 
-From 9bfba9ccb4036e22644f2a45fe1df7ab28a9d6e0 Mon Sep 17 00:00:00 2001
+From 645ff7c251f3fa4330c46031ce47062e7c3d702e Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Mon, 6 May 2019 12:57:09 -0500
-Subject: [PATCH 05/24] ksm-wakeups
+Subject: [PATCH 05/26] ksm-wakeups
 
 reduce wakeups in ksm by adding rounding (aligning) when
 the sleep times are 1 second or longer
@@ -207,10 +207,10 @@ index 9694ee2c7..50d1d6dd1 100644
 2.31.1.527.g2d677e5b15
 
 
-From ba5b9fff3f873a6ea8dbe6b07d499190c806b69e Mon Sep 17 00:00:00 2001
+From 5ff334a68253efa87ac62bfe1e5f619827a88d4b Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Sat, 19 Mar 2016 21:32:19 -0400
-Subject: [PATCH 06/24] intel_idle: tweak cpuidle cstates
+Subject: [PATCH 06/26] intel_idle: tweak cpuidle cstates
 
 Increase target_residency in cpuidle cstate
 
@@ -428,10 +428,10 @@ index 3273360f3..257daaf1a 100644
 2.31.1.527.g2d677e5b15
 
 
-From 37dcc06c3fd76645704d1f55d249b021cce05567 Mon Sep 17 00:00:00 2001
+From 949ae350f0a24a06ff70c2da296b221b1d630ab1 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Wed, 11 Feb 2015 16:05:23 -0600
-Subject: [PATCH 07/24] bootstats: add printk's to measure boot time in more
+Subject: [PATCH 07/26] bootstats: add printk's to measure boot time in more
  detail
 
 Few distro-tweaks to add printk's to visualize boot time better
@@ -461,10 +461,10 @@ index 8d778e467..24a30b4ae 100644
 2.31.1.527.g2d677e5b15
 
 
-From eed74af7f7bca2d16be5571ae1c9d6a40e9d870d Mon Sep 17 00:00:00 2001
+From d615d661c77951babcd5df5ee68876448527b9fb Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Wed, 11 Feb 2015 17:28:14 -0600
-Subject: [PATCH 08/24] smpboot: reuse timer calibration
+Subject: [PATCH 08/26] smpboot: reuse timer calibration
 
 NO point recalibrating for known-constant tsc ...
 saves 200ms+ of boot time.
@@ -490,10 +490,10 @@ index f70dffc27..dfb9f6055 100644
 2.31.1.527.g2d677e5b15
 
 
-From 96a2c76863bf05af9854c24ccfa2ced037f2fbc7 Mon Sep 17 00:00:00 2001
+From c1aca52c12dd0e85757fccd1f691cfdc8b6f2065 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Thu, 2 Jun 2016 23:36:32 -0500
-Subject: [PATCH 09/24] Initialize ata before graphics
+Subject: [PATCH 09/26] initialize ata before graphics
 
 ATA init is the long pole in the boot process, and its asynchronous.
 move the graphics init after it so that ata and graphics initialize
@@ -541,10 +541,10 @@ index 6fba7daba..25bebfeac 100644
 2.31.1.527.g2d677e5b15
 
 
-From 5c20a08f34d143304bd7b0d4d490a70b51183527 Mon Sep 17 00:00:00 2001
+From 4b3197be81643f838891d43606798dfd2b43e424 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Fri, 29 Jul 2016 19:10:52 +0000
-Subject: [PATCH 10/24] give rdrand some credit
+Subject: [PATCH 10/26] give rdrand some credit
 
 try to credit rdrand/rdseed with some entropy
 
@@ -572,10 +572,10 @@ index 5d6acfecd..601ea65ee 100644
 2.31.1.527.g2d677e5b15
 
 
-From 1d108e49b01f54b545e19be87738c29c241dc651 Mon Sep 17 00:00:00 2001
+From 4b0640fba53b8965c3cbf1bbc62c812db8dcca1b Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Fri, 6 Jan 2017 15:34:09 +0000
-Subject: [PATCH 11/24] ipv4/tcp: allow the memory tuning for tcp to go a
+Subject: [PATCH 11/26] ipv4/tcp: allow the memory tuning for tcp to go a
  little bigger than default
 
 ---
@@ -601,10 +601,64 @@ index de7cc8445..940fa1e11 100644
 2.31.1.527.g2d677e5b15
 
 
-From a4ff82e4cd5b225926bd58a944818527ff5620b9 Mon Sep 17 00:00:00 2001
+From b4c84690615b0548f5fd71fa8a874ff49df9e475 Mon Sep 17 00:00:00 2001
+From: Arjan van de Ven <arjan@linux.intel.com>
+Date: Wed, 17 May 2017 01:52:11 +0000
+Subject: [PATCH 12/26] init: wait for partition and retry scan
+
+As Clear Linux boots fast the device is not ready when
+the mounting code is reached, so a retry device scan will
+be performed every 0.5 sec for at least 40 sec
+and synchronize the async task.
+
+Signed-off-by: Miguel Bernal Marin <miguel.bernal.marin@linux.intel.com>
+---
+ init/do_mounts.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/init/do_mounts.c b/init/do_mounts.c
+index a78e44ee6..8187b1d44 100644
+--- a/init/do_mounts.c
++++ b/init/do_mounts.c
+@@ -290,8 +290,18 @@ dev_t name_to_dev_t(const char *name)
+ 	if (strcmp(name, "/dev/ram") == 0)
+ 		return Root_RAM0;
+ #ifdef CONFIG_BLOCK
+-	if (strncmp(name, "PARTUUID=", 9) == 0)
+-		return devt_from_partuuid(name + 9);
++	if (strncmp(name, "PARTUUID=", 9) == 0) {
++		dev_t res;
++		int  needtowait = 40<<1;
++		res = devt_from_partuuid(name + 9);
++		while (!res && needtowait) {
++			/* waiting 0.5 sec */
++			msleep(500);
++			res = devt_from_partuuid(name + 9);
++			needtowait--;
++		}
++		return res;
++	}
+ 	if (strncmp(name, "PARTLABEL=", 10) == 0)
+ 		return devt_from_partlabel(name + 10);
+ 	if (strncmp(name, "/dev/", 5) == 0)
+@@ -581,7 +591,9 @@ void __init prepare_namespace(void)
+ 	 * For example, it is not atypical to wait 5 seconds here
+ 	 * for the touchpad of a laptop to initialize.
+ 	 */
++	async_synchronize_full();
+ 	wait_for_device_probe();
++	async_synchronize_full();
+ 
+ 	md_run_setup();
+ 
+-- 
+2.31.1.527.g2d677e5b15
+
+
+From 29adbf7ef2341e8ed4b74c6907f02f4dd8aac003 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Tue, 20 Jun 2017 20:19:08 +0000
-Subject: [PATCH 12/24] print fsync count for bootchart
+Subject: [PATCH 13/26] print fsync count for bootchart
 
 ---
  block/blk-core.c      | 3 +++
@@ -654,13 +708,17 @@ index 9c8b3ed21..5a86c8cba 100644
 2.31.1.527.g2d677e5b15
 
 
-From cd594e2642383aa3fe195b7a9d14dcd40418177b Mon Sep 17 00:00:00 2001
-From: Piotr Gorski <lucjan.lucjanov@gmail.com>
-Date: Tue, 13 Apr 2021 16:55:35 +0200
-Subject: [PATCH 13/24] clearlinux-5.12: port: Add boot option to allow
- unsigned modules
+From e49f3601409e7e7e60c1d60cc0203510ac8592f1 Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Mon, 13 Aug 2018 04:01:21 -0500
+Subject: [PATCH 14/26] add boot option to allow unsigned modules
 
-Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
+Add module.sig_unenforce boot parameter to allow loading unsigned kernel
+modules. Parameter is only effective if CONFIG_MODULE_SIG_FORCE is
+enabled and system is *not* SecureBooted.
+
+Signed-off-by: Brett T. Warden <brett.t.warden@intel.com>
+Signed-off-by: Miguel Bernal Marin <miguel.bernal.marin@linux.intel.com>
 ---
  kernel/module.c | 20 ++++++++++++++++++++
  1 file changed, 20 insertions(+)
@@ -721,10 +779,10 @@ index 30479355a..4f659af23 100644
 2.31.1.527.g2d677e5b15
 
 
-From 7960ef80a458e4ede4b5ccaf8afcc9e7aa0ccd74 Mon Sep 17 00:00:00 2001
+From be1db9f90abe83f9f298fc0cb1d5c473328e1147 Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
 Date: Wed, 20 Jun 2018 17:23:21 +0000
-Subject: [PATCH 14/24] Enable stateless firmware loading
+Subject: [PATCH 15/26] enable stateless firmware loading
 
 Prefer the order of specific version before generic and /etc before
 /lib to enable the user to give specific overrides for generic
@@ -750,10 +808,10 @@ index 78355095e..7e2c79e2a 100644
 2.31.1.527.g2d677e5b15
 
 
-From b1f26940eab97e9d3c1079b53a01063a7e0979fd Mon Sep 17 00:00:00 2001
+From 9f16795ffa5b5affa76c2bb40f7c5a2176f93557 Mon Sep 17 00:00:00 2001
 From: Auke Kok <auke-jan.h.kok@intel.com>
 Date: Thu, 2 Aug 2018 12:03:22 -0700
-Subject: [PATCH 15/24] Migrate some systemd defaults to the kernel defaults.
+Subject: [PATCH 16/26] migrate some systemd defaults to the kernel defaults.
 
 These settings are needed to prevent networking issues when
 the networking modules come up by default without explicit
@@ -796,10 +854,68 @@ index e8eb4ad03..a76bd5e60 100644
 2.31.1.527.g2d677e5b15
 
 
-From db4c94a1b7870b3186a1514747358d46f9e0dee8 Mon Sep 17 00:00:00 2001
+From a8afe32dfcf1bef2cc0d4cb4cc833e5d15c41282 Mon Sep 17 00:00:00 2001
+From: Alan Cox <alan@linux.intel.com>
+Date: Thu, 10 Mar 2016 15:11:28 +0000
+Subject: [PATCH 17/26] xattr: allow setting user.* attributes on symlinks by
+ owner
+
+Kvmtool and clear containers supports using user attributes to label host
+files with the virtual uid/guid of the file in the container. This allows an
+end user to manage their files and a complete uid space without all the ugly
+namespace stuff.
+
+The one gap in the support is symlinks because an end user can change the
+ownership of a symbolic link. We support attributes on these files as you
+can already (as root) set security attributes on them.
+
+The current rules seem slightly over-paranoid and as we have a use case this
+patch enables updating the attributes on a symbolic link IFF you are the
+owner of the synlink (as permissions are not usually meaningful on the link
+itself).
+
+Signed-off-by: Alan Cox <alan@linux.intel.com>
+---
+ fs/xattr.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/fs/xattr.c b/fs/xattr.c
+index b3444e06c..3ae01b958 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -120,16 +120,17 @@ xattr_permission(struct user_namespace *mnt_userns, struct inode *inode,
+ 	}
+ 
+ 	/*
+-	 * In the user.* namespace, only regular files and directories can have
+-	 * extended attributes. For sticky directories, only the owner and
+-	 * privileged users can write attributes.
++	 * In the user.* namespace, only regular files, symbolic links, and
++	 * directories can have extended attributes. For symbolic links and
++	 * sticky directories, only the owner and privileged users can write
++	 * attributes.
+ 	 */
+ 	if (!strncmp(name, XATTR_USER_PREFIX, XATTR_USER_PREFIX_LEN)) {
+-		if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
++		if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode) && !S_ISLNK(inode->i_mode))
+ 			return (mask & MAY_WRITE) ? -EPERM : -ENODATA;
+-		if (S_ISDIR(inode->i_mode) && (inode->i_mode & S_ISVTX) &&
+-		    (mask & MAY_WRITE) &&
+-		    !inode_owner_or_capable(mnt_userns, inode))
++		if (((S_ISDIR(inode->i_mode) && (inode->i_mode & S_ISVTX))
++		        || S_ISLNK(inode->i_mode)) && (mask & MAY_WRITE)
++		    && !inode_owner_or_capable(mnt_userns, inode))
+ 			return -EPERM;
+ 	}
+ 
+-- 
+2.31.1.527.g2d677e5b15
+
+
+From 31e56ef88ad762823d6a6d481ae793071ab2129c Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Sat, 8 Dec 2018 18:21:32 +0000
-Subject: [PATCH 16/24] use lfence instead of rep and nop
+Subject: [PATCH 18/26] use lfence instead of rep and nop
 
 ---
  arch/x86/include/asm/vdso/processor.h | 2 +-
@@ -822,10 +938,10 @@ index 57b1a7034..e2c45674f 100644
 2.31.1.527.g2d677e5b15
 
 
-From 6378d2152e024d31ee603c96f13e0a107bdeb95e Mon Sep 17 00:00:00 2001
+From 5d7ba9287e6f11bfcd65a427de0d2f43a9777969 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Thu, 13 Dec 2018 01:00:49 +0000
-Subject: [PATCH 17/24] do accept() in LIFO order for cache efficiency
+Subject: [PATCH 19/26] do accept() in LIFO order for cache efficiency
 
 ---
  include/linux/wait.h            |  2 ++
@@ -912,12 +1028,12 @@ index fd472eae4..d85f68c9f 100644
 2.31.1.527.g2d677e5b15
 
 
-From af15938f9f740ca46498e4b2d6d2a27d284f2717 Mon Sep 17 00:00:00 2001
+From 572de2f294bd6746a1524af0eaf420129cce0861 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Sun, 18 Feb 2018 23:35:41 +0000
-Subject: [PATCH 18/24] locking: rwsem: spin faster
+Subject: [PATCH 20/26] locking: rwsem: spin faster
 
-Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
+tweak rwsem owner spinning a bit
 ---
  kernel/locking/rwsem.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
@@ -948,10 +1064,10 @@ index abba5df50..b9fab2d55 100644
 2.31.1.527.g2d677e5b15
 
 
-From a5bf3a927cd644e102aa6614c0446cefad18ac6f Mon Sep 17 00:00:00 2001
+From 5c7a9c3a7e07678a6c0a1d4f31d14a69aa962e65 Mon Sep 17 00:00:00 2001
 From: Joe Konno <joe.konno@intel.com>
 Date: Tue, 25 Jun 2019 10:35:54 -0700
-Subject: [PATCH 19/24] ata: libahci: ignore staggered spin-up
+Subject: [PATCH 21/26] ata: libahci: ignore staggered spin-up
 
 Change libahci to ignore firmware's staggered spin-up flag. End-users
 who wish to honor firmware's SSS flag can add the following kernel
@@ -991,10 +1107,10 @@ index fec2e9754..e339cb80f 100644
 2.31.1.527.g2d677e5b15
 
 
-From 61cd3a890c3db9a837df9a603edb0186ada95ea7 Mon Sep 17 00:00:00 2001
+From ebd1fa846c122b216edde145482127eea974f4d2 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Sat, 10 Aug 2019 03:19:04 +0000
-Subject: [PATCH 20/24] print CPU that faults
+Subject: [PATCH 22/26] print CPU that faults
 
 print cpu number when we print a crash
 ---
@@ -1021,10 +1137,10 @@ index a73347e2c..f6cd80163 100644
 2.31.1.527.g2d677e5b15
 
 
-From 9304c270aae073e63720b0b6ce0fe3e1317ba3e0 Mon Sep 17 00:00:00 2001
+From 666e472ac2243234e538b5061aab483867f15561 Mon Sep 17 00:00:00 2001
 From: Jim Kukunas <james.t.kukunas@linux.intel.com>
 Date: Sat, 2 Nov 2019 00:59:52 +0000
-Subject: [PATCH 21/24] fix bug in ucode force reload revision check
+Subject: [PATCH 23/26] fix bug in ucode force reload revision check
 
 If force_ucode_load==true, reload ucode even if revision # is identical.
 ---
@@ -1048,10 +1164,10 @@ index 7e8e07bdd..1ef03ab31 100644
 2.31.1.527.g2d677e5b15
 
 
-From 2dae654b4be8f33fb80c53d6dfafa01fe7a6fa03 Mon Sep 17 00:00:00 2001
+From 6e9e600e663307285f7611ba31e3e9a65d95724b Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Mon, 11 Nov 2019 23:12:11 +0000
-Subject: [PATCH 22/24] nvme workaround
+Subject: [PATCH 24/26] nvme workaround
 
 ---
  drivers/nvme/host/core.c | 2 +-
@@ -1074,10 +1190,10 @@ index 0896e2164..685f223ab 100644
 2.31.1.527.g2d677e5b15
 
 
-From 17ff2da1dfa83f5368ace77109c7e3e964a22782 Mon Sep 17 00:00:00 2001
+From 91c27c1010c1977ee9148ab2a90eb50a50267227 Mon Sep 17 00:00:00 2001
 From: Alexander Koskovich <zvnexus@outlook.com>
 Date: Wed, 12 Feb 2020 22:47:12 +0000
-Subject: [PATCH 23/24] Don't report an error if PowerClamp run on other CPU
+Subject: [PATCH 25/26] don't report an error if PowerClamp run on other CPU
 
 ---
  drivers/thermal/intel/intel_powerclamp.c | 10 ++++++++++
@@ -1115,10 +1231,10 @@ index b0eb5ece9..5dc056d31 100644
 2.31.1.527.g2d677e5b15
 
 
-From e1811ce470526f6ded537d6aaf814efdf197657e Mon Sep 17 00:00:00 2001
+From b869f2fd5147f9e24fa5ada491364f452ff9cfa9 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Thu, 11 Jun 2020 22:30:56 +0200
-Subject: [PATCH 24/24] Port microcode patches
+Subject: [PATCH 26/26] Port microcode patches
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
 ---
