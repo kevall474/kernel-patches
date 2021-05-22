@@ -1,7 +1,7 @@
-From f18e13b1988ae618a29167b22b33f60fb3b8b343 Mon Sep 17 00:00:00 2001
+From 1b74613ea8bd2658b07043b899a39da40dfa830c Mon Sep 17 00:00:00 2001
 From: Steven Barrett <steven@liquorix.net>
 Date: Wed, 30 Dec 2020 15:23:55 -0600
-Subject: [PATCH 2/2] zen: Allow MSR writes by default
+Subject: [PATCH 2/3] zen: Allow MSR writes by default
 
 Allow MSR writes by default, which enables support for popular tools
 like throttled (lenovo_fix), and anything else that uses MSR writes to
@@ -24,5 +24,5 @@ index ed8ac6bcb..d6fc5bdb0 100644
  static ssize_t msr_read(struct file *file, char __user *buf,
  			size_t count, loff_t *ppos)
 -- 
-2.31.1.305.gd1b10fc6d8
+2.31.1.621.g97eea85a0a
 
