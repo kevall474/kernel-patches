@@ -1,0 +1,34 @@
+From 6a90d04db1844be2485cb7f7af8573660f01ed10 Mon Sep 17 00:00:00 2001
+From: kevall474 <kevall474@tuta.io>
+Date: Sun, 23 May 2021 13:09:44 +0000
+Subject: [PATCH] Remove asm for more optimization flags patche
+
+---
+ arch/x86/include/asm/jump_label.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/jump_label.h b/arch/x86/include/asm/jump_label.h
+index 610a05374c02..7f26557e13ac 100644
+--- a/arch/x86/include/asm/jump_label.h
++++ b/arch/x86/include/asm/jump_label.h
+@@ -13,7 +13,7 @@
+ 
+ #include <linux/stringify.h>
+ #include <linux/types.h>
+-
++/*
+ static __always_inline bool arch_static_branch(struct static_key * const key, const bool branch)
+ {
+ 	asm_volatile_goto("1:"
+@@ -46,7 +46,7 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
+ l_yes:
+ 	return true;
+ }
+-
++*/
+ #else	/* __ASSEMBLY__ */
+ 
+ .macro STATIC_JUMP_IF_TRUE target, key, def
+-- 
+2.31.1
+
