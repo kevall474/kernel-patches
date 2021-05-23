@@ -1,0 +1,29 @@
+From 19c03cd032ffb7474d018f1e091885709ce3db37 Mon Sep 17 00:00:00 2001
+From: kevall474 <kevall474@tuta.io>
+Date: Sun, 23 May 2021 12:11:33 +0000
+Subject: [PATCH] Remove asm for more optimization flags patche
+
+---
+ include/linux/compiler_types.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index d29bda7f6ebd..0a01c1bbd163 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -250,9 +250,9 @@ struct ftrace_likely_data {
+ # define __cficanonical
+ #endif
+ 
+-#ifndef asm_volatile_goto
+-#define asm_volatile_goto(x...) asm goto(x)
+-#endif
++/*#ifndef asm_volatile_goto*/
++/*#define asm_volatile_goto(x...) asm goto(x)*/
++/*#endif*/
+ 
+ #ifdef CONFIG_CC_HAS_ASM_INLINE
+ #define asm_inline asm __inline
+-- 
+2.31.1
+
