@@ -1,4 +1,4 @@
-From 7339373f6a399eeff97bb6246a6f4072df433a18 Mon Sep 17 00:00:00 2001
+From 7265614f09036e0b503ccbb70bc72042a94d9d69 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Mon, 5 Aug 2019 14:31:53 -0400
 Subject: [PATCH 01/23] btrfs: add a force_chunk_alloc to space_info's sysfs
@@ -116,7 +116,7 @@ index 6eb1c50fa..9372ef191 100644
 2.31.1.621.g97eea85a0a
 
 
-From d414f015cd95f49c704dfc626c76369a45da4d00 Mon Sep 17 00:00:00 2001
+From dba703d292376729cded7bec201cf1ed36fe069d Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 24 Jul 2020 12:41:47 -0400
 Subject: [PATCH 02/23] btrfs: do not evaluate the expression with
@@ -159,7 +159,7 @@ index 29ef96903..12921830e 100644
 2.31.1.621.g97eea85a0a
 
 
-From 69785e3031154ee78f323e3a9c256fefc9b6f0ba Mon Sep 17 00:00:00 2001
+From 40f2e14be3f6168540d546d6c4dbc3424d7e2ee8 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 20 Mar 2020 14:34:36 -0400
 Subject: [PATCH 03/23] btrfs: restart snapshot delete if we have to end the
@@ -236,7 +236,7 @@ index 5b82050b8..1165ef2da 100644
 2.31.1.621.g97eea85a0a
 
 
-From 9a19c7b5a537eb8ea5458daa0768fe61f9fb0ffa Mon Sep 17 00:00:00 2001
+From 38e6819eca64b3496b5eec983d5f0c10801f3961 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 24 Mar 2021 09:44:21 -0400
 Subject: [PATCH 04/23] btrfs: use percpu_read_positive instead of sum_positive
@@ -370,7 +370,7 @@ index 2da6177f4..2dc674b7c 100644
 2.31.1.621.g97eea85a0a
 
 
-From a40d1a733f8bb730debe7c7070e4d701f0d25e0b Mon Sep 17 00:00:00 2001
+From 29891e67c7d494a634d1069c56973ec2a0bcf56a Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Mon, 1 Mar 2021 09:26:42 +0000
 Subject: [PATCH 05/23] btrfs: add btree read ahead for full send operations
@@ -519,7 +519,7 @@ index 8ae8f1732..9817da145 100644
 2.31.1.621.g97eea85a0a
 
 
-From 4f7032bc37dd950987cb329aae2093c62b14367b Mon Sep 17 00:00:00 2001
+From 48446f79e679b0b0556214fb124e2602dd4ff59d Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Mon, 1 Mar 2021 09:26:43 +0000
 Subject: [PATCH 06/23] btrfs: add btree read ahead for incremental send
@@ -770,7 +770,7 @@ index 9817da145..ed1310e38 100644
 2.31.1.621.g97eea85a0a
 
 
-From 282c7fdc160c40109bf984f0bc62429b55f06313 Mon Sep 17 00:00:00 2001
+From b0c77b601eb90693f7294ecff8386e2c1bc9d5b4 Mon Sep 17 00:00:00 2001
 From: Boris Burkov <boris@bur.io>
 Date: Tue, 6 Apr 2021 15:31:18 -0700
 Subject: [PATCH 07/23] btrfs: return whole extents in fiemap
@@ -820,7 +820,7 @@ Signed-off-by: Boris Burkov <boris@bur.io>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index 910769d5f..50c8e34f2 100644
+index e7ef56798..683125943 100644
 --- a/fs/btrfs/extent_io.c
 +++ b/fs/btrfs/extent_io.c
 @@ -4975,7 +4975,7 @@ int extent_fiemap(struct btrfs_inode *inode, struct fiemap_extent_info *fieinfo,
@@ -836,7 +836,7 @@ index 910769d5f..50c8e34f2 100644
 2.31.1.621.g97eea85a0a
 
 
-From a98ebd665d35ef5ae1549b3f3b1586b891198e05 Mon Sep 17 00:00:00 2001
+From c44b3f03dad50b37cb247e4614f0a4caf98a8c59 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:42 -0400
 Subject: [PATCH 08/23] btrfs: check worker before need_preemptive_reclaim
@@ -870,7 +870,7 @@ index 2dc674b7c..c9a5e003b 100644
 2.31.1.621.g97eea85a0a
 
 
-From f11e07754217e8f8e7671d92d284536029c5a308 Mon Sep 17 00:00:00 2001
+From 86bdbfa618887c83d6744f9eb02b6b70c7fbf96c Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:43 -0400
 Subject: [PATCH 09/23] btrfs: only clamp the first time we have to start
@@ -927,7 +927,7 @@ index c9a5e003b..33edab17a 100644
 2.31.1.621.g97eea85a0a
 
 
-From c40a4413a4fb6edeae80afd3e7311db4cae3838c Mon Sep 17 00:00:00 2001
+From 1d1516b3262106726594da5233bb4954b232a2fd Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:46 -0400
 Subject: [PATCH 10/23] btrfs: don't include the global rsv size in the
@@ -962,7 +962,7 @@ index 33edab17a..52e3bfedc 100644
 2.31.1.621.g97eea85a0a
 
 
-From 03877abd5fa50d80eb3b05723f13b808be6db183 Mon Sep 17 00:00:00 2001
+From 67fce1a1ef3ad7495e94c438a64b93a5a8523cd5 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:44 -0400
 Subject: [PATCH 11/23] btrfs: take into account global rsv in
@@ -1003,7 +1003,7 @@ index 52e3bfedc..aeb1f0b7b 100644
 2.31.1.621.g97eea85a0a
 
 
-From 2d7d29489c25bfbd5fd00ae1820ac774fa83b5ab Mon Sep 17 00:00:00 2001
+From 89a9a79d3209629e2a132ac282d31f6f11b42da6 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:45 -0400
 Subject: [PATCH 12/23] btrfs: use the global rsv size in the preemptive thresh
@@ -1043,7 +1043,7 @@ index aeb1f0b7b..4e3857474 100644
 2.31.1.621.g97eea85a0a
 
 
-From 59e476402f46b635affff4ced10b63d5d49f4845 Mon Sep 17 00:00:00 2001
+From 53d85e390fa1a2c1ac67035d9097648456d961d1 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:47 -0400
 Subject: [PATCH 13/23] btrfs: only ignore delalloc if delalloc is much smaller
@@ -1090,7 +1090,7 @@ index 4e3857474..cf09b23f3 100644
 2.31.1.621.g97eea85a0a
 
 
-From 381339a41ced13a1f70a9da7cbf2b36e06833e0d Mon Sep 17 00:00:00 2001
+From d45a3b2a3b41a06eaf9f93669e8c8cb6c7b830bf Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:48 -0400
 Subject: [PATCH 14/23] btrfs: handle preemptive delalloc flushing slightly
@@ -1161,331 +1161,10 @@ index cf09b23f3..b2d834b92 100644
 2.31.1.621.g97eea85a0a
 
 
-From b7dcbab0c4fe82962bf1080d35b659b96a745307 Mon Sep 17 00:00:00 2001
-From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 29 Apr 2021 10:51:34 -0400
-Subject: [PATCH 15/23] btrfs: avoid RCU stalls while running delayed iputs
-
-Generally a delayed iput is added when we might do the final iput, so
-usually we'll end up sleeping while processing the delayed iputs
-naturally.  However there's no guarantee of this, especially for small
-files.  In production we noticed 5 instances of RCU stalls while testing
-a kernel release overnight across 1000 machines, so this is relatively
-common.
-
-Fix this by adding a cond_resched_lock() to the loop processing delayed
-iputs so we can avoid these sort of stalls.
-
-[HH: snip mangled stack trace]
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Reviewed-by: Rik van Riel <riel@surriel.com>
----
- fs/btrfs/inode.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index 8c4d2eaa5..81b93c9c6 100644
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -3253,6 +3253,7 @@ void btrfs_run_delayed_iputs(struct btrfs_fs_info *fs_info)
- 		inode = list_first_entry(&fs_info->delayed_iputs,
- 				struct btrfs_inode, delayed_iput);
- 		run_delayed_iput_locked(fs_info, inode);
-+		cond_resched_lock(&fs_info->delayed_iput_lock);
- 	}
- 	spin_unlock(&fs_info->delayed_iput_lock);
- }
--- 
-2.31.1.621.g97eea85a0a
-
-
-From 08fca90cca67a5eb7c61127b1c55d8855fa882a1 Mon Sep 17 00:00:00 2001
-From: Filipe Manana <fdmanana@suse.com>
-Date: Wed, 12 May 2021 16:27:16 +0100
-Subject: [PATCH 16/23] btrfs: fix removed dentries still existing after log is
- synced
-
-When we move one inode from one directory to another and both the inode
-and its previous parent directory were logged before, we are not supposed
-to have the dentry for the old parent if we have a power failure after the
-log is synced. Only the new dentry is supposed to exist.
-
-Generally this works correctly, however there is a scenario where this is
-not currently working, because the old parent of the file/directory that
-was moved is not authoritative for a range that includes the dir index and
-dir item keys of the old dentry. This case is better explained with the
-following example and reproducer:
-
-  # The test requires a very specific layout of keys and items in the
-  # fs/subvolume btree to trigger the bug. So we want to make sure that
-  # on whatever platform we are, we have the same leaf/node size.
-  #
-  # Currently in btrfs the node/leaf size can not be smaller than the page
-  # size (but it can be greater than the page size). So use the largest
-  # supported node/leaf size (64K).
-
-  $ mkfs.btrfs -f -n 65536 /dev/sdc
-  $ mount /dev/sdc /mnt
-
-  # "testdir" is inode 257.
-  $ mkdir /mnt/testdir
-  $ chmod 755 /mnt/testdir
-
-  # Create several empty files to have the directory "testdir" with its
-  # items spread over several leaves (7 in this case).
-  $ for ((i = 1; i <= 1200; i++)); do
-       echo -n > /mnt/testdir/file$i
-    done
-
-  # Create our test directory "dira", inode number 1458, which gets all
-  # its items in leaf 7.
-  #
-  # The BTRFS_DIR_ITEM_KEY item for inode 257 ("testdir") that points to
-  # the entry named "dira" is in leaf 2, while the BTRFS_DIR_INDEX_KEY
-  # item that points to that entry is in leaf 3.
-  #
-  # For this particular filesystem node size (64K), file count and file
-  # names, we endup with the directory entry items from inode 257 in
-  # leaves 2 and 3, as previously mentioned - what matters for triggering
-  # the bug exercised by this test case is that those items are not placed
-  # in leaf 1, they must be placed in a leaf different from the one
-  # containing the inode item for inode 257.
-  #
-  # The corresponding BTRFS_DIR_ITEM_KEY and BTRFS_DIR_INDEX_KEY items for
-  # the parent inode (257) are the following:
-  #
-  #    item 460 key (257 DIR_ITEM 3724298081) itemoff 48344 itemsize 34
-  #         location key (1458 INODE_ITEM 0) type DIR
-  #         transid 6 data_len 0 name_len 4
-  #         name: dira
-  #
-  # and:
-  #
-  #    item 771 key (257 DIR_INDEX 1202) itemoff 36673 itemsize 34
-  #         location key (1458 INODE_ITEM 0) type DIR
-  #         transid 6 data_len 0 name_len 4
-  #         name: dira
-
-  $ mkdir /mnt/testdir/dira
-
-  # Make sure everything done so far is durably persisted.
-  $ sync
-
-  # Now do a change to inode 257 ("testdir") that does not result in
-  # COWing leaves 2 and 3 - the leaves that contain the directory items
-  # pointing to inode 1458 (directory "dira").
-  #
-  # Changing permissions, the owner/group, updating or adding a xattr,
-  # etc, will not change (COW) leaves 2 and 3. So for the sake of
-  # simplicity change the permissions of inode 257, which results in
-  # updating its inode item and therefore change (COW) only leaf 1.
-
-  $ chmod 700 /mnt/testdir
-
-  # Now fsync directory inode 257.
-  #
-  # Since only the first leaf was changed/COWed, we log the inode item of
-  # inode 257 and only the dentries found in the first leaf, all have a
-  # key type of BTRFS_DIR_ITEM_KEY, and no keys of type
-  # BTRFS_DIR_INDEX_KEY, because they sort after the former type and none
-  # exist in the first leaf.
-  #
-  # We also log 3 items that represent ranges for dir items and dir
-  # indexes for which the log is authoritative:
-  #
-  # 1) a key of type BTRFS_DIR_LOG_ITEM_KEY, which indicates the log is
-  #    authoritative for all BTRFS_DIR_ITEM_KEY keys that have an offset
-  #    in the range [0, 2285968570] (the offset here is the crc32c of the
-  #    dentry's name). The value 2285968570 corresponds to the offset of
-  #    the first key of leaf 2 (which is of type BTRFS_DIR_ITEM_KEY);
-  #
-  # 2) a key of type BTRFS_DIR_LOG_ITEM_KEY, which indicates the log is
-  #    authoritative for all BTRFS_DIR_ITEM_KEY keys that have an offset
-  #    in the range [4293818216, (u64)-1] (the offset here is the crc32c
-  #    of the dentry's name). The value 4293818216 corresponds to the
-  #    offset of the highest key of type BTRFS_DIR_ITEM_KEY plus 1
-  #    (4293818215 + 1), which is located in leaf 2;
-  #
-  # 3) a key of type BTRFS_DIR_LOG_INDEX_KEY, with an offset of 1203,
-  #    which indicates the log is authoritative for all keys of type
-  #    BTRFS_DIR_INDEX_KEY that have an offset in the range
-  #    [1203, (u64)-1]. The value 1203 corresponds to the offset of the
-  #    last key of type BTRFS_DIR_INDEX_KEY plus 1 (1202 + 1), which is
-  #    located in leaf 3;
-  #
-  # Also, because "testdir" is a directory and inode 1458 ("dira") is a
-  # child directory, we log inode 1458 too.
-
-  $ xfs_io -c "fsync" /mnt/testdir
-
-  # Now move "dira", inode 1458, to be a child of the root directory
-  # (inode 256).
-  #
-  # Because this inode was previously logged, when "testdir" was fsynced,
-  # the log is updated so that the old inode reference, referring to inode
-  # 257 as the parent, is deleted and the new inode reference, referring
-  # to inode 256 as the parent, is added to the log.
-
-  $ mv /mnt/testdir/dira /mnt
-
-  # Now change some file and fsync it. This guarantees the log changes
-  # made by the previous move/rename operation are persisted. We do not
-  # need to do any special modification to the file, just any change to
-  # any file and sync the log.
-
-  $ xfs_io -c "pwrite -S 0xab 0 64K" -c "fsync" /mnt/testdir/file1
-
-  # Simulate a power failure and then mount again the filesystem to
-  # replay the log tree. We want to verify that we are able to mount the
-  # filesystem, meaning log replay was successful, and that directory
-  # inode 1458 ("dira") only has inode 256 (the filesystem's root) as
-  # its parent (and no longer a child of inode 257).
-  #
-  # It used to happen that during log replay we would end up having
-  # inode 1458 (directory "dira") with 2 hard links, being a child of
-  # inode 257 ("testdir") and inode 256 (the filesystem's root). This
-  # resulted in the tree checker detecting the issue and causing the
-  # mount operation to fail (with -EIO).
-  #
-  # This happened because in the log we have the new name/parent for
-  # inode 1458, which results in adding the new dentry with inode 256
-  # as the parent, but the previous dentry, under inode 257 was never
-  # removed - this is because the ranges for dir items and dir indexes
-  # of inode 257 for which the log is authoritative do not include the
-  # old dir item and dir index for the dentry of inode 257 referring to
-  # inode 1458:
-  #
-  # - for dir items, the log is authoritative for the ranges
-  #   [0, 2285968570] and [4293818216, (u64)-1]. The dir item at inode 257
-  #   pointing to inode 1458 has a key of (257 DIR_ITEM 3724298081), as
-  #   previously mentioned, so the dir item is not deleted when the log
-  #   replay procedure processes the authoritative ranges, as 3724298081
-  #   is outside both ranges;
-  #
-  # - for dir indexes, the log is authoritative for the range
-  #   [1203, (u64)-1], and the dir index item of inode 257 pointing to
-  #   inode 1458 has a key of (257 DIR_INDEX 1202), as previously
-  #   mentioned, so the dir index item is not deleted when the log
-  #   replay procedure processes the authoritative range.
-
-  <power failure>
-
-  $ mount /dev/sdc /mnt
-  mount: /mnt: can't read superblock on /dev/sdc.
-
-  $ dmesg
-  (...)
-  [87849.840509] BTRFS info (device sdc): start tree-log replay
-  [87849.875719] BTRFS critical (device sdc): corrupt leaf: root=5 block=30539776 slot=554 ino=1458, invalid nlink: has 2 expect no more than 1 for dir
-  [87849.878084] BTRFS info (device sdc): leaf 30539776 gen 7 total ptrs 557 free space 2092 owner 5
-  [87849.879516] BTRFS info (device sdc): refs 1 lock_owner 0 current 2099108
-  [87849.880613] 	item 0 key (1181 1 0) itemoff 65275 itemsize 160
-  [87849.881544] 		inode generation 6 size 0 mode 100644
-  [87849.882692] 	item 1 key (1181 12 257) itemoff 65258 itemsize 17
-  (...)
-  [87850.562549] 	item 556 key (1458 12 257) itemoff 16017 itemsize 14
-  [87850.563349] BTRFS error (device dm-0): block=30539776 write time tree block corruption detected
-  [87850.564386] ------------[ cut here ]------------
-  [87850.564920] WARNING: CPU: 3 PID: 2099108 at fs/btrfs/disk-io.c:465 csum_one_extent_buffer+0xed/0x100 [btrfs]
-  [87850.566129] Modules linked in: btrfs dm_zero dm_snapshot (...)
-  [87850.573789] CPU: 3 PID: 2099108 Comm: mount Not tainted 5.12.0-rc8-btrfs-next-86 #1
-  (...)
-  [87850.587481] Call Trace:
-  [87850.587768]  btree_csum_one_bio+0x244/0x2b0 [btrfs]
-  [87850.588354]  ? btrfs_bio_fits_in_stripe+0xd8/0x110 [btrfs]
-  [87850.589003]  btrfs_submit_metadata_bio+0xb7/0x100 [btrfs]
-  [87850.589654]  submit_one_bio+0x61/0x70 [btrfs]
-  [87850.590248]  submit_extent_page+0x91/0x2f0 [btrfs]
-  [87850.590842]  write_one_eb+0x175/0x440 [btrfs]
-  [87850.591370]  ? find_extent_buffer_nolock+0x1c0/0x1c0 [btrfs]
-  [87850.592036]  btree_write_cache_pages+0x1e6/0x610 [btrfs]
-  [87850.592665]  ? free_debug_processing+0x1d5/0x240
-  [87850.593209]  do_writepages+0x43/0xf0
-  [87850.593798]  ? __filemap_fdatawrite_range+0xa4/0x100
-  [87850.594391]  __filemap_fdatawrite_range+0xc5/0x100
-  [87850.595196]  btrfs_write_marked_extents+0x68/0x160 [btrfs]
-  [87850.596202]  btrfs_write_and_wait_transaction.isra.0+0x4d/0xd0 [btrfs]
-  [87850.597377]  btrfs_commit_transaction+0x794/0xca0 [btrfs]
-  [87850.598455]  ? _raw_spin_unlock_irqrestore+0x32/0x60
-  [87850.599305]  ? kmem_cache_free+0x15a/0x3d0
-  [87850.600029]  btrfs_recover_log_trees+0x346/0x380 [btrfs]
-  [87850.601021]  ? replay_one_extent+0x7d0/0x7d0 [btrfs]
-  [87850.601988]  open_ctree+0x13c9/0x1698 [btrfs]
-  [87850.602846]  btrfs_mount_root.cold+0x13/0xed [btrfs]
-  [87850.603771]  ? kmem_cache_alloc_trace+0x7c9/0x930
-  [87850.604576]  ? vfs_parse_fs_string+0x5d/0xb0
-  [87850.605293]  ? kfree+0x276/0x3f0
-  [87850.605857]  legacy_get_tree+0x30/0x50
-  [87850.606540]  vfs_get_tree+0x28/0xc0
-  [87850.607163]  fc_mount+0xe/0x40
-  [87850.607695]  vfs_kern_mount.part.0+0x71/0x90
-  [87850.608440]  btrfs_mount+0x13b/0x3e0 [btrfs]
-  (...)
-  [87850.629477] ---[ end trace 68802022b99a1ea0 ]---
-  [87850.630849] BTRFS: error (device sdc) in btrfs_commit_transaction:2381: errno=-5 IO failure (Error while writing out transaction)
-  [87850.632422] BTRFS warning (device sdc): Skipping commit of aborted transaction.
-  [87850.633416] BTRFS: error (device sdc) in cleanup_transaction:1978: errno=-5 IO failure
-  [87850.634553] BTRFS: error (device sdc) in btrfs_replay_log:2431: errno=-5 IO failure (Failed to recover log tree)
-  [87850.637529] BTRFS error (device sdc): open_ctree failed
-
-In this example the inode we moved was a directory, so it was easy to
-detect the problem because directories can only have one hard link and
-the tree checker immediately detects that. If the moved inode was a file,
-then the log replay would succeed and we would end up having both the
-new hard link (/mnt/foo) and the old hard link (/mnt/testdir/foo) present,
-but only the new one should be present.
-
-Fix this by forcing re-logging of the old parent directory when logging
-the new name during a rename operation. This ensures we end up with a log
-that is authoritative for a range covering the keys for the old dentry,
-therefore causing the old dentry do be deleted when replaying the log.
-
-A test case for fstests will follow up soon.
-
-Fixes: 64d6b281ba4db0 ("btrfs: remove unnecessary check_parent_dirs_for_sync()")
-CC: stable@vger.kernel.org # 5.12+
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
----
- fs/btrfs/tree-log.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index 47e76e79b..53624fca0 100644
---- a/fs/btrfs/tree-log.c
-+++ b/fs/btrfs/tree-log.c
-@@ -6457,6 +6457,24 @@ void btrfs_log_new_name(struct btrfs_trans_handle *trans,
- 	    (!old_dir || old_dir->logged_trans < trans->transid))
- 		return;
- 
-+	/*
-+	 * If we are doing a rename (old_dir is not NULL) from a directory that
-+	 * was previously logged, make sure the next log attempt on the directory
-+	 * is not skipped and logs the inode again. This is because the log may
-+	 * not currently be authoritative for a range including the old
-+	 * BTRFS_DIR_ITEM_KEY and BTRFS_DIR_INDEX_KEY keys, so we want to make
-+	 * sure after a log replay we do not end up with both the new and old
-+	 * dentries around (in case the inode is a directory we would have a
-+	 * directory with two hard links and 2 inode references for different
-+	 * parents). The next log attempt of old_dir will happen at
-+	 * btrfs_log_all_parents(), called through btrfs_log_inode_parent()
-+	 * below, because we have previously set inode->last_unlink_trans to the
-+	 * current transaction ID, either here or at btrfs_record_unlink_dir() in
-+	 * case inode is a directory.
-+	 */
-+	if (old_dir)
-+		old_dir->logged_trans = 0;
-+
- 	btrfs_init_log_ctx(&ctx, &inode->vfs_inode);
- 	ctx.logging_new_name = true;
- 	/*
--- 
-2.31.1.621.g97eea85a0a
-
-
-From 5414613ea63e75a2c62b724c0f365e8bf44243cd Mon Sep 17 00:00:00 2001
+From 4f4d38ba99a1c1c34069b96d5b498fdeb2cf73b6 Mon Sep 17 00:00:00 2001
 From: David Sterba <dsterba@suse.com>
 Date: Tue, 18 May 2021 16:49:35 +0200
-Subject: [PATCH 17/23] btrfs: scrub: per-device bandwidth control
+Subject: [PATCH 15/23] btrfs: scrub: per-device bandwidth control
 
 Add sysfs interface to limit io during scrub. We relied on the ionice
 interface to do that, eg. the idle class let the system usable while
@@ -1694,10 +1373,10 @@ index d4c3e0dd3..be7932d9b 100644
 2.31.1.621.g97eea85a0a
 
 
-From 148ff46a660bfee25c2715727adacce9333ad914 Mon Sep 17 00:00:00 2001
+From 1260e32c5334ec7aed5ce020a05106ad89324c21 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 19 May 2021 11:29:03 -0400
-Subject: [PATCH 18/23] btrfs: abort the transaction if we fail to replay log
+Subject: [PATCH 16/23] btrfs: abort the transaction if we fail to replay log
  trees
 
 During inspection of the return path for replay I noticed that we don't
@@ -1733,10 +1412,10 @@ index 53624fca0..c4ce191b4 100644
 2.31.1.621.g97eea85a0a
 
 
-From 0f29eb163a66d98f409d9d82549a7116037b4107 Mon Sep 17 00:00:00 2001
+From cfc218a0d612a91b6a3b60e426f3929cd681382e Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef () toxicpanda ! com>
 Date: Wed, 19 May 2021 15:26:25 +0000
-Subject: [PATCH 19/23] btrfs: check error value from btrfs_update_inode in
+Subject: [PATCH 17/23] btrfs: check error value from btrfs_update_inode in
  tree log
 
 Error injection testing uncovered a case where we ended up with invalid
@@ -1782,10 +1461,10 @@ index c4ce191b4..d0bf296e1 100644
 2.31.1.621.g97eea85a0a
 
 
-From c6fd0ced39cf8caa4ce49ec3afe57d9f3eedd763 Mon Sep 17 00:00:00 2001
+From 3541a5d38d0cba90c1a0d20518bcd0547013b64f Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 19 May 2021 11:45:16 -0400
-Subject: [PATCH 20/23] btrfs: do not infinite loop in data reclaim if we
+Subject: [PATCH 18/23] btrfs: do not infinite loop in data reclaim if we
  aborted
 
 Error injection stressing uncovered a busy loop in our data reclaim
@@ -1920,10 +1599,10 @@ index b2d834b92..208f47e60 100644
 2.31.1.621.g97eea85a0a
 
 
-From 35c6968080b0f3aff09753a01b0fc65eafa25710 Mon Sep 17 00:00:00 2001
+From 849574d57c01080de64728db8f025ea777f486fe Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef () toxicpanda ! com>
 Date: Wed, 19 May 2021 14:52:45 +0000
-Subject: [PATCH 21/23] btrfs: fix error handling in btrfs_del_csums
+Subject: [PATCH 19/23] btrfs: fix error handling in btrfs_del_csums
 
 Error injection stress would sometimes fail with checksums on disk that
 did not have a corresponding extent.  This occurred because the pattern
@@ -2010,10 +1689,10 @@ index 47cd3a6dc..2a4dfe94a 100644
 2.31.1.621.g97eea85a0a
 
 
-From 85f1ac91100bbfe79ac32ad77e636da8381af7ca Mon Sep 17 00:00:00 2001
+From 70ab182920807cffe41d9e008f44a62e182257b8 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 19 May 2021 09:38:27 -0400
-Subject: [PATCH 22/23] btrfs: mark ordered extent and inode with error if we
+Subject: [PATCH 20/23] btrfs: mark ordered extent and inode with error if we
  fail to finish
 
 While doing error injection testing I saw that sometimes we'd get an
@@ -2040,7 +1719,7 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 13 insertions(+)
 
 diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index 81b93c9c6..e5535bf48 100644
+index d32164985..ec7895393 100644
 --- a/fs/btrfs/inode.c
 +++ b/fs/btrfs/inode.c
 @@ -3011,6 +3011,19 @@ static int btrfs_finish_ordered_io(struct btrfs_ordered_extent *ordered_extent)
@@ -2067,10 +1746,10 @@ index 81b93c9c6..e5535bf48 100644
 2.31.1.621.g97eea85a0a
 
 
-From 9e1d4f485cb2f826aa9cd5a407dd466519bd1993 Mon Sep 17 00:00:00 2001
+From bce7600b2c2c4e16efa41db0a7c36913c97a4c13 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 19 May 2021 10:52:46 -0400
-Subject: [PATCH 23/23] btrfs: return errors from btrfs_del_csums in
+Subject: [PATCH 21/23] btrfs: return errors from btrfs_del_csums in
  cleanup_ref_head
 
 We are unconditionally returning 0 in cleanup_ref_head, despite the fact
@@ -2105,6 +1784,138 @@ index 1165ef2da..119145293 100644
  }
  
  static struct btrfs_delayed_ref_head *btrfs_obtain_ref_head(
+-- 
+2.31.1.621.g97eea85a0a
+
+
+From ac2707ffd0539cfcd3fae74eecaf799139a81bd0 Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Fri, 12 Mar 2021 15:25:05 -0500
+Subject: [PATCH 22/23] btrfs: handle btrfs_record_root_in_trans failure in
+ btrfs_recover_log_trees
+
+btrfs_record_root_in_trans will return errors in the future, so handle
+the error properly in btrfs_recover_log_trees.
+
+This appears tricky, however we have a reference count on the
+destination root, so if this fails we need to continue on in the loop to
+make sure the proper cleanup is done.
+
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+[ add comment ]
+Signed-off-by: David Sterba <dsterba@suse.com>
+---
+ fs/btrfs/tree-log.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
+index d0bf296e1..4ea7c534e 100644
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -6285,8 +6285,13 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+ 		}
+ 
+ 		wc.replay_dest->log_root = log;
+-		btrfs_record_root_in_trans(trans, wc.replay_dest);
+-		ret = walk_log_tree(trans, log, &wc);
++		ret = btrfs_record_root_in_trans(trans, wc.replay_dest);
++		if (ret)
++			/* The loop needs to continue due to the root refs */
++			btrfs_handle_fs_error(fs_info, ret,
++				"failed to record the log root in transaction");
++		else
++			ret = walk_log_tree(trans, log, &wc);
+ 
+ 		if (!ret && wc.stage == LOG_WALK_REPLAY_ALL) {
+ 			ret = fixup_inode_link_counts(trans, wc.replay_dest,
+-- 
+2.31.1.621.g97eea85a0a
+
+
+From cfa5e1c2e986c74a987679f885315f95e0f70916 Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef () toxicpanda ! com>
+Date: Thu, 20 May 2021 14:46:01 +0000
+Subject: [PATCH 23/23] btrfs: change handle_fs_error in recover_log_trees to
+ aborts
+
+During inspection of the return path for replay I noticed that we don't
+actually abort the transaction if we get a failure during replay.  This
+isn't a problem necessarily, as we properly return the error and will
+fail to mount.  However we still leave this dangling transaction that
+could conceivably be committed without thinking there was an error.
+We were using btrfs_handle_fs_error() here, but that pre-dates the
+transaction abort code.  Simply replace the btrfs_handle_fs_error()
+calls with transaction aborts, so we still know where exactly things
+went wrong, and add a few in some other un-handled error cases.
+
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/tree-log.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
+index 4ea7c534e..59c71e323 100644
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -6232,8 +6232,7 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+ 		ret = btrfs_search_slot(NULL, log_root_tree, &key, path, 0, 0);
+ 
+ 		if (ret < 0) {
+-			btrfs_handle_fs_error(fs_info, ret,
+-				    "Couldn't find tree log root.");
++			btrfs_abort_transaction(trans, ret);
+ 			goto error;
+ 		}
+ 		if (ret > 0) {
+@@ -6250,8 +6249,7 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+ 		log = btrfs_read_tree_root(log_root_tree, &found_key);
+ 		if (IS_ERR(log)) {
+ 			ret = PTR_ERR(log);
+-			btrfs_handle_fs_error(fs_info, ret,
+-				    "Couldn't read tree log root.");
++			btrfs_abort_transaction(trans, ret);
+ 			goto error;
+ 		}
+ 
+@@ -6279,8 +6277,7 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+ 
+ 			if (!ret)
+ 				goto next;
+-			btrfs_handle_fs_error(fs_info, ret,
+-				"Couldn't read target root for tree log recovery.");
++			btrfs_abort_transaction(trans, ret);
+ 			goto error;
+ 		}
+ 
+@@ -6288,14 +6285,15 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+ 		ret = btrfs_record_root_in_trans(trans, wc.replay_dest);
+ 		if (ret)
+ 			/* The loop needs to continue due to the root refs */
+-			btrfs_handle_fs_error(fs_info, ret,
+-				"failed to record the log root in transaction");
++			btrfs_abort_transaction(trans, ret);
+ 		else
+ 			ret = walk_log_tree(trans, log, &wc);
+ 
+ 		if (!ret && wc.stage == LOG_WALK_REPLAY_ALL) {
+ 			ret = fixup_inode_link_counts(trans, wc.replay_dest,
+ 						      path);
++			if (ret)
++				btrfs_abort_transaction(trans, ret);
+ 		}
+ 
+ 		if (!ret && wc.stage == LOG_WALK_REPLAY_ALL) {
+@@ -6312,6 +6310,8 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+ 			 * could only happen during mount.
+ 			 */
+ 			ret = btrfs_init_root_free_objectid(root);
++			if (ret)
++				btrfs_abort_transaction(trans, ret);
+ 		}
+ 
+ 		wc.replay_dest->log_root = NULL;
 -- 
 2.31.1.621.g97eea85a0a
 
