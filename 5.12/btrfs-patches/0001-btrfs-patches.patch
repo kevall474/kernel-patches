@@ -1,7 +1,7 @@
-From 7265614f09036e0b503ccbb70bc72042a94d9d69 Mon Sep 17 00:00:00 2001
+From 94683d448dbbd0bd6b54a95e503ccaef3d26513c Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Mon, 5 Aug 2019 14:31:53 -0400
-Subject: [PATCH 01/23] btrfs: add a force_chunk_alloc to space_info's sysfs
+Subject: [PATCH 01/22] btrfs: add a force_chunk_alloc to space_info's sysfs
 
 In testing various things such as the btrfsck patch to detect over
 allocation of chunks, empty block group deletion, and balance I've had
@@ -113,13 +113,13 @@ index 6eb1c50fa..9372ef191 100644
  #define BTRFS_FEATURE_NAME_MAX 13
  static char btrfs_unknown_feature_names[FEAT_MAX][NUM_FEATURE_BITS][BTRFS_FEATURE_NAME_MAX];
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From dba703d292376729cded7bec201cf1ed36fe069d Mon Sep 17 00:00:00 2001
+From 923edbb27eb8b56784d050c7bc19e0991e727638 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 24 Jul 2020 12:41:47 -0400
-Subject: [PATCH 02/23] btrfs: do not evaluate the expression with
+Subject: [PATCH 02/22] btrfs: do not evaluate the expression with
  !CONFIG_BTRFS_ASSERT
 
 While investigating a performance issue I noticed that turning off
@@ -156,13 +156,13 @@ index 29ef96903..12921830e 100644
  
  /*
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 40f2e14be3f6168540d546d6c4dbc3424d7e2ee8 Mon Sep 17 00:00:00 2001
+From 670fb7845e0ec40aa676219f5a7a8d29ddfbb386 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 20 Mar 2020 14:34:36 -0400
-Subject: [PATCH 03/23] btrfs: restart snapshot delete if we have to end the
+Subject: [PATCH 03/22] btrfs: restart snapshot delete if we have to end the
  transaction
 
 This is to fully fix the deadlock described in
@@ -233,13 +233,13 @@ index 5b82050b8..1165ef2da 100644
  	}
  	btrfs_release_path(path);
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 38e6819eca64b3496b5eec983d5f0c10801f3961 Mon Sep 17 00:00:00 2001
+From 64de3d78d0492e017aa827636ee0f557666a5f78 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 24 Mar 2021 09:44:21 -0400
-Subject: [PATCH 04/23] btrfs: use percpu_read_positive instead of sum_positive
+Subject: [PATCH 04/22] btrfs: use percpu_read_positive instead of sum_positive
  for need_preempt
 
 Looking at perf data for a fio workload I noticed that we were spending
@@ -367,13 +367,13 @@ index 2da6177f4..2dc674b7c 100644
  		used += fs_info->delayed_refs_rsv.reserved +
  			fs_info->delayed_block_rsv.reserved;
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 29891e67c7d494a634d1069c56973ec2a0bcf56a Mon Sep 17 00:00:00 2001
+From 065cc45a99fee65343a74835b481363e6becc85f Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Mon, 1 Mar 2021 09:26:42 +0000
-Subject: [PATCH 05/23] btrfs: add btree read ahead for full send operations
+Subject: [PATCH 05/22] btrfs: add btree read ahead for full send operations
 
 When doing a full send we know that we are going to be reading every node
 and leaf of the send root, so we benefit from enabling read ahead for the
@@ -516,13 +516,13 @@ index 8ae8f1732..9817da145 100644
  	key.objectid = BTRFS_FIRST_FREE_OBJECTID;
  	key.type = BTRFS_INODE_ITEM_KEY;
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 48446f79e679b0b0556214fb124e2602dd4ff59d Mon Sep 17 00:00:00 2001
+From 0411c245bc7737b24003be0695dd287834e2db51 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Mon, 1 Mar 2021 09:26:43 +0000
-Subject: [PATCH 06/23] btrfs: add btree read ahead for incremental send
+Subject: [PATCH 06/22] btrfs: add btree read ahead for incremental send
  operations
 
 Currently we do not do btree read ahead when doing an incremental send,
@@ -767,79 +767,13 @@ index 9817da145..ed1310e38 100644
  				right_end_reached = ADVANCE;
  			else if (ret < 0)
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From b0c77b601eb90693f7294ecff8386e2c1bc9d5b4 Mon Sep 17 00:00:00 2001
-From: Boris Burkov <boris@bur.io>
-Date: Tue, 6 Apr 2021 15:31:18 -0700
-Subject: [PATCH 07/23] btrfs: return whole extents in fiemap
-
-`xfs_io -c 'fiemap <off> <len>' <file>`
-can give surprising results on btrfs that differ from xfs.
-
-btrfs spits out extents trimmed to fit the user input. If the user's
-fiemap request has an offset, then rather than returning each whole
-extent which intersects that range, we also trim the start extent to not
-have start < off.
-
-Documentation in filesystems/fiemap.txt and the xfs_io man page suggests
-that returning the whole extent is expected.
-
-Some cases which all yield the same fiemap in xfs, but not btrfs:
-dd if=/dev/zero of=$f bs=4k count=1
-sudo xfs_io -c 'fiemap 0 1024' $f
-  0: [0..7]: 26624..26631
-sudo xfs_io -c 'fiemap 2048 1024' $f
-  0: [4..7]: 26628..26631
-sudo xfs_io -c 'fiemap 2048 4096' $f
-  0: [4..7]: 26628..26631
-sudo xfs_io -c 'fiemap 3584 512' $f
-  0: [7..7]: 26631..26631
-sudo xfs_io -c 'fiemap 4091 5' $f
-  0: [7..6]: 26631..26630
-
-I believe this is a consequence of the logic for merging contiguous
-extents represented by separate extent items. That logic needs to track
-the last offset as it loops through the extent items, which happens to
-pick up the start offset on the first iteration, and trim off the
-beginning of the full extent. To fix it, start `off` at 0 rather than
-`start` so that we keep the iteration/merging intact without cutting off
-the start of the extent.
-
-after the fix, all the above commands give:
-0: [0..7]: 26624..26631
-
-The merging logic is exercised by xfstest generic/483, and I have
-written a new xfstest for checking we don't have backwards or
-zero-length fiemaps for cases like those above.
-
-Signed-off-by: Boris Burkov <boris@bur.io>
----
- fs/btrfs/extent_io.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index e7ef56798..683125943 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -4975,7 +4975,7 @@ int extent_fiemap(struct btrfs_inode *inode, struct fiemap_extent_info *fieinfo,
- 		  u64 start, u64 len)
- {
- 	int ret = 0;
--	u64 off = start;
-+	u64 off = 0;
- 	u64 max = start + len;
- 	u32 flags = 0;
- 	u32 found_type;
--- 
-2.31.1.621.g97eea85a0a
-
-
-From c44b3f03dad50b37cb247e4614f0a4caf98a8c59 Mon Sep 17 00:00:00 2001
+From 0ad4cf1149eaff7a5ed0e0f769108c2a29f17667 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:42 -0400
-Subject: [PATCH 08/23] btrfs: check worker before need_preemptive_reclaim
+Subject: [PATCH 07/22] btrfs: check worker before need_preemptive_reclaim
 
 need_preemptive_reclaim() does some calculations, which aren't heavy,
 but if we're already running preemptive reclaim there's no reason to do
@@ -867,13 +801,13 @@ index 2dc674b7c..c9a5e003b 100644
  						  orig_bytes, flush, "preempt");
  			queue_work(system_unbound_wq,
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 86bdbfa618887c83d6744f9eb02b6b70c7fbf96c Mon Sep 17 00:00:00 2001
+From 6fd0fb4878a897cf31bd50b082d07fb7605288e6 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:43 -0400
-Subject: [PATCH 09/23] btrfs: only clamp the first time we have to start
+Subject: [PATCH 08/22] btrfs: only clamp the first time we have to start
  flushing
 
 We were clamping the threshold for preemptive reclaim any time we added
@@ -924,13 +858,13 @@ index c9a5e003b..33edab17a 100644
  		used += orig_bytes;
  		/*
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 1d1516b3262106726594da5233bb4954b232a2fd Mon Sep 17 00:00:00 2001
+From b77568efd0449b690104b3a286cfec66c20ba734 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:46 -0400
-Subject: [PATCH 10/23] btrfs: don't include the global rsv size in the
+Subject: [PATCH 09/22] btrfs: don't include the global rsv size in the
  preemptive used amount
 
 When deciding if we should preemptively flush space, we will add in the
@@ -959,13 +893,13 @@ index 33edab17a..52e3bfedc 100644
  	return (used >= thresh && !btrfs_fs_closing(fs_info) &&
  		!test_bit(BTRFS_FS_STATE_REMOUNTING, &fs_info->fs_state));
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 67fce1a1ef3ad7495e94c438a64b93a5a8523cd5 Mon Sep 17 00:00:00 2001
+From 04905815488852b1d676ce45ba095605a86fad7e Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:44 -0400
-Subject: [PATCH 11/23] btrfs: take into account global rsv in
+Subject: [PATCH 10/22] btrfs: take into account global rsv in
  need_preemptive_reclaim
 
 Global rsv can't be used for normal allocations, and for very full file
@@ -1000,13 +934,13 @@ index 52e3bfedc..aeb1f0b7b 100644
  
  	/*
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 89a9a79d3209629e2a132ac282d31f6f11b42da6 Mon Sep 17 00:00:00 2001
+From 6d96198144c1c7d48f0d06544d63194c7e4f2496 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:45 -0400
-Subject: [PATCH 12/23] btrfs: use the global rsv size in the preemptive thresh
+Subject: [PATCH 11/22] btrfs: use the global rsv size in the preemptive thresh
  calculation
 
 We calculate the amount of "free" space available for normal
@@ -1040,13 +974,13 @@ index aeb1f0b7b..4e3857474 100644
  
  	used = space_info->bytes_pinned;
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 53d85e390fa1a2c1ac67035d9097648456d961d1 Mon Sep 17 00:00:00 2001
+From fb85a3322a772077443254a0e0f522b0fe4b5779 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:47 -0400
-Subject: [PATCH 13/23] btrfs: only ignore delalloc if delalloc is much smaller
+Subject: [PATCH 12/22] btrfs: only ignore delalloc if delalloc is much smaller
  than ordered
 
 While testing heavy delalloc workloads I noticed that sometimes we'd
@@ -1087,13 +1021,13 @@ index 4e3857474..cf09b23f3 100644
  	if (ordered >= delalloc)
  		used += fs_info->delayed_refs_rsv.reserved +
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From d45a3b2a3b41a06eaf9f93669e8c8cb6c7b830bf Mon Sep 17 00:00:00 2001
+From f6ddaf0c1d8595dbcc8cb90b42c2c19c87d3bf48 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:48 -0400
-Subject: [PATCH 14/23] btrfs: handle preemptive delalloc flushing slightly
+Subject: [PATCH 13/22] btrfs: handle preemptive delalloc flushing slightly
  differently
 
 If we decide to flush delalloc from the preemptive flusher, we really do
@@ -1158,13 +1092,13 @@ index cf09b23f3..b2d834b92 100644
  	case FLUSH_DELAYED_REFS_NR:
  	case FLUSH_DELAYED_REFS:
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 4f4d38ba99a1c1c34069b96d5b498fdeb2cf73b6 Mon Sep 17 00:00:00 2001
+From 7924d667cbb8298c2c178f73ad7c95b8be241800 Mon Sep 17 00:00:00 2001
 From: David Sterba <dsterba@suse.com>
 Date: Tue, 18 May 2021 16:49:35 +0200
-Subject: [PATCH 15/23] btrfs: scrub: per-device bandwidth control
+Subject: [PATCH 14/22] btrfs: scrub: per-device bandwidth control
 
 Add sysfs interface to limit io during scrub. We relied on the ionice
 interface to do that, eg. the idle class let the system usable while
@@ -1370,13 +1304,13 @@ index d4c3e0dd3..be7932d9b 100644
  
  /*
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 1260e32c5334ec7aed5ce020a05106ad89324c21 Mon Sep 17 00:00:00 2001
+From 123000e43adad9a61f244ce8ad1a1e8281e886ee Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 19 May 2021 11:29:03 -0400
-Subject: [PATCH 16/23] btrfs: abort the transaction if we fail to replay log
+Subject: [PATCH 15/22] btrfs: abort the transaction if we fail to replay log
  trees
 
 During inspection of the return path for replay I noticed that we don't
@@ -1393,10 +1327,10 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index 53624fca0..c4ce191b4 100644
+index d7f1599e6..473ce7bf9 100644
 --- a/fs/btrfs/tree-log.c
 +++ b/fs/btrfs/tree-log.c
-@@ -6344,8 +6344,10 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+@@ -6342,8 +6342,10 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
  
  	return 0;
  error:
@@ -1409,13 +1343,13 @@ index 53624fca0..c4ce191b4 100644
  	return ret;
  }
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From cfc218a0d612a91b6a3b60e426f3929cd681382e Mon Sep 17 00:00:00 2001
+From 1461553a6c4c3b16fc03ec2cac23e906262746b0 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef () toxicpanda ! com>
 Date: Wed, 19 May 2021 15:26:25 +0000
-Subject: [PATCH 17/23] btrfs: check error value from btrfs_update_inode in
+Subject: [PATCH 16/22] btrfs: check error value from btrfs_update_inode in
  tree log
 
 Error injection testing uncovered a case where we ended up with invalid
@@ -1432,7 +1366,7 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index c4ce191b4..d0bf296e1 100644
+index 473ce7bf9..b2c2f2ce3 100644
 --- a/fs/btrfs/tree-log.c
 +++ b/fs/btrfs/tree-log.c
 @@ -1574,7 +1574,9 @@ static noinline int add_inode_ref(struct btrfs_trans_handle *trans,
@@ -1458,13 +1392,13 @@ index c4ce191b4..d0bf296e1 100644
  	BTRFS_I(inode)->index_cnt = (u64)-1;
  
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 3541a5d38d0cba90c1a0d20518bcd0547013b64f Mon Sep 17 00:00:00 2001
+From 782ada988e0ac78d817439194a41e8a9ac2a3f7e Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 19 May 2021 11:45:16 -0400
-Subject: [PATCH 18/23] btrfs: do not infinite loop in data reclaim if we
+Subject: [PATCH 17/22] btrfs: do not infinite loop in data reclaim if we
  aborted
 
 Error injection stressing uncovered a busy loop in our data reclaim
@@ -1596,13 +1530,13 @@ index b2d834b92..208f47e60 100644
  		spin_unlock(&space_info->lock);
  	}
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 849574d57c01080de64728db8f025ea777f486fe Mon Sep 17 00:00:00 2001
+From 832e83c6ae194a6a21bc64310308f462b1e7130a Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef () toxicpanda ! com>
 Date: Wed, 19 May 2021 14:52:45 +0000
-Subject: [PATCH 19/23] btrfs: fix error handling in btrfs_del_csums
+Subject: [PATCH 18/22] btrfs: fix error handling in btrfs_del_csums
 
 Error injection stress would sometimes fail with checksums on disk that
 did not have a corresponding extent.  This occurred because the pattern
@@ -1686,13 +1620,13 @@ index 47cd3a6dc..2a4dfe94a 100644
  	return ret;
  }
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From 70ab182920807cffe41d9e008f44a62e182257b8 Mon Sep 17 00:00:00 2001
+From e72e199aff0c37d9c5dd3871241a812360a92240 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 19 May 2021 09:38:27 -0400
-Subject: [PATCH 20/23] btrfs: mark ordered extent and inode with error if we
+Subject: [PATCH 19/22] btrfs: mark ordered extent and inode with error if we
  fail to finish
 
 While doing error injection testing I saw that sometimes we'd get an
@@ -1719,7 +1653,7 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 13 insertions(+)
 
 diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index d32164985..ec7895393 100644
+index 81b93c9c6..e5535bf48 100644
 --- a/fs/btrfs/inode.c
 +++ b/fs/btrfs/inode.c
 @@ -3011,6 +3011,19 @@ static int btrfs_finish_ordered_io(struct btrfs_ordered_extent *ordered_extent)
@@ -1743,13 +1677,13 @@ index d32164985..ec7895393 100644
  			unwritten_start += logical_len;
  		clear_extent_uptodate(io_tree, unwritten_start, end, NULL);
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From bce7600b2c2c4e16efa41db0a7c36913c97a4c13 Mon Sep 17 00:00:00 2001
+From c098e457ac3dc698a2027fc26e48377ba14d0129 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 19 May 2021 10:52:46 -0400
-Subject: [PATCH 21/23] btrfs: return errors from btrfs_del_csums in
+Subject: [PATCH 20/22] btrfs: return errors from btrfs_del_csums in
  cleanup_ref_head
 
 We are unconditionally returning 0 in cleanup_ref_head, despite the fact
@@ -1785,13 +1719,13 @@ index 1165ef2da..119145293 100644
  
  static struct btrfs_delayed_ref_head *btrfs_obtain_ref_head(
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From ac2707ffd0539cfcd3fae74eecaf799139a81bd0 Mon Sep 17 00:00:00 2001
+From b075cc3fefeed9745507933a06357c5a90a111cf Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 12 Mar 2021 15:25:05 -0500
-Subject: [PATCH 22/23] btrfs: handle btrfs_record_root_in_trans failure in
+Subject: [PATCH 21/22] btrfs: handle btrfs_record_root_in_trans failure in
  btrfs_recover_log_trees
 
 btrfs_record_root_in_trans will return errors in the future, so handle
@@ -1811,10 +1745,10 @@ Signed-off-by: David Sterba <dsterba@suse.com>
  1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index d0bf296e1..4ea7c534e 100644
+index b2c2f2ce3..743f8d46a 100644
 --- a/fs/btrfs/tree-log.c
 +++ b/fs/btrfs/tree-log.c
-@@ -6285,8 +6285,13 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+@@ -6283,8 +6283,13 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
  		}
  
  		wc.replay_dest->log_root = log;
@@ -1831,13 +1765,13 @@ index d0bf296e1..4ea7c534e 100644
  		if (!ret && wc.stage == LOG_WALK_REPLAY_ALL) {
  			ret = fixup_inode_link_counts(trans, wc.replay_dest,
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
 
-From cfa5e1c2e986c74a987679f885315f95e0f70916 Mon Sep 17 00:00:00 2001
+From 4dfa8fd9515b208d881fdb65c8b0b325300d6081 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef () toxicpanda ! com>
 Date: Thu, 20 May 2021 14:46:01 +0000
-Subject: [PATCH 23/23] btrfs: change handle_fs_error in recover_log_trees to
+Subject: [PATCH 22/22] btrfs: change handle_fs_error in recover_log_trees to
  aborts
 
 During inspection of the return path for replay I noticed that we don't
@@ -1856,10 +1790,10 @@ Signed-off-by: Josef Bacik <josef@toxicpanda.com>
  1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index 4ea7c534e..59c71e323 100644
+index 743f8d46a..d02ede5c7 100644
 --- a/fs/btrfs/tree-log.c
 +++ b/fs/btrfs/tree-log.c
-@@ -6232,8 +6232,7 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+@@ -6230,8 +6230,7 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
  		ret = btrfs_search_slot(NULL, log_root_tree, &key, path, 0, 0);
  
  		if (ret < 0) {
@@ -1869,7 +1803,7 @@ index 4ea7c534e..59c71e323 100644
  			goto error;
  		}
  		if (ret > 0) {
-@@ -6250,8 +6249,7 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+@@ -6248,8 +6247,7 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
  		log = btrfs_read_tree_root(log_root_tree, &found_key);
  		if (IS_ERR(log)) {
  			ret = PTR_ERR(log);
@@ -1879,7 +1813,7 @@ index 4ea7c534e..59c71e323 100644
  			goto error;
  		}
  
-@@ -6279,8 +6277,7 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+@@ -6277,8 +6275,7 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
  
  			if (!ret)
  				goto next;
@@ -1889,7 +1823,7 @@ index 4ea7c534e..59c71e323 100644
  			goto error;
  		}
  
-@@ -6288,14 +6285,15 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+@@ -6286,14 +6283,15 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
  		ret = btrfs_record_root_in_trans(trans, wc.replay_dest);
  		if (ret)
  			/* The loop needs to continue due to the root refs */
@@ -1907,7 +1841,7 @@ index 4ea7c534e..59c71e323 100644
  		}
  
  		if (!ret && wc.stage == LOG_WALK_REPLAY_ALL) {
-@@ -6312,6 +6310,8 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
+@@ -6310,6 +6308,8 @@ int btrfs_recover_log_trees(struct btrfs_root *log_root_tree)
  			 * could only happen during mount.
  			 */
  			ret = btrfs_init_root_free_objectid(root);
@@ -1917,5 +1851,5 @@ index 4ea7c534e..59c71e323 100644
  
  		wc.replay_dest->log_root = NULL;
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc1
 
