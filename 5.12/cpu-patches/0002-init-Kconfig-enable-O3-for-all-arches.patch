@@ -1,4 +1,4 @@
-From 747d3d86171ffdecf601b4bf76b3923cb3bba73d Mon Sep 17 00:00:00 2001
+From 4f9fcb0964dace73ca3cb142181e7075c48fb9ca Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Fri, 15 May 2020 16:58:29 +0200
 Subject: [PATCH 2/3] init/Kconfig: enable -O3 for all arches
@@ -21,5 +21,5 @@ index 5f5c776ef..c0f7ef4b4 100644
  	  Choosing this option will pass "-O3" to your compiler to optimize
  	  the kernel yet more for performance.
 -- 
-2.31.1.621.g97eea85a0a
+2.32.0.rc3
 

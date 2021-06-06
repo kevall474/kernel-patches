@@ -1,7 +1,7 @@
-From 083e8aca046da3492e485e5666c9f56252564f77 Mon Sep 17 00:00:00 2001
+From 314ccbb84b6a0ef5230c336346d6701b5f503248 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Thu, 2 Jul 2020 19:16:43 +0200
-Subject: [PATCH 1/7] block, Kconfig.iosched: set default value of IOSCHED_BFQ
+Subject: [PATCH 1/8] block, Kconfig.iosched: set default value of IOSCHED_BFQ
  to yes
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
@@ -36,13 +36,13 @@ index 2f2158e05..e58b2953a 100644
  	BFQ I/O scheduler for BLK-MQ. BFQ distributes the bandwidth of
  	of the device among all processes according to their weights,
 -- 
-2.32.0.rc1
+2.32.0.rc3
 
 
-From 9486555f2883370eb0e6c7949fcc734c18d34232 Mon Sep 17 00:00:00 2001
+From 01ca9797e910be9ef6098a62bba393e4ba736b4a Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Thu, 2 Jul 2020 19:26:24 +0200
-Subject: [PATCH 2/7] block: Fix depends for BLK_DEV_ZONED
+Subject: [PATCH 2/8] block: Fix depends for BLK_DEV_ZONED
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
 ---
@@ -63,13 +63,13 @@ index a2297edfd..f688ea5f0 100644
  	Block layer zoned block device support. This option enables
  	support for ZAC/ZBC/ZNS host-managed and host-aware zoned block
 -- 
-2.32.0.rc1
+2.32.0.rc3
 
 
-From 9e09046ec26857dd243655cb75fb127bc01cf957 Mon Sep 17 00:00:00 2001
+From 0987682ac0fde0896af3b03cf1ffc40b89d73d53 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Thu, 22 Oct 2020 23:54:33 +0200
-Subject: [PATCH 3/7] block: set rq_affinity = 2 for full multithreading I/O
+Subject: [PATCH 3/8] block: set rq_affinity = 2 for full multithreading I/O
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
 ---
@@ -89,13 +89,13 @@ index 158aefae1..e4ab20964 100644
  
  void blk_queue_flag_set(unsigned int flag, struct request_queue *q);
 -- 
-2.32.0.rc1
+2.32.0.rc3
 
 
-From cccc5df3920618f2d38ff7c71e7a9fb8616a6776 Mon Sep 17 00:00:00 2001
+From 04f45c327fffc3fcf0d9618004cb4ef113e1ba04 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Fri, 3 Jul 2020 12:58:15 +0200
-Subject: [PATCH 4/7] block: Add CONFIG to rename the mq-deadline scheduler
+Subject: [PATCH 4/8] block: Add CONFIG to rename the mq-deadline scheduler
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
 ---
@@ -158,13 +158,13 @@ index 3aabcd2a7..780f4422d 100644
  	.elevator_owner = THIS_MODULE,
  };
 -- 
-2.32.0.rc1
+2.32.0.rc3
 
 
-From 61749b5595cbc0f2dfb06bd60e09d59968ca0031 Mon Sep 17 00:00:00 2001
+From c1678637c9b9c8dec40be4a3ce86ddfd65c0d25d Mon Sep 17 00:00:00 2001
 From: Steven Barrett <steven@liquorix.net>
 Date: Wed, 27 Jan 2021 14:27:35 -0600
-Subject: [PATCH 5/7] ZEN: Fix mq-deadline scheduler renaming
+Subject: [PATCH 5/8] ZEN: Fix mq-deadline scheduler renaming
 
 In recent ZEN commit ("ZEN: Add CONFIG to rename the mq-deadline
 scheduler"), we only handled the elevator name if mq-deadline, but not
@@ -199,13 +199,13 @@ index 780f4422d..175436687 100644
  static int __init deadline_init(void)
  {
 -- 
-2.32.0.rc1
+2.32.0.rc3
 
 
-From acedec5628550884e6d5e8c9fe251bcbc8bc2c51 Mon Sep 17 00:00:00 2001
+From 4270fd863e9730ded666a2578c6901c41e3c8766 Mon Sep 17 00:00:00 2001
 From: Steven Barrett <steven@liquorix.net>
 Date: Wed, 27 Jan 2021 17:39:54 -0600
-Subject: [PATCH 6/7] ZEN: Increase max elevator name size
+Subject: [PATCH 6/8] ZEN: Increase max elevator name size
 
 After renaming mq-deadline to mq-deadline-nodefault, setting the new
 scheduler name would always fail.  Part of that reason was the module
@@ -232,13 +232,13 @@ index dcb2f9022..0b3c67155 100644
  struct elv_fs_entry {
  	struct attribute attr;
 -- 
-2.32.0.rc1
+2.32.0.rc3
 
 
-From 83bf6161d0cb26cbfb8c2770e7fcfac9572f49c0 Mon Sep 17 00:00:00 2001
+From 6300cd75c17d7e321e738178e75dfa71f65b4816 Mon Sep 17 00:00:00 2001
 From: Tom Saeger <tom.saeger () oracle ! com>
 Date: Fri, 26 Mar 2021 03:04:57 +0000
-Subject: [PATCH 7/7] block: fix trivial typos in comments
+Subject: [PATCH 7/8] block: fix trivial typos in comments
 
 s/Additonal/Additional/
 s/assocaited/associated/
@@ -594,5 +594,43 @@ index 6599bac0a..384aa4837 100644
  
  	switch (opcode) {
 -- 
-2.32.0.rc1
+2.32.0.rc3
+
+
+From b949c26e37528be37c671051a1c7ce751ad1b48d Mon Sep 17 00:00:00 2001
+From: Ming Lei <ming.lei@redhat.com>
+Date: Fri, 28 May 2021 11:20:55 +0800
+Subject: [PATCH 8/8] blk-mq: update hctx->dispatch_busy in case of real
+ scheduler
+
+Commit 6e6fcbc27e77 ("blk-mq: support batching dispatch in case of io")
+starts to support io batching submission by using hctx->dispatch_busy.
+
+However, blk_mq_update_dispatch_busy() isn't changed to update hctx->dispatch_busy
+in that commit, so fix the issue by updating hctx->dispatch_busy in case
+of real scheduler.
+
+Reported-by: Jan Kara <jack@suse.cz>
+Fixes: 6e6fcbc27e77 ("blk-mq: support batching dispatch in case of io")
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+---
+ block/blk-mq.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 26aa57ae7..8e5bf35ea 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -1219,9 +1219,6 @@ static void blk_mq_update_dispatch_busy(struct blk_mq_hw_ctx *hctx, bool busy)
+ {
+ 	unsigned int ewma;
+ 
+-	if (hctx->queue->elevator)
+-		return;
+-
+ 	ewma = hctx->dispatch_busy;
+ 
+ 	if (!ewma && !busy)
+-- 
+2.32.0.rc3
 
