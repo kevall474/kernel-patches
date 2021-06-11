@@ -1,0 +1,50 @@
+From f69055a1ab1bc136ff8cf3472f5f48e51cfeb108 Mon Sep 17 00:00:00 2001
+From: kevall474 <kevall474@tuta.io>
+Date: Fri, 11 Jun 2021 13:12:13 -0400
+Subject: [PATCH] Makefile Turn off loop vectorization for GCC O3 opti
+
+---
+ Makefile     | 6 ++++++
+ init/Kconfig | 6 ++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 7b643a1a7..fce7b19e7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -807,9 +807,15 @@ KBUILD_RUSTCFLAGS_OPT_LEVEL_MAP := 2
+ else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
+ KBUILD_CFLAGS += -O3
+ KBUILD_RUSTCFLAGS_OPT_LEVEL_MAP := 3
++ifdef CONFIG_CC_IS_GCC
++KBUILD_CFLAGS += -fno-tree-loop-vectorize
++endif
+ else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
+ KBUILD_CFLAGS += -Os
+ KBUILD_RUSTCFLAGS_OPT_LEVEL_MAP := z
++else ifdef CONFIG_CC_OPTIMIZE_BASAL
++KBUILD_CFLAGS += -O1
++KBUILD_RUSTCFLAGS_OPT_LEVEL_MAP := 1
+ endif
+ 
+ ifdef CONFIG_RUST_OPT_LEVEL_SIMILAR_AS_CHOSEN_FOR_C
+diff --git a/init/Kconfig b/init/Kconfig
+index 173a47401..37c2effbc 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1334,6 +1334,12 @@ choice
+ 	prompt "Compiler optimization level"
+ 	default CC_OPTIMIZE_FOR_PERFORMANCE
+ 
++config CC_OPTIMIZE_BASAL
++	bool "Optimize for performance (-O1)"
++	help
++	  Choosing this option will pass "-O1" to your compiler resulting
++	  in basal optimization, possibly speeding up compilation.
++
+ config CC_OPTIMIZE_FOR_PERFORMANCE
+ 	bool "Optimize for performance (-O2)"
+ 	help
+-- 
+2.32.0
+
