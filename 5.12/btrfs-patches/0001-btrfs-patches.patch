@@ -1,7 +1,7 @@
-From 7314ccd17b519ca74a27807d6366c653ba95459f Mon Sep 17 00:00:00 2001
+From c2b6c4c4cf9508cf8157720b599f8b378af9a978 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Mon, 5 Aug 2019 14:31:53 -0400
-Subject: [PATCH 01/21] btrfs: add a force_chunk_alloc to space_info's sysfs
+Subject: [PATCH 01/24] btrfs: add a force_chunk_alloc to space_info's sysfs
 
 In testing various things such as the btrfsck patch to detect over
 allocation of chunks, empty block group deletion, and balance I've had
@@ -113,13 +113,13 @@ index 6eb1c50fa..9372ef191 100644
  #define BTRFS_FEATURE_NAME_MAX 13
  static char btrfs_unknown_feature_names[FEAT_MAX][NUM_FEATURE_BITS][BTRFS_FEATURE_NAME_MAX];
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 683217ae1c50e85ba3f0e0b00d945d584c3d635c Mon Sep 17 00:00:00 2001
+From 0236cc97e5be8f24e15b67b28a75b6ec337076b6 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 24 Jul 2020 12:41:47 -0400
-Subject: [PATCH 02/21] btrfs: do not evaluate the expression with
+Subject: [PATCH 02/24] btrfs: do not evaluate the expression with
  !CONFIG_BTRFS_ASSERT
 
 While investigating a performance issue I noticed that turning off
@@ -156,13 +156,13 @@ index 29ef96903..12921830e 100644
  
  /*
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 7fad218eda9a393fde87e9cda67c52226afaeaa1 Mon Sep 17 00:00:00 2001
+From 7a04d8f77c11f610cea85331344753566a04be09 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 20 Mar 2020 14:34:36 -0400
-Subject: [PATCH 03/21] btrfs: restart snapshot delete if we have to end the
+Subject: [PATCH 03/24] btrfs: restart snapshot delete if we have to end the
  transaction
 
 This is to fully fix the deadlock described in
@@ -233,13 +233,13 @@ index 27c368007..1aff5769c 100644
  	}
  	btrfs_release_path(path);
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 3709759d2e56733a92249692ced0b17f954bcc1f Mon Sep 17 00:00:00 2001
+From 63589ea0435d27a362bcd1cca72f79315d28375d Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 24 Mar 2021 09:44:21 -0400
-Subject: [PATCH 04/21] btrfs: use percpu_read_positive instead of sum_positive
+Subject: [PATCH 04/24] btrfs: use percpu_read_positive instead of sum_positive
  for need_preempt
 
 Looking at perf data for a fio workload I noticed that we were spending
@@ -367,13 +367,13 @@ index 2da6177f4..2dc674b7c 100644
  		used += fs_info->delayed_refs_rsv.reserved +
  			fs_info->delayed_block_rsv.reserved;
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 5d4fe171fec36479ab8d7e55bc9d764288bb5979 Mon Sep 17 00:00:00 2001
+From 6a28da4527b25641fa841d4a9c2137d81ae38f81 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Mon, 1 Mar 2021 09:26:42 +0000
-Subject: [PATCH 05/21] btrfs: add btree read ahead for full send operations
+Subject: [PATCH 05/24] btrfs: add btree read ahead for full send operations
 
 When doing a full send we know that we are going to be reading every node
 and leaf of the send root, so we benefit from enabling read ahead for the
@@ -516,13 +516,13 @@ index 8ae8f1732..9817da145 100644
  	key.objectid = BTRFS_FIRST_FREE_OBJECTID;
  	key.type = BTRFS_INODE_ITEM_KEY;
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 58994e55764d72efc89b0e50d6e7421353396b9a Mon Sep 17 00:00:00 2001
+From 5542a69b6155a932deb6b8941707ec6b937d8203 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Mon, 1 Mar 2021 09:26:43 +0000
-Subject: [PATCH 06/21] btrfs: add btree read ahead for incremental send
+Subject: [PATCH 06/24] btrfs: add btree read ahead for incremental send
  operations
 
 Currently we do not do btree read ahead when doing an incremental send,
@@ -767,13 +767,13 @@ index 9817da145..ed1310e38 100644
  				right_end_reached = ADVANCE;
  			else if (ret < 0)
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 8c2945bc882e195173fb97981bca85d32c71c504 Mon Sep 17 00:00:00 2001
+From c698d150a240a15a377af11b80c6945f943a913c Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:42 -0400
-Subject: [PATCH 07/21] btrfs: check worker before need_preemptive_reclaim
+Subject: [PATCH 07/24] btrfs: check worker before need_preemptive_reclaim
 
 need_preemptive_reclaim() does some calculations, which aren't heavy,
 but if we're already running preemptive reclaim there's no reason to do
@@ -801,13 +801,13 @@ index 2dc674b7c..c9a5e003b 100644
  						  orig_bytes, flush, "preempt");
  			queue_work(system_unbound_wq,
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From c20e94eada7bb271ab4e1383fc3ba2db2c59a375 Mon Sep 17 00:00:00 2001
+From 54128ebdf0d99432804df8f5b53922a384a9a075 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:43 -0400
-Subject: [PATCH 08/21] btrfs: only clamp the first time we have to start
+Subject: [PATCH 08/24] btrfs: only clamp the first time we have to start
  flushing
 
 We were clamping the threshold for preemptive reclaim any time we added
@@ -858,13 +858,13 @@ index c9a5e003b..33edab17a 100644
  		used += orig_bytes;
  		/*
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 2a9ae72cecbeefd203035c9376faa5b27818c755 Mon Sep 17 00:00:00 2001
+From 2a8dd7875f3d1f433b2f54bbaf4434ab90e52598 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:46 -0400
-Subject: [PATCH 09/21] btrfs: don't include the global rsv size in the
+Subject: [PATCH 09/24] btrfs: don't include the global rsv size in the
  preemptive used amount
 
 When deciding if we should preemptively flush space, we will add in the
@@ -893,13 +893,13 @@ index 33edab17a..52e3bfedc 100644
  	return (used >= thresh && !btrfs_fs_closing(fs_info) &&
  		!test_bit(BTRFS_FS_STATE_REMOUNTING, &fs_info->fs_state));
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 89fd7b7d96f96a63b42e6442b1ee637a3bda67a3 Mon Sep 17 00:00:00 2001
+From 28e059c0a690790829ec0feed8846aec04399853 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:44 -0400
-Subject: [PATCH 10/21] btrfs: take into account global rsv in
+Subject: [PATCH 10/24] btrfs: take into account global rsv in
  need_preemptive_reclaim
 
 Global rsv can't be used for normal allocations, and for very full file
@@ -934,13 +934,13 @@ index 52e3bfedc..aeb1f0b7b 100644
  
  	/*
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 3425c667b398bf72c6dc90171720fd53ef2aea4f Mon Sep 17 00:00:00 2001
+From e957cf029a95670a9fc8cbf0cc271f265c6c27b2 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:45 -0400
-Subject: [PATCH 11/21] btrfs: use the global rsv size in the preemptive thresh
+Subject: [PATCH 11/24] btrfs: use the global rsv size in the preemptive thresh
  calculation
 
 We calculate the amount of "free" space available for normal
@@ -974,13 +974,13 @@ index aeb1f0b7b..4e3857474 100644
  
  	used = space_info->bytes_pinned;
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 1b9b867b569166a5498f9f2f92e2e899b0388b68 Mon Sep 17 00:00:00 2001
+From 1a4a04042f0dc64230172c5ba292d96c3f601bd3 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:47 -0400
-Subject: [PATCH 12/21] btrfs: only ignore delalloc if delalloc is much smaller
+Subject: [PATCH 12/24] btrfs: only ignore delalloc if delalloc is much smaller
  than ordered
 
 While testing heavy delalloc workloads I noticed that sometimes we'd
@@ -1021,13 +1021,13 @@ index 4e3857474..cf09b23f3 100644
  	if (ordered >= delalloc)
  		used += fs_info->delayed_refs_rsv.reserved +
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From e5993907dd65689cb1599b024252146ce8b6766e Mon Sep 17 00:00:00 2001
+From 5c0999bdafda83b6de1be4620ebda9d514e48bf7 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 28 Apr 2021 13:38:48 -0400
-Subject: [PATCH 13/21] btrfs: handle preemptive delalloc flushing slightly
+Subject: [PATCH 13/24] btrfs: handle preemptive delalloc flushing slightly
  differently
 
 If we decide to flush delalloc from the preemptive flusher, we really do
@@ -1092,13 +1092,13 @@ index cf09b23f3..b2d834b92 100644
  	case FLUSH_DELAYED_REFS_NR:
  	case FLUSH_DELAYED_REFS:
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 33111db8b42727e8ba838e3efb5616c06c55e2fe Mon Sep 17 00:00:00 2001
+From f50912155fac2c8d164e7ca67ef780eccf361e5b Mon Sep 17 00:00:00 2001
 From: David Sterba <dsterba@suse.com>
 Date: Tue, 18 May 2021 16:49:35 +0200
-Subject: [PATCH 14/21] btrfs: scrub: per-device bandwidth control
+Subject: [PATCH 14/24] btrfs: scrub: per-device bandwidth control
 
 Add sysfs interface to limit io during scrub. We relied on the ionice
 interface to do that, eg. the idle class let the system usable while
@@ -1304,13 +1304,13 @@ index d4c3e0dd3..be7932d9b 100644
  
  /*
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 70f96a9d8606bc53057e1371a33d635fb036025e Mon Sep 17 00:00:00 2001
+From 8f675cd32142a2139822aa611276dfac4749aa73 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 19 May 2021 11:29:03 -0400
-Subject: [PATCH 15/21] btrfs: abort the transaction if we fail to replay log
+Subject: [PATCH 15/24] btrfs: abort the transaction if we fail to replay log
  trees
 
 During inspection of the return path for replay I noticed that we don't
@@ -1343,13 +1343,13 @@ index faae6ebd8..1e062ae76 100644
  	return ret;
  }
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 9bdd61b94e992c6f34a6a77d310db873eaf187ab Mon Sep 17 00:00:00 2001
+From 2f9438af1d3497a4721741cd8ca6083139549650 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Wed, 19 May 2021 11:45:16 -0400
-Subject: [PATCH 16/21] btrfs: do not infinite loop in data reclaim if we
+Subject: [PATCH 16/24] btrfs: do not infinite loop in data reclaim if we
  aborted
 
 Error injection stressing uncovered a busy loop in our data reclaim
@@ -1481,13 +1481,13 @@ index b2d834b92..208f47e60 100644
  		spin_unlock(&space_info->lock);
  	}
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From f3f00a1bd510e27b4e9eb7bec6602dbdd8b17cc9 Mon Sep 17 00:00:00 2001
+From f384a0fe4489e823d1a20d3e497f48a6c684ffb0 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef@toxicpanda.com>
 Date: Fri, 12 Mar 2021 15:25:05 -0500
-Subject: [PATCH 17/21] btrfs: handle btrfs_record_root_in_trans failure in
+Subject: [PATCH 17/24] btrfs: handle btrfs_record_root_in_trans failure in
  btrfs_recover_log_trees
 
 btrfs_record_root_in_trans will return errors in the future, so handle
@@ -1527,13 +1527,13 @@ index 1e062ae76..2bb54ec3e 100644
  		if (!ret && wc.stage == LOG_WALK_REPLAY_ALL) {
  			ret = fixup_inode_link_counts(trans, wc.replay_dest,
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 5b0c97d41b280cd2f96a5819237a8164ec06d96e Mon Sep 17 00:00:00 2001
+From a2058b9e766081a1b7a590f30a5b68c4de1f4f39 Mon Sep 17 00:00:00 2001
 From: Josef Bacik <josef () toxicpanda ! com>
 Date: Thu, 20 May 2021 14:46:01 +0000
-Subject: [PATCH 18/21] btrfs: change handle_fs_error in recover_log_trees to
+Subject: [PATCH 18/24] btrfs: change handle_fs_error in recover_log_trees to
  aborts
 
 During inspection of the return path for replay I noticed that we don't
@@ -1613,13 +1613,13 @@ index 2bb54ec3e..301ce263b 100644
  
  		wc.replay_dest->log_root = NULL;
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 2b498306b8c4346d4e471719930d68f0ed7ad812 Mon Sep 17 00:00:00 2001
+From 8c4ce11406b9547f381c0e1953029d0c29395987 Mon Sep 17 00:00:00 2001
 From: Filipe Manana <fdmanana@suse.com>
 Date: Fri, 28 May 2021 11:37:32 +0100
-Subject: [PATCH 19/21] btrfs: avoid unnecessary logging of xattrs during fast
+Subject: [PATCH 19/24] btrfs: avoid unnecessary logging of xattrs during fast
  fsyncs
 
 When logging an inode we always log all its xattrs, so that we are able
@@ -1735,13 +1735,13 @@ index 301ce263b..f2ab22892 100644
  	if (fast_search) {
  		ret = btrfs_log_changed_extents(trans, root, inode, dst_path,
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From d7aa3f0bd3327a293eafefc3ff840168c8f8b0f2 Mon Sep 17 00:00:00 2001
+From 4604f80ecf8083797ae04aaa888d14260a92361c Mon Sep 17 00:00:00 2001
 From: Ritesh Harjani <riteshh@linux.ibm.com>
 Date: Sun, 30 May 2021 20:24:05 +0530
-Subject: [PATCH 20/21] btrfs: Fix return value of btrfs_mark_extent_written()
+Subject: [PATCH 20/24] btrfs: Fix return value of btrfs_mark_extent_written()
  in case of error
 
 We always return 0 even in case of an error in btrfs_mark_extent_written().
@@ -1775,13 +1775,13 @@ index abee4b627..f21d98c73 100644
  
  /*
 -- 
-2.32.0.rc3
+2.32.0
 
 
-From 620b1b8ecc6ee4fcb1ae78eb1b4e298ef8acd64d Mon Sep 17 00:00:00 2001
+From 96b9a270a0ce3fd506121b581e06f464b288bd9e Mon Sep 17 00:00:00 2001
 From: Nikolay Borisov <nborisov@suse.com>
 Date: Mon, 31 May 2021 12:26:01 +0300
-Subject: [PATCH 21/21] btrfs: Promote debugging asserts to full-flegded checks
+Subject: [PATCH 21/24] btrfs: Promote debugging asserts to full-flegded checks
  in validate_super
 
 Syzbot managed to trigger this assert while performing its fuzzing.
@@ -1836,5 +1836,423 @@ index 289f1f094..5a283b350 100644
  	features = btrfs_super_flags(disk_super);
  	if (features & BTRFS_SUPER_FLAG_CHANGING_FSID_V2) {
 -- 
-2.32.0.rc3
+2.32.0
+
+
+From aab91b2dc895e2d534969e245591f735cf61dcda Mon Sep 17 00:00:00 2001
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Tue, 1 Jun 2021 15:45:08 -0400
+Subject: [PATCH 22/24] btrfs: handle shrink_delalloc pages calculation
+ differently
+
+We have been hitting some early ENOSPC issues in production with more
+recent kernels, and I tracked it down to us simply not flushing delalloc
+as aggressively as we should be.  With tracing I was seeing us failing
+all tickets with all of the block rsvs at or around 0, with very little
+pinned space, but still around 120mib of outstanding bytes_may_used.
+Upon further investigation I saw that we were flushing around 14 pages
+per shrink call for delalloc, despite having around 2gib of delalloc
+outstanding.
+
+Consider the example of a 8 way machine, all cpu's trying to create a
+file in parallel, which at the time of this commit requires 5 items to
+do.  Assuming a 16k leaf size, we have 10mib of total metadata reclaim
+size waiting on reservations.  Now assume we have 128mib of delalloc
+outstanding.  With our current math we would set items to 20, and then
+set to_reclaim to 20 * 256k, or 5mib.
+
+Assuming that we went through this loop all 3 times, for both
+FLUSH_DELALLOC and FLUSH_DELALLOC_WAIT, and then did the full loop
+twice, we'd only flush 60mib of the 128mib delalloc space.  This could
+leave a fair bit of delalloc reservations still hanging around by the
+time we go to ENOSPC out all the remaining tickets.
+
+Fix this two ways.  First, change the calculations to be a fraction of
+the total delalloc bytes on the system.  Prior to my change we were
+calculating based on dirty inodes so our math made more sense, now it's
+just completely unrelated to what we're actually doing.
+
+Second add a FLUSH_DELALLOC_FULL state, that we hold off until we've
+gone through the flush states at least once.  This will empty the system
+of all delalloc so we're sure to be truly out of space when we start
+failing tickets.
+
+I'm tagging stable 5.10 and forward, because this is where we started
+using the page stuff heavily again.  This affects earlier kernel
+versions as well, but would be a pain to backport to them as the
+flushing mechanisms aren't the same.
+
+CC: stable@vger.kernel.org # 5.10
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/ctree.h             | 11 ++++++-----
+ fs/btrfs/space-info.c        | 36 +++++++++++++++++++++++++++---------
+ include/trace/events/btrfs.h |  1 +
+ 3 files changed, 34 insertions(+), 14 deletions(-)
+
+diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
+index 12921830e..75ba87dcc 100644
+--- a/fs/btrfs/ctree.h
++++ b/fs/btrfs/ctree.h
+@@ -2746,11 +2746,12 @@ enum btrfs_flush_state {
+ 	FLUSH_DELAYED_REFS	=	4,
+ 	FLUSH_DELALLOC		=	5,
+ 	FLUSH_DELALLOC_WAIT	=	6,
+-	ALLOC_CHUNK		=	7,
+-	ALLOC_CHUNK_FORCE	=	8,
+-	RUN_DELAYED_IPUTS	=	9,
+-	COMMIT_TRANS		=	10,
+-	FORCE_COMMIT_TRANS	=	11,
++	FLUSH_DELALLOC_FULL	=	7,
++	ALLOC_CHUNK		=	8,
++	ALLOC_CHUNK_FORCE	=	9,
++	RUN_DELAYED_IPUTS	=	10,
++	COMMIT_TRANS		=	11,
++	FORCE_COMMIT_TRANS	=	12,
+ };
+ 
+ int btrfs_subvolume_reserve_metadata(struct btrfs_root *root,
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index 208f47e60..88bac64d5 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -505,6 +505,10 @@ static void shrink_delalloc(struct btrfs_fs_info *fs_info,
+ 	long time_left;
+ 	int loops;
+ 
++	delalloc_bytes = percpu_counter_sum_positive(
++						&fs_info->delalloc_bytes);
++	ordered_bytes = percpu_counter_sum_positive(&fs_info->ordered_bytes);
++
+ 	/* Calc the number of the pages we need flush for space reservation */
+ 	if (to_reclaim == U64_MAX) {
+ 		items = U64_MAX;
+@@ -512,19 +516,21 @@ static void shrink_delalloc(struct btrfs_fs_info *fs_info,
+ 		/*
+ 		 * to_reclaim is set to however much metadata we need to
+ 		 * reclaim, but reclaiming that much data doesn't really track
+-		 * exactly, so increase the amount to reclaim by 2x in order to
+-		 * make sure we're flushing enough delalloc to hopefully reclaim
+-		 * some metadata reservations.
++		 * exactly.  What we really want to do is reclaim full inode's
++		 * worth of reservations, however that's not available to us
++		 * here.  We will take a fraction of the delalloc bytes for our
++		 * flushing loops and hope for the best.  Delalloc will expand
++		 * the amount we write to cover an entire dirty extent, which
++		 * will reclaim the metadata reservation for that range.  If
++		 * it's not enough subsequent flush stages will be more
++		 * aggressive.
+ 		 */
++		to_reclaim = max(to_reclaim, delalloc_bytes >> 3);
+ 		items = calc_reclaim_items_nr(fs_info, to_reclaim) * 2;
+-		to_reclaim = items * EXTENT_SIZE_PER_ITEM;
+ 	}
+ 
+ 	trans = (struct btrfs_trans_handle *)current->journal_info;
+ 
+-	delalloc_bytes = percpu_counter_sum_positive(
+-						&fs_info->delalloc_bytes);
+-	ordered_bytes = percpu_counter_sum_positive(&fs_info->ordered_bytes);
+ 	if (delalloc_bytes == 0 && ordered_bytes == 0)
+ 		return;
+ 
+@@ -710,8 +716,11 @@ static void flush_space(struct btrfs_fs_info *fs_info,
+ 		break;
+ 	case FLUSH_DELALLOC:
+ 	case FLUSH_DELALLOC_WAIT:
++	case FLUSH_DELALLOC_FULL:
++		if (state == FLUSH_DELALLOC_FULL)
++			num_bytes = U64_MAX;
+ 		shrink_delalloc(fs_info, space_info, num_bytes,
+-				state == FLUSH_DELALLOC_WAIT, for_preempt);
++				state != FLUSH_DELALLOC, for_preempt);
+ 		break;
+ 	case FLUSH_DELAYED_REFS_NR:
+ 	case FLUSH_DELAYED_REFS:
+@@ -1043,6 +1052,14 @@ static void btrfs_async_reclaim_metadata_space(struct work_struct *work)
+ 				commit_cycles--;
+ 		}
+ 
++		/*
++		 * We do not want to empty the system of delalloc unless we're
++		 * under heavy pressure, so allow one trip through the flushing
++		 * logic before we start doing a FLUSH_DELALLOC_FULL.
++		 */
++		if (flush_state == FLUSH_DELALLOC_FULL && !commit_cycles)
++			flush_state++;
++
+ 		/*
+ 		 * We don't want to force a chunk allocation until we've tried
+ 		 * pretty hard to reclaim space.  Think of the case where we
+@@ -1225,7 +1242,7 @@ static void btrfs_preempt_reclaim_metadata_space(struct work_struct *work)
+  *   so if we now have space to allocate do the force chunk allocation.
+  */
+ static const enum btrfs_flush_state data_flush_states[] = {
+-	FLUSH_DELALLOC_WAIT,
++	FLUSH_DELALLOC_FULL,
+ 	RUN_DELAYED_IPUTS,
+ 	FLUSH_DELAYED_REFS,
+ 	COMMIT_TRANS,
+@@ -1334,6 +1351,7 @@ static const enum btrfs_flush_state evict_flush_states[] = {
+ 	FLUSH_DELAYED_REFS,
+ 	FLUSH_DELALLOC,
+ 	FLUSH_DELALLOC_WAIT,
++	FLUSH_DELALLOC_FULL,
+ 	ALLOC_CHUNK,
+ 	COMMIT_TRANS,
+ };
+diff --git a/include/trace/events/btrfs.h b/include/trace/events/btrfs.h
+index 0551ea653..7cda6c3d7 100644
+--- a/include/trace/events/btrfs.h
++++ b/include/trace/events/btrfs.h
+@@ -94,6 +94,7 @@ struct btrfs_space_info;
+ 	EM( FLUSH_DELAYED_ITEMS,	"FLUSH_DELAYED_ITEMS")		\
+ 	EM( FLUSH_DELALLOC,		"FLUSH_DELALLOC")		\
+ 	EM( FLUSH_DELALLOC_WAIT,	"FLUSH_DELALLOC_WAIT")		\
++	EM( FLUSH_DELALLOC_FULL,	"FLUSH_DELALLOC_FULL")		\
+ 	EM( FLUSH_DELAYED_REFS_NR,	"FLUSH_DELAYED_REFS_NR")	\
+ 	EM( FLUSH_DELAYED_REFS,		"FLUSH_ELAYED_REFS")		\
+ 	EM( ALLOC_CHUNK,		"ALLOC_CHUNK")			\
+-- 
+2.32.0
+
+
+From 3212dc6d4da27700ff4412b120f23c6eb55158b8 Mon Sep 17 00:00:00 2001
+From: Filipe Manana <fdmanana@suse.com>
+Date: Wed, 9 Jun 2021 11:25:03 +0100
+Subject: [PATCH 23/24] btrfs: send: fix invalid path for unlink operations
+ after parent orphanization
+
+During an incremental send operation, when processing the new references
+for the current inode, we might send an unlink operation for another inode
+that has a conflicting path and has more than one hard link. However this
+path was computed and cached before we processed previous new references
+for the current inode. We may have orphanized a directory of that path
+while processing a previous new reference, in which case the path will
+be invalid and cause the receiver process to fail.
+
+The following reproducer triggers the problem and explains how/why it
+happens in its comments:
+
+  $ cat test-send-unlink.sh
+  #!/bin/bash
+
+  DEV=/dev/sdi
+  MNT=/mnt/sdi
+
+  mkfs.btrfs -f $DEV >/dev/null
+  mount $DEV $MNT
+
+  # Create our test files and directory. Inode 259 (file3) has two hard
+  # links.
+  touch $MNT/file1
+  touch $MNT/file2
+  touch $MNT/file3
+
+  mkdir $MNT/A
+  ln $MNT/file3 $MNT/A/hard_link
+
+  # Filesystem looks like:
+  #
+  # .                                     (ino 256)
+  # |----- file1                          (ino 257)
+  # |----- file2                          (ino 258)
+  # |----- file3                          (ino 259)
+  # |----- A/                             (ino 260)
+  #        |---- hard_link                (ino 259)
+  #
+
+  # Now create the base snapshot, which is going to be the parent snapshot
+  # for a later incremental send.
+  btrfs subvolume snapshot -r $MNT $MNT/snap1
+  btrfs send -f /tmp/snap1.send $MNT/snap1
+
+  # Move inode 257 into directory inode 260. This results in computing the
+  # path for inode 260 as "/A" and caching it.
+  mv $MNT/file1 $MNT/A/file1
+
+  # Move inode 258 (file2) into directory inode 260, with a name of
+  # "hard_link", moving first inode 259 away since it currently has that
+  # location and name.
+  mv $MNT/A/hard_link $MNT/tmp
+  mv $MNT/file2 $MNT/A/hard_link
+
+  # Now rename inode 260 to something else (B for example) and then create
+  # a hard link for inode 258 that has the old name and location of inode
+  # 260 ("/A").
+  mv $MNT/A $MNT/B
+  ln $MNT/B/hard_link $MNT/A
+
+  # Filesystem now looks like:
+  #
+  # .                                     (ino 256)
+  # |----- tmp                            (ino 259)
+  # |----- file3                          (ino 259)
+  # |----- B/                             (ino 260)
+  # |      |---- file1                    (ino 257)
+  # |      |---- hard_link                (ino 258)
+  # |
+  # |----- A                              (ino 258)
+
+  # Create another snapshot of our subvolume and use it for an incremental
+  # send.
+  btrfs subvolume snapshot -r $MNT $MNT/snap2
+  btrfs send -f /tmp/snap2.send -p $MNT/snap1 $MNT/snap2
+
+  # Now unmount the filesystem, create a new one, mount it and try to
+  # apply both send streams to recreate both snapshots.
+  umount $DEV
+
+  mkfs.btrfs -f $DEV >/dev/null
+
+  mount $DEV $MNT
+
+  # First add the first snapshot to the new filesystem by applying the
+  # first send stream.
+  btrfs receive -f /tmp/snap1.send $MNT
+
+  # The incremental receive operation below used to fail with the
+  # following error:
+  #
+  #    ERROR: unlink A/hard_link failed: No such file or directory
+  #
+  # This is because when send is processing inode 257, it generates the
+  # path for inode 260 as "/A", since that inode is its parent in the send
+  # snapshot, and caches that path.
+  #
+  # Later when processing inode 258, it first processes its new reference
+  # that has the path of "/A", which results in orphanizing inode 260
+  # because there is a a path collision. This results in issuing a rename
+  # operation from "/A" to "/o260-6-0".
+  #
+  # Finally when processing the new reference "B/hard_link" for inode 258,
+  # it notices that it collides with inode 259 (not yet processed, because
+  # it has a higher inode number), since that inode has the name
+  # "hard_link" under the directory inode 260. It also checks that inode
+  # 259 has two hardlinks, so it decides to issue a unlink operation for
+  # the name "hard_link" for inode 259. However the path passed to the
+  # unlink operation is "/A/hard_link", which is incorrect since currently
+  # "/A" does not exists, due to the orphanization of inode 260 mentioned
+  # before. The path is incorrect because it was computed and cached
+  # before the orphanization. This results in the receiver to fail with
+  # the above error.
+  btrfs receive -f /tmp/snap2.send $MNT
+
+  umount $MNT
+
+When running the test, it fails like this:
+
+  $ ./test-send-unlink.sh
+  Create a readonly snapshot of '/mnt/sdi' in '/mnt/sdi/snap1'
+  At subvol /mnt/sdi/snap1
+  Create a readonly snapshot of '/mnt/sdi' in '/mnt/sdi/snap2'
+  At subvol /mnt/sdi/snap2
+  At subvol snap1
+  At snapshot snap2
+  ERROR: unlink A/hard_link failed: No such file or directory
+
+Fix this by recomputing a path before issuing an unlink operation when
+processing the new references for the current inode if we previously
+have orphanized a directory.
+
+A test case for fstests will follow soon.
+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+---
+ fs/btrfs/send.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+index ed1310e38..f61ababf8 100644
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -4064,6 +4064,17 @@ static int process_recorded_refs(struct send_ctx *sctx, int *pending_move)
+ 				if (ret < 0)
+ 					goto out;
+ 			} else {
++				/*
++				 * If we previously orphanized a directory that
++				 * collided with a new reference that we already
++				 * processed, recompute the current path because
++				 * that directory may be part of the path.
++				 */
++				if (orphanized_dir) {
++					ret = refresh_ref_path(sctx, cur);
++					if (ret < 0)
++						goto out;
++				}
+ 				ret = send_unlink(sctx, cur->full_path);
+ 				if (ret < 0)
+ 					goto out;
+-- 
+2.32.0
+
+
+From ef301f7e7b137b78232f03ba5558c8cf1b9a875d Mon Sep 17 00:00:00 2001
+From: David Sterba <dsterba () suse ! com>
+Date: Fri, 11 Jun 2021 13:36:22 +0000
+Subject: [PATCH 24/24] btrfs: sysfs: export dev stats in devinfo directory
+
+The device stats can be read by ioctl, wrapped by command 'btrfs device
+stats'. Provide another source where to read the information in
+/sys/fs/btrfs/FSID/devinfo/DEVID/stats . The format is a list of
+'key value' pairs one per line, which is common in other stat files.
+The names are the same as used in other device stat outputs.
+
+The stats are all in one file as it's the snapshot of all available
+stats. The 'one value per file' is not very suitable here. The stats
+should be valid right after the stats item is read from disk, shortly
+after initializing the device.
+
+In case the stats are not yet valid, print just 'invalid' as the file
+contents.
+
+Signed-off-by: David Sterba <dsterba@suse.com>
+---
+ fs/btrfs/sysfs.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/fs/btrfs/sysfs.c b/fs/btrfs/sysfs.c
+index 9dda3feda..5c50fd77f 100644
+--- a/fs/btrfs/sysfs.c
++++ b/fs/btrfs/sysfs.c
+@@ -1509,7 +1509,36 @@ static ssize_t btrfs_devinfo_writeable_show(struct kobject *kobj,
+ }
+ BTRFS_ATTR(devid, writeable, btrfs_devinfo_writeable_show);
+ 
++static ssize_t btrfs_devinfo_error_stats_show(struct kobject *kobj,
++		struct kobj_attribute *a, char *buf)
++{
++	struct btrfs_device *device = container_of(kobj, struct btrfs_device,
++						   devid_kobj);
++
++	if (!device->dev_stats_valid)
++		return scnprintf(buf, PAGE_SIZE, "invalid\n");
++
++	/*
++	 * Print all at once so we get a snapshot of all values from the same
++	 * time. Keep them in sync and in order of definition of
++	 * btrfs_dev_stat_values.
++	 */
++	return scnprintf(buf, PAGE_SIZE,
++		"write_errs %d\n"
++		"read_errs %d\n"
++		"flush_errs %d\n"
++		"corruption_errs %d\n"
++		"generation_errs %d\n",
++		btrfs_dev_stat_read(device, BTRFS_DEV_STAT_WRITE_ERRS),
++		btrfs_dev_stat_read(device, BTRFS_DEV_STAT_READ_ERRS),
++		btrfs_dev_stat_read(device, BTRFS_DEV_STAT_FLUSH_ERRS),
++		btrfs_dev_stat_read(device, BTRFS_DEV_STAT_CORRUPTION_ERRS),
++		btrfs_dev_stat_read(device, BTRFS_DEV_STAT_GENERATION_ERRS));
++}
++BTRFS_ATTR(devid, error_stats, btrfs_devinfo_error_stats_show);
++
+ static struct attribute *devid_attrs[] = {
++	BTRFS_ATTR_PTR(devid, error_stats),
+ 	BTRFS_ATTR_PTR(devid, in_fs_metadata),
+ 	BTRFS_ATTR_PTR(devid, missing),
+ 	BTRFS_ATTR_PTR(devid, replace_target),
+-- 
+2.32.0
 
