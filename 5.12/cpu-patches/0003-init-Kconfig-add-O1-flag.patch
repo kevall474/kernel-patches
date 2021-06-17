@@ -1,4 +1,4 @@
-From b34bf2f15d41f37b705e35c540eae5e88573b842 Mon Sep 17 00:00:00 2001
+From 501a3443f0dc4692136a3837046d467628e05e39 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Tue, 18 May 2021 13:57:41 +0200
 Subject: [PATCH 3/4] init/Kconfig: add -O1 flag
@@ -10,7 +10,7 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  2 files changed, 8 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index ebc02c5..4ea0c7c 100644
+index 82ca490..cf7469b 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -739,6 +739,8 @@ else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3

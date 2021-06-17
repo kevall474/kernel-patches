@@ -1,4 +1,4 @@
-From c7804fd6104fa57f4d8d573ccc0ba17dce0f8527 Mon Sep 17 00:00:00 2001
+From 511c066786430ae44cb634d09f3e0f5c58b8eed9 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Fri, 15 May 2020 16:58:29 +0200
 Subject: [PATCH 2/4] init/Kconfig: enable -O3 for all arches
