@@ -1,6 +1,6 @@
-From 5ba400057f243e0921e144eec1c3fe701b38638a Mon Sep 17 00:00:00 2001
+From 544e3b544d0e91cf90f1ab620921bb2f374d614a Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
-Date: Tue, 1 Jun 2021 16:21:23 +0200
+Date: Tue, 15 Jun 2021 12:33:18 +0200
 Subject: [PATCH] futex2: resync from gitlab.collabora.com
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
@@ -14,7 +14,7 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  arch/x86/entry/syscalls/syscall_32.tbl        |    4 +
  arch/x86/entry/syscalls/syscall_64.tbl        |    4 +
  fs/inode.c                                    |    1 +
- include/linux/compat.h                        |   29 +
+ include/linux/compat.h                        |   26 +
  include/linux/fs.h                            |    1 +
  include/linux/syscalls.h                      |   17 +
  include/uapi/asm-generic/unistd.h             |   14 +-
@@ -22,8 +22,8 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  init/Kconfig                                  |    7 +
  kernel/Makefile                               |    1 +
  kernel/fork.c                                 |    2 +
- kernel/futex2.c                               | 1317 +++++++++++++++++
- kernel/sys_ni.c                               |    8 +
+ kernel/futex2.c                               | 1284 +++++++++++++++++
+ kernel/sys_ni.c                               |    9 +
  tools/arch/x86/include/asm/unistd_64.h        |   12 +
  tools/include/uapi/asm-generic/unistd.h       |   11 +-
  .../arch/x86/entry/syscalls/syscall_64.tbl    |    4 +
@@ -36,7 +36,7 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  tools/perf/builtin-bench.c                    |   18 +-
  .../selftests/futex/functional/.gitignore     |    4 +
  .../selftests/futex/functional/Makefile       |    7 +-
- .../futex/functional/futex2_requeue.c         |  164 ++
+ .../futex/functional/futex2_requeue.c         |  164 +++
  .../selftests/futex/functional/futex2_sizes.c |  145 ++
  .../selftests/futex/functional/futex2_wait.c  |  195 +++
  .../selftests/futex/functional/futex2_waitv.c |  154 ++
@@ -44,7 +44,7 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  .../futex/functional/futex_wait_wouldblock.c  |   33 +-
  .../testing/selftests/futex/functional/run.sh |    6 +
  .../selftests/futex/include/futex2test.h      |  113 ++
- 39 files changed, 2736 insertions(+), 52 deletions(-)
+ 39 files changed, 2701 insertions(+), 52 deletions(-)
  create mode 100644 Documentation/locking/futex2.rst
  create mode 100644 kernel/futex2.c
  create mode 100644 tools/testing/selftests/futex/functional/futex2_requeue.c
@@ -308,7 +308,7 @@ index 949788f5b..727bfc3be 100644
  
  #define __ARCH_WANT_SYS_CLONE
 diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-index 3d874f624..e5015a2b9 100644
+index 3d874f624..7fd691454 100644
 --- a/arch/arm64/include/asm/unistd32.h
 +++ b/arch/arm64/include/asm/unistd32.h
 @@ -893,6 +893,14 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
@@ -321,7 +321,7 @@ index 3d874f624..e5015a2b9 100644
 +__SYSCALL(__NR_futex_wake, sys_futex_wake)
 +#define __NR_futex_waitv 445
 +__SYSCALL(__NR_futex_waitv, compat_sys_futex_waitv)
-+#define __NR_futex_waitv 446
++#define __NR_futex_requeue 446
 +__SYSCALL(__NR_futex_requeue, compat_sys_futex_requeue)
  
  /*
@@ -366,7 +366,7 @@ index a047ab306..c5e1dd13f 100644
  	inode->i_op = &empty_iops;
  	inode->i_fop = &no_open_fops;
 diff --git a/include/linux/compat.h b/include/linux/compat.h
-index 6e65be753..42136fb99 100644
+index 6e65be753..81141044a 100644
 --- a/include/linux/compat.h
 +++ b/include/linux/compat.h
 @@ -365,6 +365,17 @@ struct compat_robust_list_head {
@@ -374,8 +374,8 @@ index 6e65be753..42136fb99 100644
  };
  
 +struct compat_futex_waitv {
++	compat_u64 val;
 +	compat_uptr_t uaddr;
-+	compat_uint_t val;
 +	compat_uint_t flags;
 +};
 +
@@ -387,17 +387,14 @@ index 6e65be753..42136fb99 100644
  #ifdef CONFIG_COMPAT_OLD_SIGACTION
  struct compat_old_sigaction {
  	compat_uptr_t			sa_handler;
-@@ -654,6 +665,24 @@ asmlinkage long
+@@ -654,6 +665,21 @@ asmlinkage long
  compat_sys_get_robust_list(int pid, compat_uptr_t __user *head_ptr,
  			   compat_size_t __user *len_ptr);
  
 +/* kernel/futex2.c */
-+asmlinkage long compat_sys_futex_requeue(struct compat_futex_requeue *uaddr1,
-+					 struct compat_futex_requeue *uaddr2,
-+					 compat_uint_t nr_wake,
-+					 compat_uint_t nr_requeue,
-+					 compat_u64 cmpval,
-+					 compat_uint_t flags);
++asmlinkage long
++compat_sys_futex_wait(void __user *uaddr, compat_u64 val, unsigned int flags,
++		      struct __kernel_timespec __user *timo);
 +asmlinkage long compat_sys_futex_waitv(struct compat_futex_waitv *waiters,
 +				       compat_uint_t nr_futexes, compat_uint_t flags,
 +				       struct __kernel_timespec __user *timo);
@@ -425,7 +422,7 @@ index ec8f3ddf4..33683ff94 100644
  	atomic_t		i_dio_count;
  	atomic_t		i_writecount;
 diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 2839dc9a7..49d36c960 100644
+index 2839dc9a7..59655c931 100644
 --- a/include/linux/syscalls.h
 +++ b/include/linux/syscalls.h
 @@ -69,6 +69,8 @@ struct io_uring_params;
@@ -442,7 +439,7 @@ index 2839dc9a7..49d36c960 100644
  				    size_t len);
  
 +/* kernel/futex2.c */
-+asmlinkage long sys_futex_wait(void __user *uaddr, unsigned int val, unsigned int flags,
++asmlinkage long sys_futex_wait(void __user *uaddr, u64 val, unsigned int flags,
 +			       struct __kernel_timespec __user *timo);
 +asmlinkage long sys_futex_wake(void __user *uaddr, unsigned int nr_wake,
 +			       unsigned int flags);
@@ -493,7 +490,7 @@ index ce58cff99..2778da551 100644
  /*
   * 32 bit systems traditionally used different
 diff --git a/include/uapi/linux/futex.h b/include/uapi/linux/futex.h
-index a3e760886..87c67bbbb 100644
+index a3e760886..5e02a0e72 100644
 --- a/include/uapi/linux/futex.h
 +++ b/include/uapi/linux/futex.h
 @@ -44,6 +44,40 @@
@@ -519,8 +516,8 @@ index a3e760886..87c67bbbb 100644
 + * @flags: Flags for this waiter
 + */
 +struct futex_waitv {
++	__u64 val;
 +	void __user *uaddr;
-+	unsigned int val;
 +	unsigned int flags;
 +};
 +
@@ -538,10 +535,10 @@ index a3e760886..87c67bbbb 100644
   * Support for robust futexes: the kernel cleans up held futexes at
   * thread exit time.
 diff --git a/init/Kconfig b/init/Kconfig
-index 5f5c776ef..11c6487ed 100644
+index 54835d5ce..2ea7f8cf2 100644
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -1537,6 +1537,13 @@ config FUTEX
+@@ -1573,6 +1573,13 @@ config FUTEX
  	  support for "fast userspace mutexes".  The resulting kernel may not
  	  run glibc-based applications correctly.
  
@@ -582,10 +579,10 @@ index 426cd0c51..9f99273b1 100644
  	}
 diff --git a/kernel/futex2.c b/kernel/futex2.c
 new file mode 100644
-index 000000000..c3ae9967b
+index 000000000..b27ad0e8c
 --- /dev/null
 +++ b/kernel/futex2.c
-@@ -0,0 +1,1317 @@
+@@ -0,0 +1,1284 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
 + * futex2 system call interface by André Almeida <andrealmeid@collabora.com>
@@ -1276,7 +1273,7 @@ index 000000000..c3ae9967b
 +	return ret;
 +}
 +
-+static long ksys_futex_wait(void __user *uaddr, unsigned int val, unsigned int flags,
++static long ksys_futex_wait(void __user *uaddr, u64 val, unsigned int flags,
 +			    struct __kernel_timespec __user *timo)
 +{
 +	bool shared = (flags & FUTEX_SHARED_FLAG) ? true : false;
@@ -1314,6 +1311,15 @@ index 000000000..c3ae9967b
 +	return __futex_waitv(futexv, 1, timo, flags);
 +}
 +
++#ifdef CONFIG_COMPAT
++COMPAT_SYSCALL_DEFINE4(compat_futex_wait, void __user *, uaddr, compat_u64, val,
++		       unsigned int, flags,
++		       struct __kernel_timespec __user *, timo)
++{
++	return ksys_futex_wait(uaddr, val, flags, timo);
++}
++#endif
++
 +/**
 + * sys_futex_wait - Wait on a futex address if (*uaddr) == val
 + * @uaddr: User address of futex
@@ -1327,7 +1333,7 @@ index 000000000..c3ae9967b
 + *
 + * Returns 0 on success, error code otherwise.
 + */
-+SYSCALL_DEFINE4(futex_wait, void __user *, uaddr, unsigned int, val, unsigned int, flags,
++SYSCALL_DEFINE4(futex_wait, void __user *, uaddr, u64, val, unsigned int, flags,
 +		struct __kernel_timespec __user *, timo)
 +{
 +	return ksys_futex_wait(uaddr, val, flags, timo);
@@ -1832,48 +1838,6 @@ index 000000000..c3ae9967b
 +	return __futex_requeue(rq1, rq2, nr_wake, nr_requeue, cmpval);
 +}
 +
-+static ssize_t wait_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			     char *buf)
-+{
-+	return sprintf(buf, "%u\n", __NR_futex_wait);
-+
-+}
-+static struct kobj_attribute futex2_wait_attr = __ATTR_RO(wait);
-+
-+static ssize_t wake_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			     char *buf)
-+{
-+	return sprintf(buf, "%u\n", __NR_futex_wake);
-+
-+}
-+static struct kobj_attribute futex2_wake_attr = __ATTR_RO(wake);
-+
-+static ssize_t waitv_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			     char *buf)
-+{
-+	return sprintf(buf, "%u\n", __NR_futex_waitv);
-+
-+}
-+static struct kobj_attribute futex2_waitv_attr = __ATTR_RO(waitv);
-+
-+static struct attribute *futex2_sysfs_attrs[] = {
-+	&futex2_wait_attr.attr,
-+	&futex2_wake_attr.attr,
-+	&futex2_waitv_attr.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group futex2_sysfs_attr_group = {
-+	.attrs = futex2_sysfs_attrs,
-+	.name = "futex2",
-+};
-+
-+static int __init futex2_sysfs_init(void)
-+{
-+	return sysfs_create_group(kernel_kobj, &futex2_sysfs_attr_group);
-+}
-+subsys_initcall(futex2_sysfs_init);
-+
 +static int __init futex2_init(void)
 +{
 +	int i;
@@ -1904,15 +1868,16 @@ index 000000000..c3ae9967b
 +}
 +core_initcall(futex2_init);
 diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-index 19aa80689..7c243dd6f 100644
+index 19aa80689..540a8ab95 100644
 --- a/kernel/sys_ni.c
 +++ b/kernel/sys_ni.c
-@@ -150,6 +150,14 @@ COND_SYSCALL_COMPAT(set_robust_list);
+@@ -150,6 +150,15 @@ COND_SYSCALL_COMPAT(set_robust_list);
  COND_SYSCALL(get_robust_list);
  COND_SYSCALL_COMPAT(get_robust_list);
  
 +/* kernel/futex2.c */
 +COND_SYSCALL(futex_wait);
++COND_SYSCALL_COMPAT(futex_wait);
 +COND_SYSCALL(futex_wake);
 +COND_SYSCALL(futex_waitv);
 +COND_SYSCALL_COMPAT(futex_waitv);
@@ -3486,5 +3451,5 @@ index 000000000..af11fd191
 +	return syscall(__NR_futex_requeue, uaddr1, uaddr2, nr_wake, nr_requeue, cmpval, flags);
 +}
 -- 
-2.32.0.rc1
+2.32.0
 
