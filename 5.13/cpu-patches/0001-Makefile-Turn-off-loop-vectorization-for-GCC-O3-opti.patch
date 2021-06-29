@@ -1,0 +1,27 @@
+From 3d445db360a33fa51311b5de1709f173039e2621 Mon Sep 17 00:00:00 2001
+From: kevall474 <kevall474@tuta.io>
+Date: Sat, 12 Jun 2021 18:21:14 +0000
+Subject: [PATCH] Makefile: Turn off loop vectorization for GCC -O3
+ optimization level
+
+---
+ Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 144d4f8b7..c95ff4be5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -749,6 +749,9 @@ ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
+ KBUILD_CFLAGS += -O2
+ else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
+ KBUILD_CFLAGS += -O3
++ifdef CONFIG_CC_IS_GCC
++KBUILD_CFLAGS += -fno-tree-loop-vectorize
++endif
+ else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
+ KBUILD_CFLAGS += -Os
+ endif
+-- 
+2.31.1
+
