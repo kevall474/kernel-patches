@@ -1,7 +1,7 @@
-From 511c066786430ae44cb634d09f3e0f5c58b8eed9 Mon Sep 17 00:00:00 2001
+From 5c9bde6c36f9003caef8cd86b594b2e6fb5e3afb Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Fri, 15 May 2020 16:58:29 +0200
-Subject: [PATCH 2/4] init/Kconfig: enable -O3 for all arches
+Subject: [PATCH 2/6] init/Kconfig: enable -O3 for all arches
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
 ---
@@ -9,7 +9,7 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  1 file changed, 1 deletion(-)
 
 diff --git a/init/Kconfig b/init/Kconfig
-index 5f5c776..c0f7ef4 100644
+index 5f5c776ef..c0f7ef4b4 100644
 --- a/init/Kconfig
 +++ b/init/Kconfig
 @@ -1316,7 +1316,6 @@ config CC_OPTIMIZE_FOR_PERFORMANCE

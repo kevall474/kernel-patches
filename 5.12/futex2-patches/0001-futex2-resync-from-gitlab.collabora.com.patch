@@ -1,6 +1,6 @@
-From 544e3b544d0e91cf90f1ab620921bb2f374d614a Mon Sep 17 00:00:00 2001
+From ac6ee9200b5efce0dcbc0a9ac2ff60ce0f7631cb Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
-Date: Tue, 15 Jun 2021 12:33:18 +0200
+Date: Thu, 1 Jul 2021 20:02:25 +0200
 Subject: [PATCH] futex2: resync from gitlab.collabora.com
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
@@ -535,10 +535,10 @@ index a3e760886..5e02a0e72 100644
   * Support for robust futexes: the kernel cleans up held futexes at
   * thread exit time.
 diff --git a/init/Kconfig b/init/Kconfig
-index 54835d5ce..2ea7f8cf2 100644
+index 5f5c776ef..11c6487ed 100644
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -1573,6 +1573,13 @@ config FUTEX
+@@ -1537,6 +1537,13 @@ config FUTEX
  	  support for "fast userspace mutexes".  The resulting kernel may not
  	  run glibc-based applications correctly.
  
@@ -579,7 +579,7 @@ index 426cd0c51..9f99273b1 100644
  	}
 diff --git a/kernel/futex2.c b/kernel/futex2.c
 new file mode 100644
-index 000000000..b27ad0e8c
+index 000000000..6e993e33f
 --- /dev/null
 +++ b/kernel/futex2.c
 @@ -0,0 +1,1284 @@
@@ -895,7 +895,7 @@ index 000000000..b27ad0e8c
 +		}
 +
 +		key->pointer = futex_get_inode_uuid(inode);
-+		key->index = (unsigned long)basepage_index(tail);
++		key->index = (unsigned long)page_to_pgoff(tail);
 +		key->offset |= FUT_OFF_INODE;
 +
 +		rcu_read_unlock();
@@ -3451,5 +3451,5 @@ index 000000000..af11fd191
 +	return syscall(__NR_futex_requeue, uaddr1, uaddr2, nr_wake, nr_requeue, cmpval, flags);
 +}
 -- 
-2.32.0
+2.32.0.93.g670b81a890
 

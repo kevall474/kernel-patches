@@ -1,7 +1,7 @@
-From bad953206b2eb3f370f4df36978034e4151c3022 Mon Sep 17 00:00:00 2001
+From 59928a3bbe954a9fe28069a819c04550a6a5aece Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Wed, 16 Jun 2021 16:00:11 +0200
-Subject: [PATCH 1/4] cpu-5.12: merge graysky's patchset
+Subject: [PATCH 1/6] cpu-5.12: merge graysky's patchset
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
 ---
@@ -11,7 +11,7 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  3 files changed, 428 insertions(+), 17 deletions(-)
 
 diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
-index 814fe0d..ac30a58 100644
+index 814fe0d34..ac30a581a 100644
 --- a/arch/x86/Kconfig.cpu
 +++ b/arch/x86/Kconfig.cpu
 @@ -157,7 +157,7 @@ config MPENTIUM4
@@ -440,7 +440,7 @@ index 814fe0d..ac30a58 100644
  	default "4"
  
 diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 2855a1a..d64b3f6 100644
+index 2855a1a3d..d64b3f6e0 100644
 --- a/arch/x86/Makefile
 +++ b/arch/x86/Makefile
 @@ -114,11 +114,48 @@ else
@@ -498,7 +498,7 @@ index 2855a1a..d64b3f6 100644
          KBUILD_CFLAGS += $(cflags-y)
  
 diff --git a/arch/x86/include/asm/vermagic.h b/arch/x86/include/asm/vermagic.h
-index 75884d2..4e6a08d 100644
+index 75884d2cd..4e6a08d4c 100644
 --- a/arch/x86/include/asm/vermagic.h
 +++ b/arch/x86/include/asm/vermagic.h
 @@ -17,6 +17,48 @@

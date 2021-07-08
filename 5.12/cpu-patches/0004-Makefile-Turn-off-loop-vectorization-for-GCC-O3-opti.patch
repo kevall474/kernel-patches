@@ -1,7 +1,7 @@
-From a18827660b127e1ebb0704fb740391646ff075a8 Mon Sep 17 00:00:00 2001
+From 5883f5313fafd4c0a4c8a4b5116b4074f605a693 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Fri, 11 Jun 2021 11:30:19 +0200
-Subject: [PATCH 4/4] Makefile: Turn off loop vectorization for GCC -O3
+Subject: [PATCH 4/6] Makefile: Turn off loop vectorization for GCC -O3
  optimization level
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
@@ -10,7 +10,7 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  1 file changed, 3 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index cf7469b..a41775e 100644
+index f02860856..4a408fd30 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -737,6 +737,9 @@ ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE

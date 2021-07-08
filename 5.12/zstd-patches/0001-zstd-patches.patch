@@ -1,7 +1,7 @@
-From a930025e03b8cf4f245f01eaa0ba7700b0c8f374 Mon Sep 17 00:00:00 2001
+From abb57fcceab50b82ade57924e3abd2924ae1b51a Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Tue, 30 Mar 2021 12:08:53 +0100
-Subject: [PATCH 1/4] init: add support for zstd compressed modules
+Subject: [PATCH 1/7] init: add support for zstd compressed modules
 
 kmod 28 supports modules compressed in zstd format so let's add this possibility to kernel.
 
@@ -12,10 +12,10 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  2 files changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 3a10a8e08..e5536960a 100644
+index 433f164f9..74c1a4ed6 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1066,8 +1066,8 @@ endif # INSTALL_MOD_STRIP
+@@ -1074,8 +1074,8 @@ endif # INSTALL_MOD_STRIP
  export mod_strip_cmd
  
  # CONFIG_MODULE_COMPRESS, if defined, will cause module to be compressed
@@ -26,7 +26,7 @@ index 3a10a8e08..e5536960a 100644
  
  mod_compress_cmd = true
  ifdef CONFIG_MODULE_COMPRESS
-@@ -1077,6 +1077,9 @@ ifdef CONFIG_MODULE_COMPRESS
+@@ -1085,6 +1085,9 @@ ifdef CONFIG_MODULE_COMPRESS
    ifdef CONFIG_MODULE_COMPRESS_XZ
      mod_compress_cmd = $(XZ) --lzma2=dict=2MiB -f
    endif # CONFIG_MODULE_COMPRESS_XZ
@@ -37,10 +37,10 @@ index 3a10a8e08..e5536960a 100644
  export mod_compress_cmd
  
 diff --git a/init/Kconfig b/init/Kconfig
-index 6cc9c1c70..ecaccccd0 100644
+index 5f5c776ef..0a9d5c63e 100644
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -2229,8 +2229,8 @@ config MODULE_COMPRESS
+@@ -2217,8 +2217,8 @@ config MODULE_COMPRESS
  	bool "Compress modules on installation"
  	help
  
@@ -51,7 +51,7 @@ index 6cc9c1c70..ecaccccd0 100644
  
  	  module-init-tools MAY support gzip, and kmod MAY support gzip and xz.
  
-@@ -2252,7 +2252,7 @@ choice
+@@ -2240,7 +2240,7 @@ choice
  	  This determines which sort of compression will be used during
  	  'make modules_install'.
  
@@ -60,7 +60,7 @@ index 6cc9c1c70..ecaccccd0 100644
  
  config MODULE_COMPRESS_GZIP
  	bool "GZIP"
-@@ -2260,6 +2260,9 @@ config MODULE_COMPRESS_GZIP
+@@ -2248,6 +2248,9 @@ config MODULE_COMPRESS_GZIP
  config MODULE_COMPRESS_XZ
  	bool "XZ"
  
@@ -71,13 +71,13 @@ index 6cc9c1c70..ecaccccd0 100644
  
  config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
 -- 
-2.31.1.305.gd1b10fc6d8
+2.32.0.93.g670b81a890
 
 
-From 22dd6599c5d261925175a2f8a661c1c5d8755211 Mon Sep 17 00:00:00 2001
+From e19c6ba98dba7d1a5ae01113934ee7d64330365e Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
 Date: Fri, 2 Apr 2021 15:56:36 +0200
-Subject: [PATCH 2/4] allow setting zstd compression level for kernel
+Subject: [PATCH 2/7] allow setting zstd compression level for kernel
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
@@ -87,10 +87,10 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  3 files changed, 26 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index e0bc3988c..59ed10c61 100644
+index 6e5522aeb..761e0dcfb 100644
 --- a/arch/x86/boot/compressed/Makefile
 +++ b/arch/x86/boot/compressed/Makefile
-@@ -130,8 +130,13 @@ $(obj)/vmlinux.bin.lzo: $(vmlinux.bin.all-y) FORCE
+@@ -131,8 +131,13 @@ $(obj)/vmlinux.bin.lzo: $(vmlinux.bin.all-y) FORCE
  	$(call if_changed,lzo)
  $(obj)/vmlinux.bin.lz4: $(vmlinux.bin.all-y) FORCE
  	$(call if_changed,lz4)
@@ -105,7 +105,7 @@ index e0bc3988c..59ed10c61 100644
  suffix-$(CONFIG_KERNEL_GZIP)	:= gz
  suffix-$(CONFIG_KERNEL_BZIP2)	:= bz2
 diff --git a/init/Kconfig b/init/Kconfig
-index ecaccccd0..34384e4a1 100644
+index 0a9d5c63e..f9c850072 100644
 --- a/init/Kconfig
 +++ b/init/Kconfig
 @@ -309,6 +309,25 @@ config KERNEL_UNCOMPRESSED
@@ -152,13 +152,13 @@ index 8cd67b1b6..f2dfaa5a0 100644
  # ASM offsets
  # ---------------------------------------------------------------------------
 -- 
-2.31.1.305.gd1b10fc6d8
+2.32.0.93.g670b81a890
 
 
-From 6e4686daf7ef33cc8b3d4934e4585cfd4e79a8be Mon Sep 17 00:00:00 2001
+From 67f9cb9ca027aca60c7b11fac5a68f68e84cf5b0 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
 Date: Fri, 2 Apr 2021 16:00:26 +0200
-Subject: [PATCH 3/4] allow setting zstd compression level for modules
+Subject: [PATCH 3/7] allow setting zstd compression level for modules
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
@@ -167,10 +167,10 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index e5536960a..7c4c6f602 100644
+index 74c1a4ed6..2a7caf7a1 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1078,7 +1078,7 @@ ifdef CONFIG_MODULE_COMPRESS
+@@ -1086,7 +1086,7 @@ ifdef CONFIG_MODULE_COMPRESS
      mod_compress_cmd = $(XZ) --lzma2=dict=2MiB -f
    endif # CONFIG_MODULE_COMPRESS_XZ
    ifdef CONFIG_MODULE_COMPRESS_ZSTD
@@ -180,10 +180,10 @@ index e5536960a..7c4c6f602 100644
  endif # CONFIG_MODULE_COMPRESS
  export mod_compress_cmd
 diff --git a/init/Kconfig b/init/Kconfig
-index 34384e4a1..98197e83f 100644
+index f9c850072..a16e83ce6 100644
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -2284,6 +2284,14 @@ config MODULE_COMPRESS_ZSTD
+@@ -2272,6 +2272,14 @@ config MODULE_COMPRESS_ZSTD
  
  endchoice
  
@@ -199,13 +199,13 @@ index 34384e4a1..98197e83f 100644
  	bool "Allow loading of modules with missing namespace imports"
  	help
 -- 
-2.31.1.305.gd1b10fc6d8
+2.32.0.93.g670b81a890
 
 
-From 12e3e44bb0d9c0115eba4e759436939f1d4e4629 Mon Sep 17 00:00:00 2001
+From a9cc4e81134514fba6e34b406ba32b7172b2154f Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Sat, 10 Apr 2021 02:06:47 +0200
-Subject: [PATCH 4/4] init: optimize zstd compression settings
+Subject: [PATCH 4/7] init: optimize zstd compression settings
 
 The --zstd=wlog=21 option is equivalent to --lzma2=dict=2MiB used in XZ compression.
 So let's unify the various compression options.
@@ -217,10 +217,10 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 7c4c6f602..51d28efd8 100644
+index 2a7caf7a1..2c5a4d474 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1078,7 +1078,7 @@ ifdef CONFIG_MODULE_COMPRESS
+@@ -1086,7 +1086,7 @@ ifdef CONFIG_MODULE_COMPRESS
      mod_compress_cmd = $(XZ) --lzma2=dict=2MiB -f
    endif # CONFIG_MODULE_COMPRESS_XZ
    ifdef CONFIG_MODULE_COMPRESS_ZSTD
@@ -230,10 +230,10 @@ index 7c4c6f602..51d28efd8 100644
  endif # CONFIG_MODULE_COMPRESS
  export mod_compress_cmd
 diff --git a/init/Kconfig b/init/Kconfig
-index 98197e83f..1bae85dc4 100644
+index a16e83ce6..8ce091162 100644
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -2288,7 +2288,7 @@ config MODULE_COMPRESS_ZSTD_LEVEL
+@@ -2276,7 +2276,7 @@ config MODULE_COMPRESS_ZSTD_LEVEL
      int "Compression level (1-19)"
      depends on MODULE_COMPRESS_ZSTD
      range 1 19
@@ -243,5 +243,127 @@ index 98197e83f..1bae85dc4 100644
          Compression level used by zstd for compressing modules.
  
 -- 
-2.31.1.305.gd1b10fc6d8
+2.32.0.93.g670b81a890
+
+
+From e1f8ea857c6fa2752061c1414f2b531ab33cab72 Mon Sep 17 00:00:00 2001
+From: Piotr Gorski <lucjan.lucjanov@gmail.com>
+Date: Wed, 30 Jun 2021 17:22:44 +0200
+Subject: [PATCH 5/7] kbuild: allow setting ultra zstd compression level for
+ modules
+
+This patch enables users to choose either a compression level between 1 and 19,
+or instead use the highest possible level (ultra 20-22).
+
+Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
+---
+ Makefile     |  4 ++++
+ init/Kconfig | 14 ++++++++++++++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 2c5a4d474..0941d5b50 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1086,7 +1086,11 @@ ifdef CONFIG_MODULE_COMPRESS
+     mod_compress_cmd = $(XZ) --lzma2=dict=2MiB -f
+   endif # CONFIG_MODULE_COMPRESS_XZ
+   ifdef CONFIG_MODULE_COMPRESS_ZSTD
++    ifdef CONFIG_MODULE_COMPRESS_ZSTD_ULTRA
++    mod_compress_cmd = $(ZSTD) -T0 -$(CONFIG_MODULE_COMPRESS_ZSTD_LEVEL_ULTRA) --ultra --zstd=wlog=21 --rm -f -q
++    else
+     mod_compress_cmd = $(ZSTD) -T0 -$(CONFIG_MODULE_COMPRESS_ZSTD_LEVEL) --zstd=wlog=21 --rm -f -q
++    endif
+   endif # CONFIG_MODULE_COMPRESS_ZSTD
+ endif # CONFIG_MODULE_COMPRESS
+ export mod_compress_cmd
+diff --git a/init/Kconfig b/init/Kconfig
+index 8ce091162..0b2655a37 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2272,6 +2272,12 @@ config MODULE_COMPRESS_ZSTD
+ 
+ endchoice
+ 
++config MODULE_COMPRESS_ZSTD_ULTRA
++	depends on MODULE_COMPRESS_ZSTD
++	bool "ZSTD"
++	help
++	  Compress modules with ZSTD using the highest possible compression.
++
+ config MODULE_COMPRESS_ZSTD_LEVEL
+     int "Compression level (1-19)"
+     depends on MODULE_COMPRESS_ZSTD
+@@ -2280,6 +2286,14 @@ config MODULE_COMPRESS_ZSTD_LEVEL
+     help
+         Compression level used by zstd for compressing modules.
+ 
++config MODULE_COMPRESS_ZSTD_LEVEL_ULTRA
++    int "Compression level (20-22)"
++    depends on MODULE_COMPRESS_ZSTD_ULTRA
++    range 20 22
++    default 20
++    help
++        Compression level used by zstd for compressing modules.
++
+ config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
+ 	bool "Allow loading of modules with missing namespace imports"
+ 	help
+-- 
+2.32.0.93.g670b81a890
+
+
+From 7326a5583398744d7a4490b3bde91d2526ade611 Mon Sep 17 00:00:00 2001
+From: Piotr Gorski <lucjan.lucjanov@gmail.com>
+Date: Wed, 30 Jun 2021 23:27:04 +0200
+Subject: [PATCH 6/7] kbuild: add proper bool for MODULE_COMPRESS_ZSTD_ULTRA
+
+Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
+---
+ init/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index 0b2655a37..1a6ab65f2 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2274,7 +2274,7 @@ endchoice
+ 
+ config MODULE_COMPRESS_ZSTD_ULTRA
+ 	depends on MODULE_COMPRESS_ZSTD
+-	bool "ZSTD"
++	bool "Enable ZSTD ultra compression"
+ 	help
+ 	  Compress modules with ZSTD using the highest possible compression.
+ 
+-- 
+2.32.0.93.g670b81a890
+
+
+From b360429b6ac543d353ade50545b2a9ed2c770e6f Mon Sep 17 00:00:00 2001
+From: Piotr Gorski <lucjan.lucjanov@gmail.com>
+Date: Thu, 1 Jul 2021 14:54:29 +0200
+Subject: [PATCH 7/7] kbuild: add proper help for
+ MODULE_COMPRESS_ZSTD_LEVEL_ULTRA
+
+Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
+---
+ init/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index 1a6ab65f2..819c2ca32 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2292,7 +2292,7 @@ config MODULE_COMPRESS_ZSTD_LEVEL_ULTRA
+     range 20 22
+     default 20
+     help
+-        Compression level used by zstd for compressing modules.
++        Ultra compression level used by zstd for compressing modules.
+ 
+ config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
+ 	bool "Allow loading of modules with missing namespace imports"
+-- 
+2.32.0.93.g670b81a890
 
