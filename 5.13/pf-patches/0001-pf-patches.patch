@@ -1,7 +1,7 @@
-From 73e1526b2ba10ec73aa2b9eab3a709592f43bb72 Mon Sep 17 00:00:00 2001
+From f4817ae4b6f7b6905d993b746dedc4ddf219075c Mon Sep 17 00:00:00 2001
 From: Thomas Gleixner <tglx@linutronix.de>
 Date: Sat, 5 Dec 2020 17:19:18 +0100
-Subject: [PATCH 1/3] genirq, i2c: Provide and use generic_dispatch_irq()
+Subject: [PATCH 1/2] genirq, i2c: Provide and use generic_dispatch_irq()
 
 Carlos reported that on his system booting with 'threadirqs' on the command
 line result in the following warning:
@@ -104,10 +104,10 @@ index 4a617d731..5aafaf4f4 100644
 2.32.0.93.g670b81a890
 
 
-From 9e787c6ab8508fa06f11184588cb6711d67c2e1e Mon Sep 17 00:00:00 2001
+From ff1be1b1d55fa13e7654cbb98fcfbfe60654ff35 Mon Sep 17 00:00:00 2001
 From: Jesse Brandeburg <jesse.brandeburg@intel.com>
 Date: Thu, 6 May 2021 19:30:01 -0700
-Subject: [PATCH 2/3] igb: fix netpoll exit with traffic
+Subject: [PATCH 2/2] igb: fix netpoll exit with traffic
 
 Oleksandr brought a bug report where netpoll causes trace messages in
 the log on igb.
@@ -158,51 +158,6 @@ index b2a042f82..90a7c4b6c 100644
  #ifdef CONFIG_IGB_DCA
  	if (q_vector->adapter->flags & IGB_FLAG_DCA_ENABLED)
  		igb_update_dca(q_vector);
--- 
-2.32.0.93.g670b81a890
-
-
-From e9b89a2a66297f55fce061b8e8af39fb86306273 Mon Sep 17 00:00:00 2001
-From: Mel Gorman <mgorman@techsingularity.net>
-Date: Mon, 28 Jun 2021 16:02:19 +0100
-Subject: [PATCH 3/3] mm/page_alloc: Correct return value of populated elements
- if bulk array is populated
-
-Dave Jones reported the following
-
-	This made it into 5.13 final, and completely breaks NFSD for me
-	(Serving tcp v3 mounts).  Existing mounts on clients hang, as do
-	new mounts from new clients.  Rebooting the server back to rc7
-	everything recovers.
-
-The commit b3b64ebd3822 ("mm/page_alloc: do bulk array bounds check after
-checking populated elements") returns the wrong value if the array is
-already populated which is interpreted as an allocation failure. Dave
-reported this fixes his problem and it also passed a test running dbench
-over NFS.
-
-Fixes: b3b64ebd3822 ("mm/page_alloc: do bulk array bounds check after checking populated elements")
-Reported-and-tested-by: Dave Jones <davej@codemonkey.org.uk>
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-Cc: <stable@vger.kernel.org> [5.13+]
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
----
- mm/page_alloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index ef2265f86..042205815 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5058,7 +5058,7 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
- 
- 	/* Already populated array? */
- 	if (unlikely(page_array && nr_pages - nr_populated == 0))
--		return 0;
-+		return nr_populated;
- 
- 	/* Use the single page allocator for one page. */
- 	if (nr_pages - nr_populated == 1)
 -- 
 2.32.0.93.g670b81a890
 
