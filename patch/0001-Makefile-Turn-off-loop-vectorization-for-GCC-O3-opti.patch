@@ -16,7 +16,7 @@ index 8b8dbbf23..fce7b19e7 100644
  KBUILD_CFLAGS += -O3
  KBUILD_RUSTCFLAGS_OPT_LEVEL_MAP := 3
 +ifdef CONFIG_CC_IS_GCC
-+KBUILD_CFLAGS += -fno-tree-loop-vectorize
++KBUILD_CFLAGS += $(call cc-option, -fno-tree-loop-vectorize)
 +endif
  else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
  KBUILD_CFLAGS += -Os
