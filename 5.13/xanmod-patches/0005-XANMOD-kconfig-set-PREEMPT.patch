@@ -1,0 +1,23 @@
+From 44984407c3c4f5f15b10b16c45c97aacc2073a6a Mon Sep 17 00:00:00 2001
+From: Alexandre Frade <admfrade@gmail.com>
+Date: Sun, 13 Oct 2019 03:10:39 -0300
+Subject: [PATCH 05/14] XANMOD: kconfig: set PREEMPT
+
+Signed-off-by: Alexandre Frade <admfrade@gmail.com>
+---
+diff --git a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
+index 416017301660..293725c44cbb 100644
+--- a/kernel/Kconfig.preempt
++++ b/kernel/Kconfig.preempt
+@@ -2,7 +2,7 @@
+ 
+ choice
+ 	prompt "Preemption Model"
+-	default PREEMPT_NONE
++	default PREEMPT
+ 
+ config PREEMPT_NONE
+ 	bool "No Forced Preemption (Server)"
+-- 
+2.32.0
+
