@@ -1,0 +1,311 @@
+From b2b3859def906da86570855bb7ca245f92d1fbe2 Mon Sep 17 00:00:00 2001
+From: kevall474 <kevall474@tuta.io>
+Date: Sun, 11 Jul 2021 21:05:35 +0000
+Subject: [PATCH] ZEN INTERACTIVE and Add CONFIG to rename the mq-deadline
+ scheduler
+
+---
+ block/Kconfig.iosched              |  9 ++++++++
+ block/elevator.c                   |  8 +++++++
+ block/mq-deadline.c                |  9 ++++++++
+ drivers/cpufreq/cpufreq_ondemand.c | 14 +++++++++++-
+ include/linux/elevator.h           |  2 +-
+ init/Kconfig                       | 35 ++++++++++++++++++++++++++++++
+ kernel/sched/core.c                |  4 ++++
+ kernel/sched/fair.c                | 25 +++++++++++++++++++++
+ mm/huge_memory.c                   |  4 ++++
+ mm/page-writeback.c                |  8 +++++++
+ 10 files changed, 116 insertions(+), 2 deletions(-)
+
+diff --git a/block/Kconfig.iosched b/block/Kconfig.iosched
+index 2f2158e05..92a47e48f 100644
+--- a/block/Kconfig.iosched
++++ b/block/Kconfig.iosched
+@@ -9,6 +9,15 @@ config MQ_IOSCHED_DEADLINE
+ 	help
+ 	  MQ version of the deadline IO scheduler.
+ 
++config MQ_IOSCHED_DEADLINE_NODEFAULT
++	bool "Rename mq-deadline scheduler to mq-deadline-nodefault"
++	depends on MQ_IOSCHED_DEADLINE
++	default n
++	help
++	  This renames the mq-deadline scheduler to "mq-deadline-nodefault" and
++	  also drops its alias of "deadline". This can prevent existing
++	  userspace from forcing this scheduler over the kernel's choice.
++
+ config MQ_IOSCHED_KYBER
+ 	tristate "Kyber I/O scheduler"
+ 	default y
+diff --git a/block/elevator.c b/block/elevator.c
+index 440699c28..4cdad3269 100644
+--- a/block/elevator.c
++++ b/block/elevator.c
+@@ -621,11 +621,19 @@ static inline bool elv_support_iosched(struct request_queue *q)
+  */
+ static struct elevator_type *elevator_get_default(struct request_queue *q)
+ {
++#ifndef CONFIG_ZEN_INTERACTIVE
+ 	if (q->nr_hw_queues != 1 &&
+ 			!blk_mq_is_sbitmap_shared(q->tag_set->flags))
+ 		return NULL;
++#endif
+ 
++#if defined(CONFIG_ZEN_INTERACTIVE) && defined(CONFIG_IOSCHED_BFQ)
++	return elevator_get(q, "bfq", false);
++#elif defined(CONFIG_MQ_IOSCHED_DEADLINE_NODEFAULT)
++	return elevator_get(q, "mq-deadline-nodefault", false);
++#else
+ 	return elevator_get(q, "mq-deadline", false);
++#endif
+ }
+ 
+ /*
+diff --git a/block/mq-deadline.c b/block/mq-deadline.c
+index 8eea2cbf2..ee0afb467 100644
+--- a/block/mq-deadline.c
++++ b/block/mq-deadline.c
+@@ -790,12 +790,21 @@ static struct elevator_type mq_deadline = {
+ 	.queue_debugfs_attrs = deadline_queue_debugfs_attrs,
+ #endif
+ 	.elevator_attrs = deadline_attrs,
++#ifdef CONFIG_MQ_IOSCHED_DEADLINE_NODEFAULT
++	.elevator_name = "mq-deadline-nodefault",
++	.elevator_alias = "deadline-nodefault",
++#else
+ 	.elevator_name = "mq-deadline",
+ 	.elevator_alias = "deadline",
++#endif
+ 	.elevator_features = ELEVATOR_F_ZBD_SEQ_WRITE,
+ 	.elevator_owner = THIS_MODULE,
+ };
++#ifdef CONFIG_MQ_IOSCHED_DEADLINE_NODEFAULT
++MODULE_ALIAS("mq-deadline-nodefault-iosched");
++#else
+ MODULE_ALIAS("mq-deadline-iosched");
++#endif
+ 
+ static int __init deadline_init(void)
+ {
+diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+index ac361a8b1..ccd127945 100644
+--- a/drivers/cpufreq/cpufreq_ondemand.c
++++ b/drivers/cpufreq/cpufreq_ondemand.c
+@@ -18,10 +18,22 @@
+ #include "cpufreq_ondemand.h"
+ 
+ /* On-demand governor macros */
++#if defined(CONFIG_ZEN_INTERACTIVE) && defined(CONFIG_SCHED_MUQSS)
++/* MuQSS is less likely to keep a single threaded task on the same core, so
++   have on-demand run at max speed from a much lower core utilization */
++#define DEF_FREQUENCY_UP_THRESHOLD		(40)
++#define MICRO_FREQUENCY_UP_THRESHOLD		(45)
++#define DEF_SAMPLING_DOWN_FACTOR		(5)
++#elif defined(CONFIG_ZEN_INTERACTIVE)
+ #define DEF_FREQUENCY_UP_THRESHOLD		(80)
++#define MICRO_FREQUENCY_UP_THRESHOLD		(95)
++#define DEF_SAMPLING_DOWN_FACTOR		(5)
++#else
++#define DEF_FREQUENCY_UP_THRESHOLD		(80)
++#define MICRO_FREQUENCY_UP_THRESHOLD		(95)
+ #define DEF_SAMPLING_DOWN_FACTOR		(1)
++#endif
+ #define MAX_SAMPLING_DOWN_FACTOR		(100000)
+-#define MICRO_FREQUENCY_UP_THRESHOLD		(95)
+ #define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(10000)
+ #define MIN_FREQUENCY_UP_THRESHOLD		(1)
+ #define MAX_FREQUENCY_UP_THRESHOLD		(100)
+diff --git a/include/linux/elevator.h b/include/linux/elevator.h
+index dcb2f9022..0b3c67155 100644
+--- a/include/linux/elevator.h
++++ b/include/linux/elevator.h
+@@ -52,7 +52,7 @@ struct elevator_mq_ops {
+ 	void (*exit_icq)(struct io_cq *);
+ };
+ 
+-#define ELV_NAME_MAX	(16)
++#define ELV_NAME_MAX	(24)
+ 
+ struct elv_fs_entry {
+ 	struct attribute attr;
+diff --git a/init/Kconfig b/init/Kconfig
+index a61c92066..77ea02f53 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -104,6 +104,41 @@ config THREAD_INFO_IN_TASK
+ 
+ menu "General setup"
+ 
++config ZEN_INTERACTIVE
++	bool "Tune kernel for interactivity"
++	default y
++	help
++	  Tunes the kernel for responsiveness at the cost of throughput and power usage.
++
++	  --- Block Layer ----------------------------------------
++
++	    Default scheduler.........: mq-deadline -> bfq
++
++	  --- Virtual Memory Subsystem ---------------------------
++
++	    Mem dirty before bg writeback..:  10 %  ->  20 %
++	    Mem dirty before sync writeback:  20 %  ->  50 %
++	    Background-reclaim hugepages...:    no  -> yes
++
++	  --- CFS CPU Scheduler ----------------------------------
++
++	    Scheduling latency.............:   6    ->   4    ms
++	    Minimal granularity............:   0.75 ->   0.4  ms
++	    Wakeup granularity.............:   1    ->   0.5  ms
++	    CPU migration cost.............:   0.5  ->   0.25 ms
++	    Bandwidth slice size...........:   5    ->   3    ms
++	    Task rebalancing threshold.....:   32   ->   128
++	    Ondemand sampling down factor..:   1    ->   5
++
++	  --- MuQSS CPU Scheduler --------------------------------
++
++	    Scheduling interval............:   6    ->   4    ms
++	    ISO task max realtime use......:  70 %  ->  25 %
++	    Yield type.....................:   1    ->   0
++	    Ondemand default freq up thresh:  80    ->  40
++	    Ondemand micro freq up thresh..:  95    ->  45
++	    Ondemand sampling down factor..:   1    ->   5
++
+ config BROKEN
+ 	bool
+ 
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 4ca80df20..0aeeb843d 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -74,7 +74,11 @@ __read_mostly int sysctl_resched_latency_warn_once = 1;
+  * Number of tasks to iterate in a single balance run.
+  * Limited because this is done with IRQs disabled.
+  */
++#ifdef CONFIG_ZEN_INTERACTIVE
++const_debug unsigned int sysctl_sched_nr_migrate = 128;
++#else
+ const_debug unsigned int sysctl_sched_nr_migrate = 32;
++#endif
+ 
+ /*
+  * period over which we measure -rt task CPU usage in us.
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 23663318f..b426cd751 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -35,8 +35,13 @@
+  *
+  * (default: 6ms * (1 + ilog(ncpus)), units: nanoseconds)
+  */
++#ifdef CONFIG_ZEN_INTERACTIVE
++unsigned int sysctl_sched_latency			= 4000000ULL;
++static unsigned int normalized_sysctl_sched_latency	= 4000000ULL;
++#else
+ unsigned int sysctl_sched_latency			= 6000000ULL;
+ static unsigned int normalized_sysctl_sched_latency	= 6000000ULL;
++#endif
+ 
+ /*
+  * The initial- and re-scaling of tunables is configurable
+@@ -56,13 +61,22 @@ unsigned int sysctl_sched_tunable_scaling = SCHED_TUNABLESCALING_LOG;
+  *
+  * (default: 0.75 msec * (1 + ilog(ncpus)), units: nanoseconds)
+  */
++#ifdef CONFIG_ZEN_INTERACTIVE
++unsigned int sysctl_sched_min_granularity			= 400000ULL;
++static unsigned int normalized_sysctl_sched_min_granularity	= 400000ULL;
++#else
+ unsigned int sysctl_sched_min_granularity			= 750000ULL;
+ static unsigned int normalized_sysctl_sched_min_granularity	= 750000ULL;
++#endif
+ 
+ /*
+  * This value is kept at sysctl_sched_latency/sysctl_sched_min_granularity
+  */
++#ifdef CONFIG_ZEN_INTERACTIVE
++static unsigned int sched_nr_latency = 10;
++#else
+ static unsigned int sched_nr_latency = 8;
++#endif
+ 
+ /*
+  * After fork, child runs first. If set to 0 (default) then
+@@ -79,10 +93,17 @@ unsigned int sysctl_sched_child_runs_first __read_mostly;
+  *
+  * (default: 1 msec * (1 + ilog(ncpus)), units: nanoseconds)
+  */
++#ifdef CONFIG_ZEN_INTERACTIVE
++unsigned int sysctl_sched_wakeup_granularity			= 500000UL;
++static unsigned int normalized_sysctl_sched_wakeup_granularity	= 500000UL;
++
++const_debug unsigned int sysctl_sched_migration_cost	= 250000UL;
++#else
+ unsigned int sysctl_sched_wakeup_granularity			= 1000000UL;
+ static unsigned int normalized_sysctl_sched_wakeup_granularity	= 1000000UL;
+ 
+ const_debug unsigned int sysctl_sched_migration_cost	= 500000UL;
++#endif
+ 
+ int sched_thermal_decay_shift;
+ static int __init setup_sched_thermal_decay_shift(char *str)
+@@ -133,8 +154,12 @@ int __weak arch_asym_cpu_priority(int cpu)
+  *
+  * (default: 5 msec, units: microseconds)
+  */
++#ifdef CONFIG_ZEN_INTERACTIVE
++unsigned int sysctl_sched_cfs_bandwidth_slice		= 3000UL;
++#else
+ unsigned int sysctl_sched_cfs_bandwidth_slice		= 5000UL;
+ #endif
++#endif
+ 
+ static inline void update_load_add(struct load_weight *lw, unsigned long inc)
+ {
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 6d2a0119f..22148126a 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -54,7 +54,11 @@ unsigned long transparent_hugepage_flags __read_mostly =
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE_MADVISE
+ 	(1<<TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG)|
+ #endif
++#ifdef CONFIG_ZEN_INTERACTIVE
++	(1<<TRANSPARENT_HUGEPAGE_DEFRAG_KSWAPD_OR_MADV_FLAG)|
++#else
+ 	(1<<TRANSPARENT_HUGEPAGE_DEFRAG_REQ_MADV_FLAG)|
++#endif
+ 	(1<<TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG)|
+ 	(1<<TRANSPARENT_HUGEPAGE_USE_ZERO_PAGE_FLAG);
+ 
+diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+index 0062d5c57..30be0e1b9 100644
+--- a/mm/page-writeback.c
++++ b/mm/page-writeback.c
+@@ -71,7 +71,11 @@ static long ratelimit_pages = 32;
+ /*
+  * Start background writeback (via writeback threads) at this percentage
+  */
++#ifdef CONFIG_ZEN_INTERACTIVE
++int dirty_background_ratio = 20;
++#else
+ int dirty_background_ratio = 10;
++#endif
+ 
+ /*
+  * dirty_background_bytes starts at 0 (disabled) so that it is a function of
+@@ -88,7 +92,11 @@ int vm_highmem_is_dirtyable;
+ /*
+  * The generator of dirty data starts writeback at this percentage
+  */
++#ifdef CONFIG_ZEN_INTERACTIVE
++int vm_dirty_ratio = 50;
++#else
+ int vm_dirty_ratio = 20;
++#endif
+ 
+ /*
+  * vm_dirty_bytes starts at 0 (disabled) so that it is a function of
+-- 
+2.32.0
+
