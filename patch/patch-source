@@ -1,0 +1,9 @@
+acs-overrides :
+
+- zen-kernel -> branch -> 5.x/zen-sauce -> commit     ZEN: Add ACS override support
+- xanmod-kernel : branch -> 5.x ->¨commit             pci: Enable overrides for missing ACS capabilities
+
+futex2 :
+
+- https://gitlab.collabora.com/tonyk/linux -> branch -> commit    commit by Andre Almeida
+- xanmod-kernel : -> branch -> 5.x -> commit

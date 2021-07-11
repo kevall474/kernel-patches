@@ -1,0 +1,30 @@
+From 552079568fdb272fdcae5767cdb2877e9fdf269a Mon Sep 17 00:00:00 2001
+From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
+Date: Mon, 27 Jan 2020 18:28:46 +0100
+Subject: [PATCH] ZEN: INTERACTIVE: Add help text for the MuQSS tweaks
+
+The tweaks themselves get merged with the MuQSS scheduler.
+---
+ init/Kconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index 3f0c0611166a..4a2540bff36e 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -128,6 +128,12 @@ config ZEN_INTERACTIVE
+ 	    CPU migration cost.............:   0.5  ->   0.25 ms
+ 	    Bandwidth slice size...........:   5    ->   3    ms
+ 
++	  --- MuQSS CPU Scheduler --------------------------------
++
++	    Scheduling interval............:   6    ->   4    ms
++	    ISO task max realtime use......:  70 %  ->  25 %
++	    Yield type.....................:   1    ->   0
++
+ config BROKEN
+ 	bool
+ 
+-- 
+GitLab
+

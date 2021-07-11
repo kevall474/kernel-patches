@@ -1,0 +1,45 @@
+From 732e5405c0311f1e32e6e4b0cd30fc104209e6bd Mon Sep 17 00:00:00 2001
+From: Steven Barrett <steven@liquorix.net>
+Date: Sat, 13 Jun 2020 15:55:18 -0500
+Subject: [PATCH] ZEN: INTERACTIVE: Increase max number of tasks rebalanced at
+ once
+
+Take "sysctl_sched_nr_migrate" tune from early XanMod builds of 128. As
+of 5.7, XanMod uses 256 but that may affect applications that require
+timely response to IRQs.
+---
+ init/Kconfig        | 1 +
+ kernel/sched/core.c | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index 7a6940d9a841..b78414217b0a 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -127,6 +127,7 @@ config ZEN_INTERACTIVE
+ 	    Wakeup granularity.............:   1    ->   0.5  ms
+ 	    CPU migration cost.............:   0.5  ->   0.25 ms
+ 	    Bandwidth slice size...........:   5    ->   3    ms
++	    Task rebalancing threshold.....:   32   ->   128
+ 	    Ondemand sampling down factor..:   1    ->   5
+ 
+ 	  --- MuQSS CPU Scheduler --------------------------------
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 4ca80df205ce..0aeeb843d6c4 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -74,7 +74,11 @@ __read_mostly int sysctl_resched_latency_warn_once = 1;
+  * Number of tasks to iterate in a single balance run.
+  * Limited because this is done with IRQs disabled.
+  */
++#ifdef CONFIG_ZEN_INTERACTIVE
++const_debug unsigned int sysctl_sched_nr_migrate = 128;
++#else
+ const_debug unsigned int sysctl_sched_nr_migrate = 32;
++#endif
+ 
+ /*
+  * period over which we measure -rt task CPU usage in us.
+-- 
+GitLab
+

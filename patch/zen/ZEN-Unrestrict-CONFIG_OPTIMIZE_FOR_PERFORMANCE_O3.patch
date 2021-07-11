@@ -1,0 +1,24 @@
+From 56350f1ad743dbb258229fe93a896fb441c8c396 Mon Sep 17 00:00:00 2001
+From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
+Date: Mon, 25 Nov 2019 22:24:42 +0100
+Subject: [PATCH] ZEN: Unrestrict CONFIG_OPTIMIZE_FOR_PERFORMANCE_O3
+
+---
+ init/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index a61c92066c2e..493fba4e834c 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1334,7 +1334,6 @@ config CC_OPTIMIZE_FOR_PERFORMANCE
+ 
+ config CC_OPTIMIZE_FOR_PERFORMANCE_O3
+ 	bool "Optimize more for performance (-O3)"
+-	depends on ARC
+ 	help
+ 	  Choosing this option will pass "-O3" to your compiler to optimize
+ 	  the kernel yet more for performance.
+-- 
+GitLab
+
